@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/Dashboard"
+        android:title="Dashboard"
+        android:icon="@drawable/ic_home" />
+
+    <item android:id="@+id/Lenses"
+        android:title="Lenses"
+        android:icon="@drawable/ic_lens" />
+
+    <item android:id="@+id/Solution"
+        android:title="Solution"
+        android:icon="@drawable/ic_solution" />
+
+    <item android:id="@+id/Drops"
+        android:title="Drops"
+        android:icon="@drawable/ic_drops"/>
+
+    <item android:id="@+id/Settings"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings" />
+</menu>
