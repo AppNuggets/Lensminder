@@ -1,4 +1,4 @@
-package com.appnuggets.lensminder;
+package com.appnuggets.lensminder.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.model.Container;
 import com.appnuggets.lensminder.model.Drops;
 import com.appnuggets.lensminder.model.Lenses;
@@ -34,7 +35,7 @@ public class DashboardActivity extends AppCompatActivity {
         Container container = new Container( new Date("12/04/2021"), new Date("10/05/2020"),63);
         updateContainerCard(container);
 
-        Drops drops = new Drops( new Date("06/10/2021"), new Date("12/01/2020"),63);
+        Drops drops = new Drops( new Date("06/10/2021"), new Date("12/01/2020"),63, "A");
         updateDropsCard(drops);
 
         Solution solution = new Solution( new Date("07/06/2021"), new Date("12/23/2020"),63);

@@ -1,4 +1,4 @@
-package com.appnuggets.lensminder;
+package com.appnuggets.lensminder.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,9 +10,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.adapter.DropsAdapter;
+import com.appnuggets.lensminder.bottomsheet.BottomSheetDialogDrops;
+import com.appnuggets.lensminder.model.Drops;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
@@ -21,6 +24,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DropsActivity extends AppCompatActivity {
@@ -102,13 +106,13 @@ public class DropsActivity extends AppCompatActivity {
         recyclerView.setAdapter(dropsAdapter);
     }
 
-    private List<DropsModel> getList(){
-        List<DropsModel> list = new ArrayList<>();
-        list.add(new DropsModel("A", "01/01/2020","01/03/2020"));
-        list.add(new DropsModel("B", "01/01/2020","01/03/2020"));
-        list.add(new DropsModel("C", "01/01/2020","01/03/2020"));
-        list.add(new DropsModel("D", "01/01/2020","01/03/2020"));
-        list.add(new DropsModel("E", "01/01/2020","01/03/2020"));
+    private List<Drops> getList(){
+        List<Drops> list = new ArrayList<>();
+        list.add(new Drops(new Date("06/10/2021"), new Date("12/01/2020"),63, "A"));
+        list.add(new Drops(new Date("06/10/2021"), new Date("12/01/2020"),63, "B"));
+        list.add(new Drops(new Date("06/10/2021"), new Date("12/01/2020"),63, "C"));
+        list.add(new Drops(new Date("06/10/2021"), new Date("12/01/2020"),63, "D"));
+        list.add(new Drops(new Date("06/10/2021"), new Date("12/01/2020"),63, "E"));
         return list;
     }
 }
