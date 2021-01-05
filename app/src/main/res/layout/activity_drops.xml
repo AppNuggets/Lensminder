@@ -7,36 +7,176 @@
     android:layout_height="match_parent"
     tools:context=".DropsActivity">
 
-    <TextView
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/topDrops"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:textSize="20dp"
-        android:text="Drops"
-        android:textAlignment="center"/>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="300dp">
+        android:layout_height="220dp"
+        android:layout_margin="0dp"
+        app:strokeWidth="1dp"
+        app:cardBackgroundColor="#e6f0ff"
+        app:strokeColor="#e6eeff"
+        app:cardCornerRadius="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:textSize="18dp"
-                android:text="Drops history"/>
+                android:orientation="vertical"
+                android:padding="5dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="0dp"
+                    android:textSize="20dp"
+                    android:text="Drops"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical"
+                    android:layout_gravity="center_horizontal">
+
+                    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                        android:id="@+id/dropsProgressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        app:cpb_background_progressbar_color="#b6bbd8"
+                        app:cpb_background_progressbar_width="10dp"
+                        app:cpb_progress_direction="to_right"
+                        app:cpb_progressbar_color="#3f51b5"
+                        app:cpb_progressbar_width="10dp"
+                        app:cpb_round_border="false" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="40sp"
+                            android:gravity="center"
+                            android:text="53"/>
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+            <!-- Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_gravity="bottom"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/deleteDropsButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    style="?attr/borderlessButtonStyle"
+                    android:backgroundTint="#8B0000"
+                    android:padding="3dp"
+                    android:text="Delete"
+                    android:layout_gravity="end"
+                    android:textSize="13dp"
+                    android:textColor="#fff" />
+
+            </LinearLayout>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="30dp"
+        android:background="@color/purple_700"
+        android:layout_marginTop="300dp"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:text="Drops history"/>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:stretchColumns="1,2,3">
+
+            <TableRow>
+
+                <TextView
+                    android:text="NAME"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="15dp"
+                    android:layout_width="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_column="1"/>
+
+                <TextView
+                    android:text="FROM"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="15dp"
+                    android:layout_width="40dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_column="2"/>
+
+                <TextView
+                    android:text="TO"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:textSize="15dp"
+                    android:layout_width="40dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_column="3" />
+
+            </TableRow>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dropsRecycleView"
+                android:layout_gravity="center"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </TableLayout>
+
+    </LinearLayout>
+
+
+
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addButton"
+        android:id="@+id/showAddDrops"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_baseline_add_24"
@@ -54,6 +194,10 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:background="@color/white"
+        android:outlineAmbientShadowColor="#001a4d"
+        app:itemTextColor="#001a4d"
+        app:itemRippleColor="#001a4d"
+        android:outlineSpotShadowColor="#001a4d"
         app:fabCradleMargin="5dp"
         app:fabAlignmentMode="center"
         app:hideOnScroll="true"
