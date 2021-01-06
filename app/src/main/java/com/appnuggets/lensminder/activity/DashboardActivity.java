@@ -4,20 +4,25 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.database.AppDatabase;
+import com.appnuggets.lensminder.database.entity.Container;
+import com.appnuggets.lensminder.database.entity.Drops;
+import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.Solution;
+import com.appnuggets.lensminder.model.DateProcessor;
+import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -26,38 +31,20 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        //Database testing ground
-        try {
-            Date startDate = new SimpleDateFormat("dd.MM.yyyy").parse("06.01.2021");
-            Date expirationDate = new SimpleDateFormat("dd.MM.yyyy").parse("06.04.2021");
+        AppDatabase db = AppDatabase.getInstance(this);
 
-            AppDatabase db = AppDatabase.getInstance(this);
+        Lenses lensesInUse = db.lensesDao().getInUse();
+        updateLensesSummary(lensesInUse);
 
-            List<Solution> allSolutions = db.solutionDao().getAll();
-            Solution solutionsInUse = db.solutionDao().getInUse();
-            List<Solution> pastSolutions = db.solutionDao().getAllNotInUse();
+        Container containerInUse = db.containerDao().getInUse();
+        updateContainerSummary(containerInUse);
 
-            Solution solution = new Solution("solution", true, expirationDate,
-                    startDate, 96L);
+        Drops dropsInUse = db.dropsDao().getInUse();
+        updateDropsSummary(dropsInUse);
 
-            /* Insert one in use */
-            db.solutionDao().insert(solution);
-            /* Create some history */
-            solution.inUse = false;
-            db.solutionDao().insert(solution);
-            db.solutionDao().insert(solution);
-            db.solutionDao().insert(solution);
+        Solution solutionsInUse = db.solutionDao().getInUse();
+        updateSolutionSummary(solutionsInUse);
 
-            allSolutions = db.solutionDao().getAll();
-            solutionsInUse = db.solutionDao().getInUse();
-            pastSolutions = db.solutionDao().getAllNotInUse();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.Dashboard);
@@ -122,87 +109,91 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-/*    private void updateLensesCard(Lenses lenses) {
-        CircularProgressBar lensesProgressBar = findViewById(R.id.lensesProgressBar);
-        TextView lensesDaysCount = findViewById(R.id.lensesDaysCount);
-        TextView lensesExpDate = findViewById(R.id.lensesExpDateTextView);
-        TextView lensesDaysUsed = findViewById(R.id.lensesDaysUsedTextView);
-
-        lensesProgressBar.setProgressMax(lenses.getDuration());
-        lensesExpDate.setText(lenses.getExpirationDateString());
-        lensesDaysUsed.setText(Long.toString(lenses.getCurrentUsage()));
-        lensesProgressBar.setProgressWithAnimation(lenses.getDuration() -  lenses.getUsageLeft(), (long) 1000); // =1s
-        if( 0 >= lenses.getUsageLeft() ) {
-            lensesDaysCount.setText(Long.toString(lenses.getUsageLeft()));
-            lensesProgressBar.setProgressBarColor(Color.RED);
-            lensesDaysCount.setTextColor(Color.RED);
+    void updateLensesSummary(Lenses lenses) {
+        CircularProgressBar progressBar = findViewById(R.id.lensesProgressBar);
+        TextView leftDaysCount = findViewById(R.id.lensesDaysCount);
+        TextView expDate = findViewById(R.id.lensesExpDateTextView);
+        TextView daysUsed = findViewById(R.id.lensesDaysUsedTextView);
+        if(null == lenses) {
+            updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }
         else {
-            lensesDaysCount.setText(Long.toString(lenses.getUsageLeft()));
-            lensesDaysCount.setTextSize(40);
+            updateCardInfoAvailable(progressBar, leftDaysCount, daysUsed, expDate,
+                    lenses.expirationDate, lenses.startDate, lenses.useInterval);
         }
     }
 
-    private void updateContainerCard(Container container) {
-        CircularProgressBar containerProgressBar = findViewById(R.id.containerProgressBar);
-        TextView containerDaysCount = findViewById(R.id.containerDaysCount);
-        TextView containerExpDate = findViewById(R.id.containerExpDateTextView);
-        TextView containerDaysUsed = findViewById(R.id.containerDaysUsedTextView);
-
-        containerProgressBar.setProgressMax(container.getDuration());
-        containerExpDate.setText(container.getExpirationDateString());
-        containerDaysUsed.setText(Long.toString(container.getCurrentUsage()));
-        containerProgressBar.setProgressWithAnimation(container.getDuration() -  container.getUsageLeft(), (long) 1000); // =1s
-        if( 0 >= container.getUsageLeft() ) {
-            containerDaysCount.setText(Long.toString(container.getUsageLeft()));
-            containerProgressBar.setProgressBarColor(Color.RED);
-            containerDaysCount.setTextColor(Color.RED);
+    void updateContainerSummary(Container container) {
+        CircularProgressBar progressBar = findViewById(R.id.containerProgressBar);
+        TextView leftDaysCount = findViewById(R.id.containerDaysCount);
+        TextView expDate = findViewById(R.id.containerExpDateTextView);
+        TextView daysUsed = findViewById(R.id.containerDaysUsedTextView);
+        if(null == container) {
+            updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }
         else {
-            containerDaysCount.setText(Long.toString(container.getUsageLeft()));
-            containerDaysCount.setTextSize(40);
+            updateCardInfoAvailable(progressBar, leftDaysCount, daysUsed, expDate,
+                    container.expirationDate, container.startDate, container.useInterval);
         }
     }
 
-    private void updateDropsCard(Drops drops) {
-        CircularProgressBar dropsProgressBar = findViewById(R.id.dropsProgressBar);
-        TextView dropsDaysCount = findViewById(R.id.dropsDaysCount);
-        TextView dropsExpDate = findViewById(R.id.dropsExpDateTextView);
-        TextView dropsDaysUsed = findViewById(R.id.dropsDaysUsedTextView);
-
-        dropsProgressBar.setProgressMax(drops.getDuration());
-        dropsExpDate.setText(drops.getExpirationDateString());
-        dropsDaysUsed.setText(Long.toString(drops.getCurrentUsage()));
-        dropsProgressBar.setProgressWithAnimation(drops.getDuration() -  drops.getUsageLeft(), (long) 1000); // =1s
-        if( 0 >= drops.getUsageLeft() ) {
-            dropsDaysCount.setText(Long.toString(drops.getUsageLeft()));
-            dropsProgressBar.setProgressBarColor(Color.RED);
-            dropsDaysCount.setTextColor(Color.RED);
+    void updateDropsSummary(Drops drops) {
+        CircularProgressBar progressBar = findViewById(R.id.dropsProgressBar);
+        TextView leftDaysCount = findViewById(R.id.dropsDaysCount);
+        TextView expDate = findViewById(R.id.dropsExpDateTextView);
+        TextView daysUsed = findViewById(R.id.dropsDaysUsedTextView);
+        if(null == drops) {
+            updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }
         else {
-            dropsDaysCount.setText(Long.toString(drops.getUsageLeft()));
-            dropsDaysCount.setTextSize(40);
+            updateCardInfoAvailable(progressBar, leftDaysCount, daysUsed, expDate,
+                    drops.expirationDate, drops.startDate, drops.useInterval);
         }
     }
 
-    private void updateSolutionCard (Solution solution) {
-        CircularProgressBar solutionProgressBar = findViewById(R.id.solutionProgressBar);
-        TextView solutionDaysCount = findViewById(R.id.solutionDaysCount);
-        TextView solutionExpDate = findViewById(R.id.solutionExpDateTextView);
-        TextView solutionDaysUsed = findViewById(R.id.solutionDaysUsedTextView);
-
-        solutionProgressBar.setProgressMax(solution.getDuration());
-        solutionExpDate.setText(solution.getExpirationDateString());
-        solutionDaysUsed.setText(Long.toString(solution.getCurrentUsage()));
-        solutionProgressBar.setProgressWithAnimation(solution.getDuration() -  solution.getUsageLeft(), (long) 1000); // =1s
-        if( 0 >= solution.getUsageLeft() ) {
-            solutionDaysCount.setText(Long.toString(solution.getUsageLeft()));
-            solutionProgressBar.setProgressBarColor(Color.RED);
-            solutionDaysCount.setTextColor(Color.RED);
+    void updateSolutionSummary(Solution solution) {
+        CircularProgressBar progressBar = findViewById(R.id.solutionProgressBar);
+        TextView leftDaysCount = findViewById(R.id.solutionDaysCount);
+        TextView expDate = findViewById(R.id.solutionExpDateTextView);
+        TextView daysUsed = findViewById(R.id.solutionDaysUsedTextView);
+        if(null == solution) {
+            updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }
         else {
-            solutionDaysCount.setText(Long.toString(solution.getUsageLeft()));
-            solutionDaysCount.setTextSize(40);
+            updateCardInfoAvailable(progressBar, leftDaysCount, daysUsed, expDate,
+                    solution.expirationDate, solution.startDate, solution.useInterval);
         }
-    }*/
+    }
+
+    private void updateCardInfoUnavailable(CircularProgressBar progressBar, TextView leftDaysView,
+                                           TextView daysUsedView, TextView expDateView) {
+        progressBar.setProgressMax(100f);
+        progressBar.setProgressWithAnimation(0f,1000L);
+        daysUsedView.setText("-");
+        expDateView.setText("-");
+        leftDaysView.setText("-");
+    }
+
+    private void updateCardInfoAvailable(CircularProgressBar progressBar, TextView leftDaysView,
+                                         TextView daysUsedView, TextView expDateView,
+                                         Date expDate, Date startDate, Long useInterval) {
+        DateProcessor dateProcessor = new DateProcessor();
+        UsageProcessor usageProcessor = new UsageProcessor();
+
+        Long leftDays = usageProcessor.calculateUsageLeft(startDate, expDate, useInterval);
+        Long daysUsed = usageProcessor.calculateCurrentUsage(startDate);
+
+        leftDaysView.setText(leftDays.toString());
+        daysUsedView.setText(daysUsed.toString());
+        expDateView.setText(dateProcessor.dateToString(expDate));
+
+        progressBar.setProgressWithAnimation(useInterval - leftDays, 1000L);
+
+        if( leftDays <= 0) {
+            // Set progressbar red
+        }
+        else {
+            // Set progress bar default color
+        }
+    }
 }
