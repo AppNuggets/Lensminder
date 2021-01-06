@@ -30,11 +30,11 @@ public class SolutionActivity extends AppCompatActivity {
     private RecyclerView solutionsRecycleView;
     private RecyclerView containersRecycleView;
 
-    SolutionAdapter solutionAdapter;
-    ContainerAdapter containerAdapter;
+    private SolutionAdapter solutionAdapter;
+    private ContainerAdapter containerAdapter;
 
-    FloatingActionButton showAddSolutionButton;
-    FloatingActionButton showAddContainerButton;
+    private FloatingActionButton showAddSolutionButton;
+    private FloatingActionButton showAddContainerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +62,13 @@ public class SolutionActivity extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.Lenses:
-                        return true;
+                        startActivity(new Intent(getApplicationContext(), LensesActivity.class));
+                        overridePendingTransition(0,0);
                     case R.id.Solution:
                         return true;
                     case R.id.Drops:
                         startActivity(new Intent(getApplicationContext(), DropsActivity.class));
                         overridePendingTransition(0,0);
-                        return true;
                     case R.id.Settings:
                         return true;
                 }

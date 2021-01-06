@@ -31,7 +31,7 @@ import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 public class DropsActivity extends AppCompatActivity {
 
     private BottomSheetDialog bottomSheetDialog;
-    FloatingActionButton showAddDropsButton;
+    private FloatingActionButton showAddDropsButton;
     private TextInputLayout textInputLayout;
     private AutoCompleteTextView autoCompleteTextView;
     private MaterialButton deleteDrops;
@@ -46,8 +46,7 @@ public class DropsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drops);
 
-        MaterialButton deleteDrops = findViewById(R.id.deleteDropsButton);
-        showAddDropsButton = findViewById(R.id.showAddDrops);
+        MaterialButton deleteDrops = findViewById(R.id.dropsDeleteButton);
 
         updateDropsSummary();
 
@@ -64,7 +63,8 @@ public class DropsActivity extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.Lenses:
-                        return true;
+                        startActivity(new Intent(getApplicationContext(), LensesActivity.class));
+                        overridePendingTransition(0,0);
                     case R.id.Solution:
                         startActivity(new Intent(getApplicationContext(), SolutionActivity.class));
                         overridePendingTransition(0,0);
@@ -79,7 +79,6 @@ public class DropsActivity extends AppCompatActivity {
         });
 
         showAddDropsButton = findViewById(R.id.showAddDrops);
-
         showAddDropsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,8 +89,7 @@ public class DropsActivity extends AppCompatActivity {
             }
         });
 
-        deleteDrops = findViewById(R.id.deleteDropsButton);
-
+        deleteDrops = findViewById(R.id.dropsDeleteButton);
         deleteDrops.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

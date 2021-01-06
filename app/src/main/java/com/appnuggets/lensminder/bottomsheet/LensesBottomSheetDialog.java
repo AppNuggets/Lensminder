@@ -24,13 +24,12 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
+public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
-    private TextInputLayout textInputLayout;
+    private TextInputLayout lensesWearCycle;
     private AutoCompleteTextView autoCompleteTextView;
-
-    private TextInputEditText dropsStartDate;
-    private TextInputEditText dropsExpDate;
+    private TextInputEditText lensesStartDate;
+    private TextInputEditText lensesExpDate;
     private MaterialButton saveButton;
 
     MaterialDatePicker startDatePicker;
@@ -39,13 +38,15 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.drops_bottom_sheet_layout, container, false);
+        View v = inflater.inflate(R.layout.lenses_bottom_sheet_layout, container, false);
 
-        textInputLayout = (TextInputLayout) v.findViewById(R.id.dropsExpPeriod);
-        autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_drops);
+        lensesWearCycle = (TextInputLayout) v.findViewById(R.id.lensesWearCycle);
+        autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_lenses);
 
         String[] items = new String[] {
-                "Three Month",
+                "Two Weeks",
+                "One month",
+                "Three months",
                 "Six months"
         };
 
@@ -57,11 +58,11 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
 
         autoCompleteTextView.setAdapter(adapter);
 
+        lensesStartDate = (TextInputEditText) v.findViewById(R.id.dropsStartDate);
+        lensesExpDate = (TextInputEditText) v.findViewById(R.id.dropsExpDate);
+        setCalendar();
 
-        dropsStartDate = (TextInputEditText) v.findViewById(R.id.dropsStartDate);
-        dropsExpDate = (TextInputEditText) v.findViewById(R.id.dropsExpDate);
-
-        dropsStartDate.setOnClickListener(new View.OnClickListener()
+        lensesStartDate.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -70,7 +71,7 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        dropsStartDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        lensesStartDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -82,15 +83,11 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         startDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
-                dropsStartDate.setText(startDatePicker.getHeaderText());
-
-                /*String myFormat = "MM/dd/yy";
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-                startDateDrops.setText(sdf.format(materialDatePicker.getHeaderText()));*/
+                lensesStartDate.setText(startDatePicker.getHeaderText());
             }
         });
 
-        dropsExpDate.setOnClickListener(new View.OnClickListener()
+        lensesExpDate.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -99,7 +96,7 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        dropsExpDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        lensesExpDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -111,11 +108,11 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         expDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
-                dropsExpDate.setText(expDatePicker.getHeaderText());
+                lensesExpDate.setText(expDatePicker.getHeaderText());
             }
         });
 
-        saveButton = (MaterialButton) v.findViewById(R.id.dropsSaveButton);
+        saveButton = (MaterialButton) v.findViewById(R.id.lensesSaveButton);
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -123,39 +120,35 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-       return v;
+        return v;
     }
 
     public void setCalendar(){
-        dropsStartDate.setInputType(InputType.TYPE_NULL);
-        dropsStartDate.setKeyListener(null);
+        lensesStartDate.setInputType(InputType.TYPE_NULL);
+        lensesStartDate.setKeyListener(null);
+        lensesExpDate.setInputType(InputType.TYPE_NULL);
+        lensesExpDate.setKeyListener(null);
 
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.clear();
         long today = MaterialDatePicker.todayInUtcMilliseconds();
 
-                /*calendar.roll(Calendar.MONTH, Calendar.JANUARY);
-                long january = calendar.getTimeInMillis();
-                calendar.roll(Calendar.MONTH, Calendar.DECEMBER);
-                long december = calendar.getTimeInMillis();*/
-
         CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
-                /*constraintBuilder.setStart(january);
-                constraintBuilder.setEnd(december);*/
 
         MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-        // builder.setTheme(R.style.MyDatePickerDialogTheme);
         builder.setTitleText("Select start date");
         builder.setSelection(today);
         builder.setCalendarConstraints(constraintBuilder.build());
+
         startDatePicker = builder.build();
 
-        dropsExpDate.setInputType(InputType.TYPE_NULL);
-        dropsExpDate.setKeyListener(null);
         constraintBuilder.setValidator(DateValidatorPointForward.now());
+
         MaterialDatePicker.Builder builderExp = MaterialDatePicker.Builder.datePicker();
         builderExp.setTitleText("Select exp. date");
         builderExp.setCalendarConstraints(constraintBuilder.build());
+
         expDatePicker = builderExp.build();
     }
+
 }

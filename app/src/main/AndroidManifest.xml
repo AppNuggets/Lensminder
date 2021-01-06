@@ -13,14 +13,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Lensminder">
+        <activity android:name=".activity.LensesActivity"></activity>
         <activity android:name=".activity.DashboardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activity.DropsActivity" />
-        <activity android:name=".activity.SolutionActivity"/>
+        <activity android:name=".activity.SolutionActivity" />
 
         <uses-library
             android:name="com.google.android.maps"
