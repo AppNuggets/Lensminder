@@ -32,13 +32,13 @@ public class DashboardActivity extends AppCompatActivity {
         Lenses lenses = new Lenses( new Date("03/05/2021"), new Date("01/01/2021"),31);
         updateLensesCard(lenses);
 
-        Container container = new Container( new Date("12/04/2021"), new Date("10/05/2020"),63);
+        Container container = new Container( new Date("12/04/2021"), new Date("10/05/2020"),63, "A");
         updateContainerCard(container);
 
         Drops drops = new Drops( new Date("06/10/2021"), new Date("12/01/2020"),63, "A");
         updateDropsCard(drops);
 
-        Solution solution = new Solution( new Date("07/06/2021"), new Date("12/23/2020"),63);
+        Solution solution = new Solution( new Date("07/06/2021"), new Date("12/23/2020"),63, "A");
         updateSolutionCard(solution);
 
 

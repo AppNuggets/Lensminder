@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:id="@+id/bottom_sheet_drops"
-    android:background="@drawable/bottom_sheet_background"
-    android:padding="20dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/solution_bottom_sheet"
+    android:background="@drawable/bottom_sheet_background"
+    android:padding="20dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start New drops"
+        android:text="Start new solution"
         android:textSize="20dp"
         android:textColor="@color/black"
         android:gravity="left"
@@ -27,7 +28,7 @@
         android:gravity="center_horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/startDateFieldDrops"
+            android:id="@+id/solutionStartDateField"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:hint="Start date"
@@ -45,7 +46,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/startDateDrops"
+                android:id="@+id/solutionStartDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="date"
@@ -56,7 +57,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/expDateFieldDrops"
+            android:id="@+id/solutionExpDateField"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:hint="Exp. date"
@@ -69,7 +70,7 @@
             android:layout_marginStart="10dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/expDateDrops"
+                android:id="@+id/solutionExpDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
@@ -80,31 +81,8 @@
 
     </LinearLayout>
 
-
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/expPeriod"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Exp. period"
-        app:boxBackgroundMode="outline"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        app:endIconMode="dropdown_menu"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp">
-
-        <AutoCompleteTextView
-            android:id="@+id/autoComplete_drops"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/nameFieldDrops"
+        android:id="@+id/solutionNameField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"
@@ -120,6 +98,7 @@
         android:layout_marginStart="50dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/solutionName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"/>
@@ -127,7 +106,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/saveDrops"
+        android:id="@+id/solutionSaveButton"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_centerInParent="true"
