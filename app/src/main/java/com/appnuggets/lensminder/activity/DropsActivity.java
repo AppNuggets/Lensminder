@@ -15,11 +15,12 @@ import android.widget.TextView;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.adapter.DropsAdapter;
-import com.appnuggets.lensminder.bottomsheet.BottomSheetDialogDrops;
+import com.appnuggets.lensminder.bottomsheet.DropsBottomSheetDialog;
 import com.appnuggets.lensminder.database.AppDatabase;
 
 import com.appnuggets.lensminder.database.entity.Drops;
 import com.appnuggets.lensminder.model.UsageProcessor;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
@@ -33,6 +34,8 @@ public class DropsActivity extends AppCompatActivity {
     FloatingActionButton showAddDropsButton;
     private TextInputLayout textInputLayout;
     private AutoCompleteTextView autoCompleteTextView;
+    private MaterialButton deleteDrops;
+    private CircularProgressBar dropsProgressBar;
 
     RecyclerView recyclerView;
     DropsAdapter dropsAdapter;
@@ -47,7 +50,6 @@ public class DropsActivity extends AppCompatActivity {
         showAddDropsButton = findViewById(R.id.showAddDrops);
 
         updateDropsSummary();
-
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.Drops);
@@ -76,21 +78,24 @@ public class DropsActivity extends AppCompatActivity {
             }
         });
 
+        showAddDropsButton = findViewById(R.id.showAddDrops);
+
         showAddDropsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                BottomSheetDialogDrops bottomSheetDialogDrops = new BottomSheetDialogDrops();
-                bottomSheetDialogDrops.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
-                bottomSheetDialogDrops.show(getSupportFragmentManager(), "bottomSheetDrops");
+                DropsBottomSheetDialog dropsBottomSheetDialog = new DropsBottomSheetDialog();
+                dropsBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
+                dropsBottomSheetDialog.show(getSupportFragmentManager(), "bottomSheetDrops");
             }
         });
 
+        deleteDrops = findViewById(R.id.deleteDropsButton);
 
         deleteDrops.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //delete this drops
+                //TODO
             }
         });
 
@@ -129,6 +134,5 @@ public class DropsActivity extends AppCompatActivity {
 
             leftDays.setText(daysLeft.toString());
         }
-
     }
 }

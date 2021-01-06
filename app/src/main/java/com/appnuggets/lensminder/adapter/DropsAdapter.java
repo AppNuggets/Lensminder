@@ -37,9 +37,9 @@ public class DropsAdapter extends RecyclerView.Adapter<DropsAdapter.ViewHolder> 
         DateProcessor dateProcessor = new DateProcessor();
         if(dropsList != null && dropsList.size() > 0) {
             Drops dropsItem = dropsList.get(position);
-            holder.nameDrops.setText(dropsItem.name);
-            holder.fromDrops.setText(dateProcessor.dateToString(dropsItem.startDate));
-            holder.toDrops.setText(dateProcessor.dateToString(dropsItem.expirationDate));
+            holder.dropsName.setText(dropsItem.name);
+            holder.dropsStartDate.setText(dateProcessor.dateToString(dropsItem.startDate));
+            holder.dropsExpDate.setText(dateProcessor.dateToString(dropsItem.expirationDate));
         }
         else {
             return;
@@ -52,12 +52,13 @@ public class DropsAdapter extends RecyclerView.Adapter<DropsAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameDrops, fromDrops, toDrops;
+        TextView dropsName, dropsStartDate, dropsExpDate;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameDrops = itemView.findViewById(R.id.nameDrops);
-            fromDrops = itemView.findViewById(R.id.fromDrops);
-            toDrops = itemView.findViewById(R.id.toDrops);
+
+            dropsName = itemView.findViewById(R.id.name);
+            dropsStartDate = itemView.findViewById(R.id.from);
+            dropsExpDate = itemView.findViewById(R.id.to);
         }
     }
 }

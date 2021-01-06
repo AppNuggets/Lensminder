@@ -6,7 +6,7 @@
 
     <TableRow>
         <TextView
-            android:id="@+id/nameDrops"
+            android:id="@+id/name"
             android:padding="10dp"
             android:textSize="15dp"
             android:gravity="center"
@@ -14,7 +14,7 @@
             android:layout_column="1" />
 
         <TextView
-            android:id="@+id/fromDrops"
+            android:id="@+id/from"
             android:padding="10dp"
             android:textSize="15dp"
             android:gravity="center"
@@ -22,7 +22,7 @@
             android:layout_column="2"/>
 
         <TextView
-            android:id="@+id/toDrops"
+            android:id="@+id/to"
             android:padding="10dp"
             android:textSize="15dp"
             android:gravity="center"
