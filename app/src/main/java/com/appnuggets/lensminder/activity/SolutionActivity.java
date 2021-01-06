@@ -13,10 +13,12 @@ import android.view.View;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.adapter.ContainerAdapter;
+import com.appnuggets.lensminder.adapter.DropsAdapter;
 import com.appnuggets.lensminder.adapter.SolutionAdapter;
 import com.appnuggets.lensminder.bottomsheet.ContainerBottomSheetDialog;
 import com.appnuggets.lensminder.bottomsheet.DropsBottomSheetDialog;
 import com.appnuggets.lensminder.bottomsheet.SolutionBottomSheetDialog;
+import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.model.Container;
 import com.appnuggets.lensminder.model.Solution;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -123,34 +125,16 @@ public class SolutionActivity extends AppCompatActivity {
     }
 
     private void setRecyclerViews() {
+        AppDatabase db = AppDatabase.getInstance(this);
+
         solutionsRecycleView.setHasFixedSize(true);
         solutionsRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        solutionAdapter = new SolutionAdapter(this, getSolutionsList());
+        solutionAdapter = new SolutionAdapter(this, db.solutionDao().getAllNotInUse());
         solutionsRecycleView.setAdapter(solutionAdapter);
 
         containersRecycleView.setHasFixedSize(true);
         containersRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        containerAdapter = new ContainerAdapter(this, getContainersList());
+        containerAdapter = new ContainerAdapter(this, db.containerDao().getAllNotInUse());
         containersRecycleView.setAdapter(containerAdapter);
-    }
-
-    private List<Solution> getSolutionsList(){
-        List<Solution> list = new ArrayList<>();
-        list.add(new Solution(new Date("06/10/2021"), new Date("12/01/2020"),63, "A"));
-        list.add(new Solution(new Date("06/10/2021"), new Date("12/01/2020"),63, "B"));
-        list.add(new Solution(new Date("06/10/2021"), new Date("12/01/2020"),63, "C"));
-        list.add(new Solution(new Date("06/10/2021"), new Date("12/01/2020"),63, "D"));
-        list.add(new Solution(new Date("06/10/2021"), new Date("12/01/2020"),63, "E"));
-        return list;
-    }
-
-    private List<Container> getContainersList(){
-        List<Container> list = new ArrayList<>();
-        list.add(new Container(new Date("06/10/2021"), new Date("12/01/2020"),63, "F"));
-        list.add(new Container(new Date("06/10/2021"), new Date("12/01/2020"),63, "G"));
-        list.add(new Container(new Date("06/10/2021"), new Date("12/01/2020"),63, "H"));
-        list.add(new Container(new Date("06/10/2021"), new Date("12/01/2020"),63, "I"));
-        list.add(new Container(new Date("06/10/2021"), new Date("12/01/2020"),63, "J"));
-        return list;
     }
 }

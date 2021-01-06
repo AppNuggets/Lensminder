@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnuggets.lensminder.R;
-import com.appnuggets.lensminder.model.Drops;
-import com.appnuggets.lensminder.model.Solution;
+import com.appnuggets.lensminder.database.entity.Solution;
+import com.appnuggets.lensminder.model.DateProcessor;
 
 import java.util.List;
 
@@ -34,11 +34,12 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        DateProcessor dateProcessor = new DateProcessor();
         if(solutionList != null && solutionList.size() > 0) {
-            Solution model = solutionList.get(position);
-            holder.solutionName.setText(model.getName());
-            holder.solutionStartDate.setText(model.getOpenDateString());
-            holder.solutionExpDate.setText(model.getExpirationDateString());
+            Solution solutionItem = solutionList.get(position);
+            holder.solutionName.setText(solutionItem.name);
+            holder.solutionStartDate.setText(dateProcessor.dateToString(solutionItem.startDate));
+            holder.solutionExpDate.setText(dateProcessor.dateToString(solutionItem.expirationDate));
         }
         else {
             return;

@@ -10,8 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnuggets.lensminder.R;
-import com.appnuggets.lensminder.model.Container;
-import com.appnuggets.lensminder.model.Solution;
+import com.appnuggets.lensminder.database.entity.Container;
+import com.appnuggets.lensminder.model.DateProcessor;
 
 import java.util.List;
 
@@ -34,11 +34,12 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ContainerAdapter.ViewHolder holder, int position) {
+        DateProcessor dateProcessor = new DateProcessor();
         if(containerList != null && containerList.size() > 0) {
-            Container model = containerList.get(position);
-            holder.containerName.setText(model.getName());
-            holder.containerStartDate.setText(model.getOpenDateString());
-            holder.containerExpDate.setText(model.getExpirationDateString());
+            Container containerItem = containerList.get(position);
+            holder.containerName.setText(containerItem.name);
+            holder.containerStartDate.setText(dateProcessor.dateToString(containerItem.startDate));
+            holder.containerExpDate.setText(dateProcessor.dateToString(containerItem.expirationDate));
         }
         else {
             return;
