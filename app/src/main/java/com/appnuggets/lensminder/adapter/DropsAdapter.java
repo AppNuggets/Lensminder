@@ -35,9 +35,9 @@ public class DropsAdapter extends RecyclerView.Adapter<DropsAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull DropsAdapter.ViewHolder holder, int position) {
         if(dropsList != null && dropsList.size() > 0) {
             Drops model = dropsList.get(position);
-            holder.nameDrops.setText(model.getName());
-            holder.fromDrops.setText(model.getOpenDateString());
-            holder.toDrops.setText(model.getExpirationDateString());
+            holder.dropsName.setText(model.getName());
+            holder.dropsStartDate.setText(model.getOpenDateString());
+            holder.dropsExpDate.setText(model.getExpirationDateString());
         }
         else {
             return;
@@ -50,15 +50,15 @@ public class DropsAdapter extends RecyclerView.Adapter<DropsAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameDrops, fromDrops, toDrops;
+        TextView dropsName, dropsStartDate, dropsExpDate;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            nameDrops = itemView.findViewById(R.id.nameDrops);
-            fromDrops = itemView.findViewById(R.id.fromDrops);
-            toDrops = itemView.findViewById(R.id.toDrops);
+            dropsName = itemView.findViewById(R.id.name);
+            dropsStartDate = itemView.findViewById(R.id.from);
+            dropsExpDate = itemView.findViewById(R.id.to);
         }
     }
 }
