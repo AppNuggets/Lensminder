@@ -10,7 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnuggets.lensminder.R;
-import com.appnuggets.lensminder.model.Drops;
+import com.appnuggets.lensminder.database.entity.Drops;
+import com.appnuggets.lensminder.model.DateProcessor;
 
 import java.util.List;
 
@@ -33,11 +34,12 @@ public class DropsAdapter extends RecyclerView.Adapter<DropsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull DropsAdapter.ViewHolder holder, int position) {
+        DateProcessor dateProcessor = new DateProcessor();
         if(dropsList != null && dropsList.size() > 0) {
-            Drops model = dropsList.get(position);
-            holder.dropsName.setText(model.getName());
-            holder.dropsStartDate.setText(model.getOpenDateString());
-            holder.dropsExpDate.setText(model.getExpirationDateString());
+            Drops dropsItem = dropsList.get(position);
+            holder.dropsName.setText(dropsItem.name);
+            holder.dropsStartDate.setText(dateProcessor.dateToString(dropsItem.startDate));
+            holder.dropsExpDate.setText(dateProcessor.dateToString(dropsItem.expirationDate));
         }
         else {
             return;
@@ -51,8 +53,6 @@ public class DropsAdapter extends RecyclerView.Adapter<DropsAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView dropsName, dropsStartDate, dropsExpDate;
-
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 

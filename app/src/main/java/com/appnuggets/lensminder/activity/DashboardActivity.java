@@ -4,21 +4,25 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.appnuggets.lensminder.R;
-import com.appnuggets.lensminder.model.Container;
-import com.appnuggets.lensminder.model.Drops;
-import com.appnuggets.lensminder.model.Lenses;
-import com.appnuggets.lensminder.model.Solution;
+import com.appnuggets.lensminder.database.AppDatabase;
+import com.appnuggets.lensminder.database.entity.Container;
+import com.appnuggets.lensminder.database.entity.Drops;
+import com.appnuggets.lensminder.database.entity.Lenses;
+import com.appnuggets.lensminder.database.entity.Solution;
+import com.appnuggets.lensminder.model.DateProcessor;
+import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -27,20 +31,6 @@ public class DashboardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
-        // Dummy values test
-        Lenses lenses = new Lenses( new Date("03/05/2021"), new Date("01/01/2021"),31);
-        updateLensesCard(lenses);
-
-        Container container = new Container( new Date("12/04/2021"), new Date("10/05/2020"),63, "A");
-        updateContainerCard(container);
-
-        Drops drops = new Drops( new Date("06/10/2021"), new Date("12/01/2020"),63, "A");
-        updateDropsCard(drops);
-
-        Solution solution = new Solution( new Date("07/06/2021"), new Date("12/23/2020"),63, "A");
-        updateSolutionCard(solution);
-
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.Dashboard);
@@ -105,87 +95,221 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-    private void updateLensesCard(Lenses lenses) {
-        CircularProgressBar lensesProgressBar = findViewById(R.id.lensesProgressBar);
-        TextView lensesDaysCount = findViewById(R.id.lensesDaysCount);
-        TextView lensesExpDate = findViewById(R.id.lensesExpDateTextView);
-        TextView lensesDaysUsed = findViewById(R.id.lensesDaysUsedTextView);
+    @Override
+    protected void onResume() {
 
-        lensesProgressBar.setProgressMax(lenses.getDuration());
-        lensesExpDate.setText(lenses.getExpirationDateString());
-        lensesDaysUsed.setText(Long.toString(lenses.getCurrentUsage()));
-        lensesProgressBar.setProgressWithAnimation(lenses.getDuration() -  lenses.getUsageLeft(), (long) 1000); // =1s
-        if( 0 >= lenses.getUsageLeft() ) {
-            lensesDaysCount.setText(Long.toString(lenses.getUsageLeft()));
-            lensesProgressBar.setProgressBarColor(Color.RED);
-            lensesDaysCount.setTextColor(Color.RED);
+        super.onResume();
+
+        AppDatabase db = AppDatabase.getInstance(this);
+
+        //DEBUG_populateDataBase(db);
+
+        Lenses lensesInUse = db.lensesDao().getInUse();
+        updateLensesSummary(lensesInUse);
+
+        Container containerInUse = db.containerDao().getInUse();
+        updateContainerSummary(containerInUse);
+
+        Drops dropsInUse = db.dropsDao().getInUse();
+        updateDropsSummary(dropsInUse);
+
+        Solution solutionsInUse = db.solutionDao().getInUse();
+        updateSolutionSummary(solutionsInUse);
+    }
+
+    private void updateLensesSummary(Lenses lenses) {
+        CircularProgressBar progressBar = findViewById(R.id.lensesProgressBar);
+        TextView leftDaysCount = findViewById(R.id.lensesDaysCount);
+        TextView expDate = findViewById(R.id.lensesExpDateTextView);
+        TextView daysUsed = findViewById(R.id.lensesDaysUsedTextView);
+        if(null == lenses) {
+            updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }
         else {
-            lensesDaysCount.setText(Long.toString(lenses.getUsageLeft()));
-            lensesDaysCount.setTextSize(40);
+            updateCardInfoAvailable(progressBar, leftDaysCount, daysUsed, expDate,
+                    lenses.expirationDate, lenses.startDate, lenses.useInterval);
         }
     }
 
-    private void updateContainerCard(Container container) {
-        CircularProgressBar containerProgressBar = findViewById(R.id.containerProgressBar);
-        TextView containerDaysCount = findViewById(R.id.containerDaysCount);
-        TextView containerExpDate = findViewById(R.id.containerExpDateTextView);
-        TextView containerDaysUsed = findViewById(R.id.containerDaysUsedTextView);
-
-        containerProgressBar.setProgressMax(container.getDuration());
-        containerExpDate.setText(container.getExpirationDateString());
-        containerDaysUsed.setText(Long.toString(container.getCurrentUsage()));
-        containerProgressBar.setProgressWithAnimation(container.getDuration() -  container.getUsageLeft(), (long) 1000); // =1s
-        if( 0 >= container.getUsageLeft() ) {
-            containerDaysCount.setText(Long.toString(container.getUsageLeft()));
-            containerProgressBar.setProgressBarColor(Color.RED);
-            containerDaysCount.setTextColor(Color.RED);
+    private void updateContainerSummary(Container container) {
+        CircularProgressBar progressBar = findViewById(R.id.containerProgressBar);
+        TextView leftDaysCount = findViewById(R.id.containerDaysCount);
+        TextView expDate = findViewById(R.id.containerExpDateTextView);
+        TextView daysUsed = findViewById(R.id.containerDaysUsedTextView);
+        if(null == container) {
+            updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }
         else {
-            containerDaysCount.setText(Long.toString(container.getUsageLeft()));
-            containerDaysCount.setTextSize(40);
+            updateCardInfoAvailable(progressBar, leftDaysCount, daysUsed, expDate,
+                    container.expirationDate, container.startDate, container.useInterval);
         }
     }
 
-    private void updateDropsCard(Drops drops) {
-        CircularProgressBar dropsProgressBar = findViewById(R.id.dropsProgressBar);
-        TextView dropsDaysCount = findViewById(R.id.dropsDaysCount);
-        TextView dropsExpDate = findViewById(R.id.dropsExpDateTextView);
-        TextView dropsDaysUsed = findViewById(R.id.dropsDaysUsedTextView);
-
-        dropsProgressBar.setProgressMax(drops.getDuration());
-        dropsExpDate.setText(drops.getExpirationDateString());
-        dropsDaysUsed.setText(Long.toString(drops.getCurrentUsage()));
-        dropsProgressBar.setProgressWithAnimation(drops.getDuration() -  drops.getUsageLeft(), (long) 1000); // =1s
-        if( 0 >= drops.getUsageLeft() ) {
-            dropsDaysCount.setText(Long.toString(drops.getUsageLeft()));
-            dropsProgressBar.setProgressBarColor(Color.RED);
-            dropsDaysCount.setTextColor(Color.RED);
+    private void updateDropsSummary(Drops drops) {
+        CircularProgressBar progressBar = findViewById(R.id.dropsProgressBar);
+        TextView leftDaysCount = findViewById(R.id.dropsDaysCount);
+        TextView expDate = findViewById(R.id.dropsExpDateTextView);
+        TextView daysUsed = findViewById(R.id.dropsDaysUsedTextView);
+        if(null == drops) {
+            updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }
         else {
-            dropsDaysCount.setText(Long.toString(drops.getUsageLeft()));
-            dropsDaysCount.setTextSize(40);
+            updateCardInfoAvailable(progressBar, leftDaysCount, daysUsed, expDate,
+                    drops.expirationDate, drops.startDate, drops.useInterval);
         }
     }
 
-    private void updateSolutionCard (Solution solution) {
-        CircularProgressBar solutionProgressBar = findViewById(R.id.solutionProgressBar);
-        TextView solutionDaysCount = findViewById(R.id.solutionDaysCount);
-        TextView solutionExpDate = findViewById(R.id.solutionExpDateTextView);
-        TextView solutionDaysUsed = findViewById(R.id.solutionDaysUsedTextView);
-
-        solutionProgressBar.setProgressMax(solution.getDuration());
-        solutionExpDate.setText(solution.getExpirationDateString());
-        solutionDaysUsed.setText(Long.toString(solution.getCurrentUsage()));
-        solutionProgressBar.setProgressWithAnimation(solution.getDuration() -  solution.getUsageLeft(), (long) 1000); // =1s
-        if( 0 >= solution.getUsageLeft() ) {
-            solutionDaysCount.setText(Long.toString(solution.getUsageLeft()));
-            solutionProgressBar.setProgressBarColor(Color.RED);
-            solutionDaysCount.setTextColor(Color.RED);
+    private void updateSolutionSummary(Solution solution) {
+        CircularProgressBar progressBar = findViewById(R.id.solutionProgressBar);
+        TextView leftDaysCount = findViewById(R.id.solutionDaysCount);
+        TextView expDate = findViewById(R.id.solutionExpDateTextView);
+        TextView daysUsed = findViewById(R.id.solutionDaysUsedTextView);
+        if(null == solution) {
+            updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }
         else {
-            solutionDaysCount.setText(Long.toString(solution.getUsageLeft()));
-            solutionDaysCount.setTextSize(40);
+            updateCardInfoAvailable(progressBar, leftDaysCount, daysUsed, expDate,
+                    solution.expirationDate, solution.startDate, solution.useInterval);
+        }
+    }
+
+    private void updateCardInfoUnavailable(CircularProgressBar progressBar, TextView leftDaysView,
+                                           TextView daysUsedView, TextView expDateView) {
+        progressBar.setProgressMax(100f);
+        progressBar.setProgressWithAnimation(0f,1000L);
+        daysUsedView.setText("-");
+        expDateView.setText("-");
+        leftDaysView.setText("-");
+    }
+
+    private void updateCardInfoAvailable(CircularProgressBar progressBar, TextView leftDaysView,
+                                         TextView daysUsedView, TextView expDateView,
+                                         Date expDate, Date startDate, Long useInterval) {
+        DateProcessor dateProcessor = new DateProcessor();
+        UsageProcessor usageProcessor = new UsageProcessor();
+
+        Long leftDays = usageProcessor.calculateUsageLeft(startDate, expDate, useInterval);
+        Long daysUsed = usageProcessor.calculateCurrentUsage(startDate);
+
+        leftDaysView.setText(leftDays.toString());
+        daysUsedView.setText(daysUsed.toString());
+        expDateView.setText(dateProcessor.dateToString(expDate));
+
+        progressBar.setProgressMax(useInterval);
+        progressBar.setProgressWithAnimation(useInterval - leftDays, 1000L);
+
+        if( leftDays <= 0) {
+            // Set progressbar red
+        }
+        else {
+            // Set progress bar default color
+        }
+    }
+
+    private void DEBUG_populateDataBase(AppDatabase db) {
+        try {
+            Lenses lenses1 = new Lenses("lenses", true,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("15.12.2020"),
+                    31L);
+
+            Lenses lenses2 = new Lenses("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("03.01.2020"),
+                    31L);
+
+            Lenses lenses3 = new Lenses("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("08.02.2020"),
+                    31L);
+
+            Lenses lenses4 = new Lenses("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("10.03.2020"),
+                    31L);
+
+            Container container1 = new Container("container", true,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("29.01.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("01.01.2021"),
+                    93L);
+
+            Container container2 = new Container("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("11.01.2020"),
+                    93L);
+
+            Container container3 = new Container("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("17.02.2020"),
+                    93L);
+
+            Container container4 = new Container("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("02.03.2020"),
+                    93L);
+
+            Drops drops1 = new Drops("drops", true,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("24.12.2020"),
+                    93L);
+
+            Drops drops2 = new Drops("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("12.02.2020"),
+                    93L);
+
+            Drops drops3 = new Drops("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("17.03.2020"),
+                    93L);
+
+            Drops drops4 = new Drops("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("07.06.2020"),
+                    93L);
+
+            Solution solution1 = new Solution("solution", true,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("04.01.2021"),
+                    93L);
+
+            Solution solution2 = new Solution("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("12.02.2019"),
+                    93L);
+
+            Solution solution3 = new Solution("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("17.03.2019"),
+                    93L);
+
+            Solution solution4 = new Solution("lenses", false,
+                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
+                    new SimpleDateFormat("dd.MM.yyyy").parse("07.06.2019"),
+                    93L);
+
+            db.lensesDao().insert(lenses1);
+            db.lensesDao().insert(lenses2);
+            db.lensesDao().insert(lenses3);
+            db.lensesDao().insert(lenses4);
+
+            db.containerDao().insert(container1);
+            db.containerDao().insert(container2);
+            db.containerDao().insert(container3);
+            db.containerDao().insert(container4);
+
+            db.dropsDao().insert(drops1);
+            db.dropsDao().insert(drops2);
+            db.dropsDao().insert(drops3);
+            db.dropsDao().insert(drops4);
+
+            db.solutionDao().insert(solution1);
+            db.solutionDao().insert(solution2);
+            db.solutionDao().insert(solution3);
+            db.solutionDao().insert(solution4);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 }
