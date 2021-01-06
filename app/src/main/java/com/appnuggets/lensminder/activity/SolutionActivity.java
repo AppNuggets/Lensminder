@@ -1,34 +1,25 @@
 package com.appnuggets.lensminder.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.adapter.ContainerAdapter;
-import com.appnuggets.lensminder.adapter.DropsAdapter;
 import com.appnuggets.lensminder.adapter.SolutionAdapter;
 import com.appnuggets.lensminder.bottomsheet.ContainerBottomSheetDialog;
-import com.appnuggets.lensminder.bottomsheet.DropsBottomSheetDialog;
 import com.appnuggets.lensminder.bottomsheet.SolutionBottomSheetDialog;
 import com.appnuggets.lensminder.database.AppDatabase;
-import com.appnuggets.lensminder.model.Container;
-import com.appnuggets.lensminder.model.Solution;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class SolutionActivity extends AppCompatActivity {
 
