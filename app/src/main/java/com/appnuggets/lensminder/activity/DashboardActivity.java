@@ -4,22 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import com.appnuggets.lensminder.R;
-import com.appnuggets.lensminder.model.Container;
-import com.appnuggets.lensminder.model.Drops;
-import com.appnuggets.lensminder.model.Lenses;
-import com.appnuggets.lensminder.model.Solution;
+import com.appnuggets.lensminder.database.AppDatabase;
+import com.appnuggets.lensminder.database.entity.Solution;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
-import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -28,19 +26,38 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        // Dummy values test
-        Lenses lenses = new Lenses( new Date("03/05/2021"), new Date("01/01/2021"),31);
-        updateLensesCard(lenses);
+        //Database testing ground
+        try {
+            Date startDate = new SimpleDateFormat("dd.MM.yyyy").parse("06.01.2021");
+            Date expirationDate = new SimpleDateFormat("dd.MM.yyyy").parse("06.04.2021");
 
-        Container container = new Container( new Date("12/04/2021"), new Date("10/05/2020"),63);
-        updateContainerCard(container);
+            AppDatabase db = AppDatabase.getInstance(this);
 
-        Drops drops = new Drops( new Date("06/10/2021"), new Date("12/01/2020"),63, "A");
-        updateDropsCard(drops);
+            List<Solution> allSolutions = db.solutionDao().getAll();
+            Solution solutionsInUse = db.solutionDao().getInUse();
+            List<Solution> pastSolutions = db.solutionDao().getAllNotInUse();
 
-        Solution solution = new Solution( new Date("07/06/2021"), new Date("12/23/2020"),63);
-        updateSolutionCard(solution);
+            Solution solution = new Solution("solution", true, expirationDate,
+                    startDate, 96L);
 
+            /* Insert one in use */
+            db.solutionDao().insert(solution);
+            /* Create some history */
+            solution.inUse = false;
+            db.solutionDao().insert(solution);
+            db.solutionDao().insert(solution);
+            db.solutionDao().insert(solution);
+
+            allSolutions = db.solutionDao().getAll();
+            solutionsInUse = db.solutionDao().getInUse();
+            pastSolutions = db.solutionDao().getAllNotInUse();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.Dashboard);
@@ -105,7 +122,7 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
-    private void updateLensesCard(Lenses lenses) {
+/*    private void updateLensesCard(Lenses lenses) {
         CircularProgressBar lensesProgressBar = findViewById(R.id.lensesProgressBar);
         TextView lensesDaysCount = findViewById(R.id.lensesDaysCount);
         TextView lensesExpDate = findViewById(R.id.lensesExpDateTextView);
@@ -187,5 +204,5 @@ public class DashboardActivity extends AppCompatActivity {
             solutionDaysCount.setText(Long.toString(solution.getUsageLeft()));
             solutionDaysCount.setTextSize(40);
         }
-    }
+    }*/
 }
