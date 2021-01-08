@@ -1,0 +1,16 @@
+<resources>
+    <!-- Reminder Preference -->
+    <string-array name="reminder_entries">
+        <item>One day prior</item>
+        <item>Two days prior</item>
+        <item>Three days prior</item>
+        <item>Five days prior</item>
+    </string-array>
+
+    <string-array name="reminder_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>5</item>
+    </string-array>
+</resources>

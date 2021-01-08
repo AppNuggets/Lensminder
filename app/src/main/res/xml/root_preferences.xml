@@ -1,0 +1,39 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="Notifications">
+        <SwitchPreference
+            app:key="notify"
+            app:title="Receive notifications"
+            app:summaryOff="Reminders will not be sent"
+            app:summaryOn="Reminder will be sent according to the setting" />
+        <ListPreference
+            app:key="notification_period"
+            app:dependency="notify"
+            app:title="Reminder interval"
+            app:useSimpleSummaryProvider="true"
+            android:entries="@array/reminder_entries"
+            android:entryValues="@array/reminder_values"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Appearance">
+        <SwitchPreference
+            app:key="dark_mode"
+            app:title="Dark mode"
+            app:summaryOff="Disabled"
+            app:summaryOn="Enabled" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Personal">
+        <EditTextPreference
+            app:key="signature"
+            app:title="@string/signature_title"
+            app:useSimpleSummaryProvider="true" />
+        <PreferenceScreen  app:title="Eye defect" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="About">
+        <PreferenceScreen app:title="About this app"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
