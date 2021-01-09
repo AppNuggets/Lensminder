@@ -2,8 +2,12 @@ package com.appnuggets.lensminder.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,6 +33,15 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean darkModeEnabled = prefs.getBoolean("dark_mode", false);
+        if( true ==  darkModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
@@ -54,7 +67,8 @@ public class DashboardActivity extends AppCompatActivity {
                                 overridePendingTransition(0,0);
                                 return true;
                             case R.id.Settings:
-                                return true;
+                                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                                overridePendingTransition(0,0);
                         }
                         return false;
                     }

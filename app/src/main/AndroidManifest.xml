@@ -13,6 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Lensminder">
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_activity_settings" />
         <activity android:name=".activity.LensesActivity"></activity>
         <activity android:name=".activity.DashboardActivity">
             <intent-filter>
