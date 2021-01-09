@@ -6,7 +6,7 @@
             app:key="notify"
             app:title="Receive notifications"
             app:summaryOff="Reminders will not be sent"
-            app:summaryOn="Reminder will be sent according to the setting" />
+            app:summaryOn="Reminders will be sent according to the setting" />
         <ListPreference
             app:key="notification_period"
             app:dependency="notify"
@@ -25,15 +25,12 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Personal">
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
-        <PreferenceScreen  app:title="Eye defect" />
+        <PreferenceScreen  app:title="Eye defect"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="About">
-        <PreferenceScreen app:title="About this app"/>
+        <PreferenceScreen app:title="About this app"
+            app:summary="Lensminder version 1.0.0\nAuthors: Claudia Polaczek, Michal Granda "/>
     </PreferenceCategory>
 
 </PreferenceScreen>
