@@ -55,6 +55,8 @@ public class DashboardActivity extends AppCompatActivity {
                             case R.id.Dashboard:
                                 return true;
                             case R.id.Lenses:
+                                startActivity(new Intent(getApplicationContext(), LensesActivity.class));
+                                overridePendingTransition(0,0);
                                 return true;
                             case R.id.Solution:
                                 startActivity(new Intent(getApplicationContext(), SolutionActivity.class));
