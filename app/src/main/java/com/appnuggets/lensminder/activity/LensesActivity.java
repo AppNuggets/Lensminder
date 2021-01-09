@@ -2,7 +2,6 @@ package com.appnuggets.lensminder.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,26 +9,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 import com.appnuggets.lensminder.R;
-import com.appnuggets.lensminder.adapter.ContainerAdapter;
-import com.appnuggets.lensminder.adapter.DropsAdapter;
 import com.appnuggets.lensminder.adapter.LensesAdapter;
-import com.appnuggets.lensminder.adapter.SolutionAdapter;
-import com.appnuggets.lensminder.bottomsheet.DropsBottomSheetDialog;
 import com.appnuggets.lensminder.bottomsheet.LensesBottomSheetDialog;
 import com.appnuggets.lensminder.bottomsheet.LensesStockBottomSheetDialog;
 import com.appnuggets.lensminder.database.AppDatabase;
-import com.appnuggets.lensminder.database.entity.Drops;
 import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 public class LensesActivity extends AppCompatActivity {
@@ -125,7 +116,7 @@ public class LensesActivity extends AppCompatActivity {
     }
 
     private void updateLensesSummary() {
-        CircularProgressBar progressBar = findViewById(R.id.lensesProgressBar);
+        CircularProgressBar progressBar = findViewById(R.id.lenses_card_progressbar);
         TextView leftDays = findViewById(R.id.lensesLeftDays);
         AppDatabase db = AppDatabase.getInstance(this);
 

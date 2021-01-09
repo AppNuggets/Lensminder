@@ -59,7 +59,7 @@
                         android:layout_gravity="center_horizontal">
 
                         <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                            android:id="@+id/dropsProgressBar"
+                            android:id="@+id/drops_card_progressbar"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"

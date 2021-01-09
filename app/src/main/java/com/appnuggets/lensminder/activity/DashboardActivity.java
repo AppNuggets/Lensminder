@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreference;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -74,7 +73,7 @@ public class DashboardActivity extends AppCompatActivity {
                     }
                 });
 
-        MaterialCardView lensesCardView = findViewById(R.id.lensesCard);
+        MaterialCardView lensesCardView = findViewById(R.id.card_lenses);
         lensesCardView.setOnClickListener(new MaterialCardView.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +81,7 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        MaterialCardView containerCardView = findViewById(R.id.containerCard);
+        MaterialCardView containerCardView = findViewById(R.id.card_container);
         containerCardView.setOnClickListener(new MaterialCardView.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,10 +133,10 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void updateLensesSummary(Lenses lenses) {
-        CircularProgressBar progressBar = findViewById(R.id.lensesProgressBar);
-        TextView leftDaysCount = findViewById(R.id.lensesDaysCount);
-        TextView expDate = findViewById(R.id.lensesExpDateTextView);
-        TextView daysUsed = findViewById(R.id.lensesDaysUsedTextView);
+        CircularProgressBar progressBar = findViewById(R.id.lenses_card_progressbar);
+        TextView leftDaysCount = findViewById(R.id.lenses_card_day_count);
+        TextView expDate = findViewById(R.id.lenses_card_expiration_date);
+        TextView daysUsed = findViewById(R.id.lenses_card_day_usage);
         if(null == lenses) {
             updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }
@@ -148,10 +147,10 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void updateContainerSummary(Container container) {
-        CircularProgressBar progressBar = findViewById(R.id.containerProgressBar);
-        TextView leftDaysCount = findViewById(R.id.containerDaysCount);
-        TextView expDate = findViewById(R.id.containerExpDateTextView);
-        TextView daysUsed = findViewById(R.id.containerDaysUsedTextView);
+        CircularProgressBar progressBar = findViewById(R.id.container_card_progressbar);
+        TextView leftDaysCount = findViewById(R.id.container_card_day_count);
+        TextView expDate = findViewById(R.id.container_card_expiration_date);
+        TextView daysUsed = findViewById(R.id.container_card_day_usage);
         if(null == container) {
             updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }
@@ -162,10 +161,10 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void updateDropsSummary(Drops drops) {
-        CircularProgressBar progressBar = findViewById(R.id.dropsProgressBar);
-        TextView leftDaysCount = findViewById(R.id.dropsDaysCount);
-        TextView expDate = findViewById(R.id.dropsExpDateTextView);
-        TextView daysUsed = findViewById(R.id.dropsDaysUsedTextView);
+        CircularProgressBar progressBar = findViewById(R.id.drops_card_progressbar);
+        TextView leftDaysCount = findViewById(R.id.drops_card_day_count);
+        TextView expDate = findViewById(R.id.drops_card_expiration_date);
+        TextView daysUsed = findViewById(R.id.drops_card_day_usage);
         if(null == drops) {
             updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }
@@ -176,10 +175,10 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void updateSolutionSummary(Solution solution) {
-        CircularProgressBar progressBar = findViewById(R.id.solutionProgressBar);
-        TextView leftDaysCount = findViewById(R.id.solutionDaysCount);
-        TextView expDate = findViewById(R.id.solutionExpDateTextView);
-        TextView daysUsed = findViewById(R.id.solutionDaysUsedTextView);
+        CircularProgressBar progressBar = findViewById(R.id.solution_card_progressbar);
+        TextView leftDaysCount = findViewById(R.id.solution_card_day_count);
+        TextView expDate = findViewById(R.id.solution_card_expiration_date);
+        TextView daysUsed = findViewById(R.id.solution_card_day_usage);
         if(null == solution) {
             updateCardInfoUnavailable(progressBar, leftDaysCount, daysUsed, expDate);
         }

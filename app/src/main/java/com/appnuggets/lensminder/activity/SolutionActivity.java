@@ -128,7 +128,7 @@ public class SolutionActivity extends AppCompatActivity {
     }
 
     private void updateSolutionSummary() {
-        CircularProgressBar solutionProgressBar = findViewById(R.id.solutionProgressBar);
+        CircularProgressBar solutionProgressBar = findViewById(R.id.solution_card_progressbar);
         TextView leftDays = findViewById(R.id.solutionLeftDays);
         AppDatabase db = AppDatabase.getInstance(this);
 
@@ -150,7 +150,7 @@ public class SolutionActivity extends AppCompatActivity {
             leftDays.setText(daysLeft.toString());
         }
 
-        containerProgressBar = findViewById(R.id.containerProgressBar);
+        containerProgressBar = findViewById(R.id.container_card_progressbar);
         leftDays = findViewById(R.id.containerLeftDays);
 
         Container currentContainer = db.containerDao().getInUse();

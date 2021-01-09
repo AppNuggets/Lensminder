@@ -111,7 +111,7 @@ public class DropsActivity extends AppCompatActivity {
     }
 
     private void updateDropsSummary() {
-        CircularProgressBar progressBar = findViewById(R.id.dropsProgressBar);
+        CircularProgressBar progressBar = findViewById(R.id.drops_card_progressbar);
         TextView leftDays = findViewById(R.id.dropsLeftDays);
         AppDatabase db = AppDatabase.getInstance(this);
 

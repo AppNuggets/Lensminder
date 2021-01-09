@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dashboard layout elements' styles -->
+    <style name="dashboard_card_style" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">@dimen/dashboard_card_width</item>
+        <item name="android:layout_height">@dimen/dashboard_card_height</item>
+        <item name="android:layout_margin">@dimen/dashboard_card_margin</item>
+    </style>
+
+    <style name="dashboard_card_title_style" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/card_title_height</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:drawablePadding">-20dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAppearance">?attr/textAppearanceHeadline6</item>
+    </style>
+
+    <style name="dashboard_card_counter_style" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">40sp</item>
+    </style>
+
+    <style name="dashboard_card_additional_text_style" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+</resources>

@@ -12,7 +12,10 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
-        <!-- Customize your theme here. -->
+        <!-- Circular progressbar color. -->
+        <item name="cpb_progressbar_color" >#3f51b5</item>
+        <item name="cpb_background_progressbar_color" >#b6bbd8</item>
+
     </style>
 
     <style name="BottomSheetTheme" parent="Theme.Design.Light.BottomSheetDialog">
