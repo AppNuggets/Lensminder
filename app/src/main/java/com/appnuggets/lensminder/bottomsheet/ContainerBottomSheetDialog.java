@@ -5,6 +5,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,19 +37,7 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.container_bottom_sheet_layout, container, false);
 
         containerStartDate = (TextInputEditText) v.findViewById(R.id.containerStartDate);
-        containerStartDate.setInputType(InputType.TYPE_NULL);
-        containerStartDate.setKeyListener(null);
-
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        calendar.clear();
-        long today = MaterialDatePicker.todayInUtcMilliseconds();
-
-        //CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select start date");
-        builder.setSelection(today);
-        //builder.setCalendarConstraints(constraintBuilder.build());
-        startDatePicker = builder.build();
+        setCalendar();
 
         containerStartDate.setOnClickListener(new View.OnClickListener()
         {
@@ -85,4 +74,19 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
 
         return v;
     }
+
+    public void setCalendar(){
+        containerStartDate.setInputType(InputType.TYPE_NULL);
+        containerStartDate.setKeyListener(null);
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.clear();
+        long today = MaterialDatePicker.todayInUtcMilliseconds();
+
+        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Select start date");
+        builder.setSelection(today);
+        startDatePicker = builder.build();
+    }
+
 }

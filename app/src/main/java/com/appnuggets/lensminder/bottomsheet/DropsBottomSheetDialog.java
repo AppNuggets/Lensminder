@@ -43,44 +43,12 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
 
         textInputLayout = (TextInputLayout) v.findViewById(R.id.dropsExpPeriod);
         autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_drops);
-
-        String[] items = new String[] {
-                "Three Month",
-                "Six months"
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getContext(),
-                R.layout.dropdown_item_drops,
-                items
-        );
-
-        autoCompleteTextView.setAdapter(adapter);
+        completeDropdownList();
 
 
         dropsStartDate = (TextInputEditText) v.findViewById(R.id.dropsStartDate);
-        dropsStartDate.setInputType(InputType.TYPE_NULL);
-        dropsStartDate.setKeyListener(null);
-
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        calendar.clear();
-        long today = MaterialDatePicker.todayInUtcMilliseconds();
-
-                /*calendar.roll(Calendar.MONTH, Calendar.JANUARY);
-                long january = calendar.getTimeInMillis();
-                calendar.roll(Calendar.MONTH, Calendar.DECEMBER);
-                long december = calendar.getTimeInMillis();*/
-
-        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
-                /*constraintBuilder.setStart(january);
-                constraintBuilder.setEnd(december);*/
-
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-       // builder.setTheme(R.style.MyDatePickerDialogTheme);
-        builder.setTitleText("Select start date");
-        builder.setSelection(today);
-        builder.setCalendarConstraints(constraintBuilder.build());
-        startDatePicker = builder.build();
+        dropsExpDate = (TextInputEditText) v.findViewById(R.id.dropsExpDate);
+        setCalendar();
 
         dropsStartDate.setOnClickListener(new View.OnClickListener()
         {
@@ -110,15 +78,6 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
                 startDateDrops.setText(sdf.format(materialDatePicker.getHeaderText()));*/
             }
         });
-
-        dropsExpDate = (TextInputEditText) v.findViewById(R.id.dropsExpDate);
-        dropsExpDate.setInputType(InputType.TYPE_NULL);
-        dropsExpDate.setKeyListener(null);
-        constraintBuilder.setValidator(DateValidatorPointForward.now());
-        MaterialDatePicker.Builder builderExp = MaterialDatePicker.Builder.datePicker();
-        builderExp.setTitleText("Select exp. date");
-        builderExp.setCalendarConstraints(constraintBuilder.build());
-        expDatePicker = builderExp.build();
 
         dropsExpDate.setOnClickListener(new View.OnClickListener()
         {
@@ -154,5 +113,55 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         });
 
        return v;
+    }
+
+    public void setCalendar(){
+        dropsStartDate.setInputType(InputType.TYPE_NULL);
+        dropsStartDate.setKeyListener(null);
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.clear();
+        long today = MaterialDatePicker.todayInUtcMilliseconds();
+
+                /*calendar.roll(Calendar.MONTH, Calendar.JANUARY);
+                long january = calendar.getTimeInMillis();
+                calendar.roll(Calendar.MONTH, Calendar.DECEMBER);
+                long december = calendar.getTimeInMillis();*/
+
+        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
+                /*constraintBuilder.setStart(january);
+                constraintBuilder.setEnd(december);*/
+
+        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        // builder.setTheme(R.style.MyDatePickerDialogTheme);
+        builder.setTitleText("Select start date");
+        builder.setSelection(today);
+        builder.setCalendarConstraints(constraintBuilder.build());
+        startDatePicker = builder.build();
+
+        dropsExpDate.setInputType(InputType.TYPE_NULL);
+        dropsExpDate.setKeyListener(null);
+        constraintBuilder.setValidator(DateValidatorPointForward.now());
+        MaterialDatePicker.Builder builderExp = MaterialDatePicker.Builder.datePicker();
+        builderExp.setTitleText("Select exp. date");
+        builderExp.setCalendarConstraints(constraintBuilder.build());
+        expDatePicker = builderExp.build();
+    }
+
+    public void completeDropdownList() {
+        String[] items = new String[] {
+                "Two Weeks",
+                "One month",
+                "Three months",
+                "Six months"
+        };
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                getContext(),
+                R.layout.dropdown_items,
+                items
+        );
+
+        autoCompleteTextView.setAdapter(adapter);
     }
 }

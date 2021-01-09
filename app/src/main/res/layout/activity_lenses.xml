@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.SolutionActivity">
+    tools:context=".activity.LensesActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/topSolution"
+                android:id="@+id/topLenses"
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 android:layout_margin="0dp"
@@ -30,175 +30,86 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center">
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="200dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:padding="5dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="5dp">
+                            android:layout_gravity="center"
+                            android:layout_margin="0dp"
+                            android:textSize="20dp"
+                            android:text="Lenses"
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textAlignment="center"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="0dp"
-                                android:textSize="20dp"
-                                android:text="Solution"
-                                android:textAppearance="?attr/textAppearanceHeadline6"
-                                android:textAlignment="center"/>
-
-                        </LinearLayout>
-
-                        <FrameLayout
-                            android:layout_width="130dp"
-                            android:layout_height="130dp"
-                            android:layout_marginTop="10dp"
-                            android:orientation="vertical"
-                            android:layout_gravity="center_horizontal">
-
-                            <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                                android:id="@+id/solutionProgressBar"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="center"
-                                app:cpb_background_progressbar_color="#b6bbd8"
-                                app:cpb_background_progressbar_width="10dp"
-                                app:cpb_progress_direction="to_right"
-                                app:cpb_progressbar_color="#3f51b5"
-                                app:cpb_progressbar_width="10dp"
-                                app:cpb_round_border="false" />
-
-                            <LinearLayout
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/solutionLeftDays"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="40sp"
-                                    android:gravity="center"
-                                    android:text="53"/>
-
-                            </LinearLayout>
-
-                        </FrameLayout>
-
-                        <!-- Buttons -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="1dp"
-                            android:layout_gravity="bottom"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/deleteSolutionButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="?attr/borderlessButtonStyle"
-                                android:backgroundTint="#8B0000"
-                                android:text="Delete"
-                                android:textSize="13dp"
-                                android:textColor="#fff" />
-
-                        </LinearLayout>
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    <FrameLayout
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical"
+                        android:layout_gravity="center_horizontal">
+
+                        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                            android:id="@+id/lensesProgressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            app:cpb_background_progressbar_color="#b6bbd8"
+                            app:cpb_background_progressbar_width="10dp"
+                            app:cpb_progress_direction="to_right"
+                            app:cpb_progressbar_color="#3f51b5"
+                            app:cpb_progressbar_width="10dp"
+                            app:cpb_round_border="false" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="5dp">
+                            android:layout_gravity="center"
+                            android:orientation="vertical">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_margin="0dp"
-                                android:textSize="20dp"
-                                android:text="Container"
-                                android:textAppearance="?attr/textAppearanceHeadline6"
-                                android:textAlignment="center"/>
-
-                        </LinearLayout>
-
-                        <FrameLayout
-                            android:layout_width="130dp"
-                            android:layout_height="130dp"
-                            android:layout_marginTop="10dp"
-                            android:orientation="vertical"
-                            android:layout_gravity="center_horizontal">
-
-                            <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                                android:id="@+id/containerProgressBar"
+                                android:id="@+id/lensesLeftDays"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="40sp"
                                 android:gravity="center"
-                                app:cpb_background_progressbar_color="#b6bbd8"
-                                app:cpb_background_progressbar_width="10dp"
-                                app:cpb_progress_direction="to_right"
-                                app:cpb_progressbar_color="#3f51b5"
-                                app:cpb_progressbar_width="10dp"
-                                app:cpb_round_border="false" />
-
-                            <LinearLayout
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/containerLeftDays"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="40sp"
-                                    android:gravity="center"
-                                    android:text="53"/>
-
-                            </LinearLayout>
-
-                        </FrameLayout>
-
-                        <!-- Buttons -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="1dp"
-                            android:layout_gravity="bottom"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/deleteContainerButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="?attr/borderlessButtonStyle"
-                                android:backgroundTint="#8B0000"
-                                android:text="Delete"
-                                android:textSize="13dp"
-                                android:textColor="#fff" />
+                                android:text="53"/>
 
                         </LinearLayout>
+
+                    </FrameLayout>
+
+                    <!-- Buttons -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="0dp"
+                        android:layout_gravity="bottom"
+                        android:gravity="end"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/lensesDeleteButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            style="?attr/borderlessButtonStyle"
+                            android:backgroundTint="#8B0000"
+                            android:text="Delete"
+                            android:textSize="13dp"
+                            android:textColor="#fff" />
+
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
         </LinearLayout>
 
         <LinearLayout
@@ -222,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="18dp"
                     android:textStyle="bold"
-                    android:text="Solution history"/>
+                    android:text="Lenses stock"/>
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -242,17 +153,17 @@
                             android:layout_column="1"/>
 
                         <TextView
-                            android:text="FROM"
+                            android:text="QUANTITY"
                             android:textStyle="bold"
                             android:padding="10dp"
                             android:textSize="15dp"
-                            android:layout_width="40dp"
+                            android:layout_width="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
                             android:layout_column="2"/>
 
                         <TextView
-                            android:text="TO"
+                            android:text="EXP. DATE"
                             android:textStyle="bold"
                             android:padding="10dp"
                             android:textSize="15dp"
@@ -264,7 +175,7 @@
                     </TableRow>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/solutionsRecycleView"
+                        android:id="@+id/stockRecycleView"
                         android:layout_gravity="center"
                         android:scrollbars="vertical"
                         android:scrollbarThumbVertical="@android:color/darker_gray"
@@ -290,7 +201,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="18dp"
                     android:textStyle="bold"
-                    android:text="Container history"/>
+                    android:text="Lenses history"/>
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -332,7 +243,7 @@
                     </TableRow>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/containersRecycleView"
+                        android:id="@+id/lensesRecycleView"
                         android:layout_gravity="center"
                         android:scrollbars="vertical"
                         android:scrollbarThumbVertical="@android:color/darker_gray"
@@ -341,11 +252,8 @@
                         android:layout_height="match_parent">
 
                     </androidx.recyclerview.widget.RecyclerView>
-
                 </TableLayout>
-
             </LinearLayout>
-
         </LinearLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -381,23 +289,23 @@
             android:orientation="vertical">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/showAddContainer"
+                android:id="@+id/showAddLensesToStock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_container"
+                android:src="@drawable/ic_lens"
                 app:maxImageSize="20dp"
-                app:backgroundTint="@color/cardview_light_background"
+                app:backgroundTint="@color/white"
                 android:layout_gravity="end|bottom"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/showAddSolution"
+                android:id="@+id/showAddLenses"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_solution"
+                android:src="@drawable/ic_baseline_add_24"
                 app:maxImageSize="20dp"
-                app:backgroundTint="@color/cardview_light_background"
+                app:backgroundTint="@color/white"
                 android:layout_gravity="end|bottom"
                 app:fabSize="normal"
                 android:layout_marginEnd="10dp"
@@ -406,5 +314,5 @@
         </LinearLayout>
 
     </LinearLayout>
-    
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

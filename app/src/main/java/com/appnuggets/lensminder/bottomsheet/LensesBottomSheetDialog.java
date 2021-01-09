@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,14 +19,17 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
-public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
+public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
-    private TextInputEditText solutionStartDate;
-    private TextInputEditText solutionExpDate;
+    private TextInputLayout lensesWearCycle;
+    private AutoCompleteTextView autoCompleteTextView;
+    private TextInputEditText lensesStartDate;
+    private TextInputEditText lensesExpDate;
     private MaterialButton saveButton;
 
     MaterialDatePicker startDatePicker;
@@ -34,13 +38,17 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.solution_bottom_sheet_layout, container, false);
+        View v = inflater.inflate(R.layout.lenses_bottom_sheet_layout, container, false);
 
-        solutionStartDate = (TextInputEditText) v.findViewById(R.id.solutionStartDate);
-        solutionExpDate = (TextInputEditText) v.findViewById(R.id.solutionExpDate);
+        lensesWearCycle = (TextInputLayout) v.findViewById(R.id.lensesWearCycle);
+        autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_lenses);
+        completeDropdownList();
+
+        lensesStartDate = (TextInputEditText) v.findViewById(R.id.lensesStartDate);
+        lensesExpDate = (TextInputEditText) v.findViewById(R.id.lensesExpDate);
         setCalendar();
 
-        solutionStartDate.setOnClickListener(new View.OnClickListener()
+        lensesStartDate.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -49,7 +57,7 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        solutionStartDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        lensesStartDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -61,11 +69,11 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
         startDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
-                solutionStartDate.setText(startDatePicker.getHeaderText());
+                lensesStartDate.setText(startDatePicker.getHeaderText());
             }
         });
 
-        solutionExpDate.setOnClickListener(new View.OnClickListener()
+        lensesExpDate.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -74,7 +82,7 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        solutionExpDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        lensesExpDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -86,11 +94,11 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
         expDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
-                solutionExpDate.setText(expDatePicker.getHeaderText());
+                lensesExpDate.setText(expDatePicker.getHeaderText());
             }
         });
 
-        saveButton = (MaterialButton) v.findViewById(R.id.solutionSaveButton);
+        saveButton = (MaterialButton) v.findViewById(R.id.lensesSaveButton);
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -102,8 +110,10 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
     }
 
     public void setCalendar(){
-        solutionStartDate.setInputType(InputType.TYPE_NULL);
-        solutionStartDate.setKeyListener(null);
+        lensesStartDate.setInputType(InputType.TYPE_NULL);
+        lensesStartDate.setKeyListener(null);
+        lensesExpDate.setInputType(InputType.TYPE_NULL);
+        lensesExpDate.setKeyListener(null);
 
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.clear();
@@ -115,15 +125,32 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
         builder.setTitleText("Select start date");
         builder.setSelection(today);
         builder.setCalendarConstraints(constraintBuilder.build());
+
         startDatePicker = builder.build();
 
-        solutionExpDate.setInputType(InputType.TYPE_NULL);
-        solutionExpDate.setKeyListener(null);
         constraintBuilder.setValidator(DateValidatorPointForward.now());
+
         MaterialDatePicker.Builder builderExp = MaterialDatePicker.Builder.datePicker();
         builderExp.setTitleText("Select exp. date");
         builderExp.setCalendarConstraints(constraintBuilder.build());
+
         expDatePicker = builderExp.build();
     }
 
+    public void completeDropdownList() {
+        String[] items = new String[] {
+                "Two Weeks",
+                "One month",
+                "Three months",
+                "Six months"
+        };
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                getContext(),
+                R.layout.dropdown_items,
+                items
+        );
+
+        autoCompleteTextView.setAdapter(adapter);
+    }
 }
