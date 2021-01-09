@@ -5,6 +5,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,20 +37,8 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.solution_bottom_sheet_layout, container, false);
 
         solutionStartDate = (TextInputEditText) v.findViewById(R.id.solutionStartDate);
-        solutionStartDate.setInputType(InputType.TYPE_NULL);
-        solutionStartDate.setKeyListener(null);
-
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        calendar.clear();
-        long today = MaterialDatePicker.todayInUtcMilliseconds();
-
-        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
-
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select start date");
-        builder.setSelection(today);
-        builder.setCalendarConstraints(constraintBuilder.build());
-        startDatePicker = builder.build();
+        solutionExpDate = (TextInputEditText) v.findViewById(R.id.solutionExpDate);
+        setCalendar();
 
         solutionStartDate.setOnClickListener(new View.OnClickListener()
         {
@@ -75,15 +64,6 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
                 solutionStartDate.setText(startDatePicker.getHeaderText());
             }
         });
-
-        solutionExpDate = (TextInputEditText) v.findViewById(R.id.solutionExpDate);
-        solutionExpDate.setInputType(InputType.TYPE_NULL);
-        solutionExpDate.setKeyListener(null);
-        constraintBuilder.setValidator(DateValidatorPointForward.now());
-        MaterialDatePicker.Builder builderExp = MaterialDatePicker.Builder.datePicker();
-        builderExp.setTitleText("Select exp. date");
-        builderExp.setCalendarConstraints(constraintBuilder.build());
-        expDatePicker = builderExp.build();
 
         solutionExpDate.setOnClickListener(new View.OnClickListener()
         {
@@ -120,4 +100,30 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
 
         return v;
     }
+
+    public void setCalendar(){
+        solutionStartDate.setInputType(InputType.TYPE_NULL);
+        solutionStartDate.setKeyListener(null);
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.clear();
+        long today = MaterialDatePicker.todayInUtcMilliseconds();
+
+        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
+
+        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Select start date");
+        builder.setSelection(today);
+        builder.setCalendarConstraints(constraintBuilder.build());
+        startDatePicker = builder.build();
+
+        solutionExpDate.setInputType(InputType.TYPE_NULL);
+        solutionExpDate.setKeyListener(null);
+        constraintBuilder.setValidator(DateValidatorPointForward.now());
+        MaterialDatePicker.Builder builderExp = MaterialDatePicker.Builder.datePicker();
+        builderExp.setTitleText("Select exp. date");
+        builderExp.setCalendarConstraints(constraintBuilder.build());
+        expDatePicker = builderExp.build();
+    }
+
 }

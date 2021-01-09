@@ -73,6 +73,7 @@ public class LensesActivity extends AppCompatActivity {
                             case R.id.Drops:
                                 startActivity(new Intent(getApplicationContext(), DropsActivity.class));
                                 overridePendingTransition(0,0);
+                                return true;
                             case R.id.Settings:
                                 return true;
                         }
@@ -80,22 +81,22 @@ public class LensesActivity extends AppCompatActivity {
                     }
                 });
 
-        showAddLensesButton = findViewById(R.id.showAddLenses);
+        showAddLensesButton = (FloatingActionButton) findViewById(R.id.showAddLenses);
         showAddLensesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LensesBottomSheetDialog lensesBottomSheetDialog = new LensesBottomSheetDialog();
-                lensesBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
+                //lensesBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
                 lensesBottomSheetDialog.show(getSupportFragmentManager(), "bottomSheetLenses");
             }
         });
 
-        showAddLensesToStockButton = findViewById(R.id.showAddLensesToStock);
-        showAddLensesButton.setOnClickListener(new View.OnClickListener() {
+        showAddLensesToStockButton = (FloatingActionButton) findViewById(R.id.showAddLensesToStock);
+        showAddLensesToStockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LensesStockBottomSheetDialog lensesStockBottomSheetDialog = new LensesStockBottomSheetDialog();
-                lensesStockBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
+                //lensesStockBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
                 lensesStockBottomSheetDialog.show(getSupportFragmentManager(), "bottomSheetLensesStock");
             }
         });

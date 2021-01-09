@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,9 @@ import com.appnuggets.lensminder.adapter.SolutionAdapter;
 import com.appnuggets.lensminder.bottomsheet.ContainerBottomSheetDialog;
 import com.appnuggets.lensminder.bottomsheet.SolutionBottomSheetDialog;
 import com.appnuggets.lensminder.database.AppDatabase;
+import com.appnuggets.lensminder.database.entity.Container;
+import com.appnuggets.lensminder.database.entity.Solution;
+import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -41,13 +45,7 @@ public class SolutionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solution);
 
-        solutionProgressBar = findViewById(R.id.solutionProgressBar);
-        solutionProgressBar.setProgressMax(31f);
-        solutionProgressBar.setProgressWithAnimation(2f, (long) 1000); // =1s
-
-        containerProgressBar = findViewById(R.id.containerProgressBar);
-        containerProgressBar.setProgressMax(31f);
-        containerProgressBar.setProgressWithAnimation(2f, (long) 1000); // =1s
+        updateSolutionSummary();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.Solution);
@@ -127,5 +125,50 @@ public class SolutionActivity extends AppCompatActivity {
         containersRecycleView.setLayoutManager(new LinearLayoutManager(this));
         containerAdapter = new ContainerAdapter(this, db.containerDao().getAllNotInUse());
         containersRecycleView.setAdapter(containerAdapter);
+    }
+
+    private void updateSolutionSummary() {
+        CircularProgressBar solutionProgressBar = findViewById(R.id.solutionProgressBar);
+        TextView leftDays = findViewById(R.id.solutionLeftDays);
+        AppDatabase db = AppDatabase.getInstance(this);
+
+        Solution currentSolution = db.solutionDao().getInUse();
+        if (null == currentSolution) {
+            solutionProgressBar.setProgressMax(100f);
+            solutionProgressBar.setProgressWithAnimation(0f, (long) 1000); // =1s
+            leftDays.setText("-");
+        }
+        else {
+            UsageProcessor usageProcessor = new UsageProcessor();
+            Long daysLeft = usageProcessor.calculateUsageLeft(currentSolution.startDate,
+                    currentSolution.expirationDate, currentSolution.useInterval);
+
+            solutionProgressBar.setProgressMax(currentSolution.useInterval);
+            solutionProgressBar.setProgressWithAnimation(currentSolution.useInterval - daysLeft,
+                    1000L);
+
+            leftDays.setText(daysLeft.toString());
+        }
+
+        containerProgressBar = findViewById(R.id.containerProgressBar);
+        leftDays = findViewById(R.id.containerLeftDays);
+
+        Container currentContainer = db.containerDao().getInUse();
+        if (null == currentContainer) {
+            containerProgressBar.setProgressMax(100f);
+            containerProgressBar.setProgressWithAnimation(0f, (long) 1000); // =1s
+            leftDays.setText("-");
+        }
+        else {
+            UsageProcessor usageProcessor = new UsageProcessor();
+            Long daysLeft = usageProcessor.calculateUsageLeft(currentContainer.startDate,
+                    currentContainer.expirationDate, currentContainer.useInterval);
+
+            containerProgressBar.setProgressMax(currentContainer.useInterval);
+            containerProgressBar.setProgressWithAnimation(currentContainer.useInterval - daysLeft,
+                    1000L);
+
+            leftDays.setText(daysLeft.toString());
+        }
     }
 }

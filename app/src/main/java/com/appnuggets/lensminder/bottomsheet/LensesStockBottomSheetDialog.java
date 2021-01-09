@@ -39,21 +39,8 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.lenses_stock_bottom_sheret_layout, container, false);
 
         stockLensesWearCycle = (TextInputLayout) v.findViewById(R.id.stockLensesWearCycle);
-        autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_lenses);
-
-        String[] items = new String[] {
-                "Two Weeks",
-                "One month",
-                "Three months",
-                "Six months"
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getContext(),
-                R.layout.dropdown_items,
-                items
-        );
-        autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_stockLenses);
+        completeDropdownList();
 
         stockLensesExpDate = (TextInputEditText) v.findViewById(R.id.stockLensesExpDate);
         setCalendar();
@@ -83,7 +70,7 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        saveButton = (MaterialButton) v.findViewById(R.id.lensesSaveButton);
+        saveButton = (MaterialButton) v.findViewById(R.id.stockLensesSaveButton);
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -109,5 +96,22 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
         builderExp.setCalendarConstraints(constraintBuilder.build());
 
         expDatePicker = builderExp.build();
+    }
+
+    public void completeDropdownList() {
+        String[] items = new String[] {
+                "Two Weeks",
+                "One month",
+                "Three months",
+                "Six months"
+        };
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                getContext(),
+                R.layout.dropdown_items,
+                items
+        );
+
+        autoCompleteTextView.setAdapter(adapter);
     }
 }

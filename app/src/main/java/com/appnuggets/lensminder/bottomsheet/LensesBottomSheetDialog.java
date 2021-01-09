@@ -42,24 +42,10 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
         lensesWearCycle = (TextInputLayout) v.findViewById(R.id.lensesWearCycle);
         autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_lenses);
+        completeDropdownList();
 
-        String[] items = new String[] {
-                "Two Weeks",
-                "One month",
-                "Three months",
-                "Six months"
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getContext(),
-                R.layout.dropdown_items,
-                items
-        );
-
-        autoCompleteTextView.setAdapter(adapter);
-
-        lensesStartDate = (TextInputEditText) v.findViewById(R.id.dropsStartDate);
-        lensesExpDate = (TextInputEditText) v.findViewById(R.id.dropsExpDate);
+        lensesStartDate = (TextInputEditText) v.findViewById(R.id.lensesStartDate);
+        lensesExpDate = (TextInputEditText) v.findViewById(R.id.lensesExpDate);
         setCalendar();
 
         lensesStartDate.setOnClickListener(new View.OnClickListener()
@@ -151,4 +137,20 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
         expDatePicker = builderExp.build();
     }
 
+    public void completeDropdownList() {
+        String[] items = new String[] {
+                "Two Weeks",
+                "One month",
+                "Three months",
+                "Six months"
+        };
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                getContext(),
+                R.layout.dropdown_items,
+                items
+        );
+
+        autoCompleteTextView.setAdapter(adapter);
+    }
 }

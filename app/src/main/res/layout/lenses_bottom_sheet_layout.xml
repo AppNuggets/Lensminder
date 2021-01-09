@@ -81,7 +81,6 @@
 
     </LinearLayout>
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/lensesWearCycle"
         android:layout_width="match_parent"

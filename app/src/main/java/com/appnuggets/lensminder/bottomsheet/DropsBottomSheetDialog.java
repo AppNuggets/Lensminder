@@ -43,23 +43,12 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
 
         textInputLayout = (TextInputLayout) v.findViewById(R.id.dropsExpPeriod);
         autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_drops);
-
-        String[] items = new String[] {
-                "Three Month",
-                "Six months"
-        };
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getContext(),
-                R.layout.dropdown_items,
-                items
-        );
-
-        autoCompleteTextView.setAdapter(adapter);
+        completeDropdownList();
 
 
         dropsStartDate = (TextInputEditText) v.findViewById(R.id.dropsStartDate);
         dropsExpDate = (TextInputEditText) v.findViewById(R.id.dropsExpDate);
+        setCalendar();
 
         dropsStartDate.setOnClickListener(new View.OnClickListener()
         {
@@ -157,5 +146,22 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         builderExp.setTitleText("Select exp. date");
         builderExp.setCalendarConstraints(constraintBuilder.build());
         expDatePicker = builderExp.build();
+    }
+
+    public void completeDropdownList() {
+        String[] items = new String[] {
+                "Two Weeks",
+                "One month",
+                "Three months",
+                "Six months"
+        };
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                getContext(),
+                R.layout.dropdown_items,
+                items
+        );
+
+        autoCompleteTextView.setAdapter(adapter);
     }
 }

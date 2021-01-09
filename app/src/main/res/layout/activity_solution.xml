@@ -82,6 +82,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/solutionLeftDays"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="40sp"
@@ -163,6 +164,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
+                                    android:id="@+id/containerLeftDays"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textSize="40sp"
