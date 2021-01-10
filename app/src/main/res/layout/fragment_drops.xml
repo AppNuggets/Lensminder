@@ -26,7 +26,7 @@
             <FrameLayout
                 android:layout_width="@dimen/circular_progressbar_size"
                 android:layout_height="@dimen/circular_progressbar_size"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="@dimen/progressbar_margin_bottom"
                 android:orientation="vertical"
                 android:gravity="center">
                 <com.mikhaellopez.circularprogressbar.CircularProgressBar
@@ -47,20 +47,20 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/delete_drops_button"
                 style="@style/delete_button_style"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="@dimen/delete_button_margin_bottom"/>
         </LinearLayout>
         <!-- Middle screen section - history table -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginVertical="20dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/table_margin_horizontal"
+            android:layout_marginVertical="@dimen/table_margin_vertical"
             android:orientation="vertical"
             android:layout_weight="1">
             <!-- Table header -->
             <TextView
                 style="@style/page_table_header_style"
-                android:text="Drops history"/>
+                android:text="@string/drops_history"/>
             <!-- Table contents -->
             <TableLayout
                 android:layout_width="match_parent"
@@ -70,15 +70,15 @@
                     <TextView
                         style="@style/page_table_row_style"
                         android:layout_column="1"
-                        android:text="NAME"/>
+                        android:text="@string/name_column_header"/>
                     <TextView
                         style="@style/page_table_row_style"
                         android:layout_column="2"
-                        android:text="FROM"/>
+                        android:text="@string/from_column_header"/>
                     <TextView
                         style="@style/page_table_row_style"
                         android:layout_column="3"
-                        android:text="TO"/>
+                        android:text="@string/to_column_header"/>
                 </TableRow>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/drops_recycler_view"
@@ -86,21 +86,18 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:scrollbars="vertical"
-                    android:scrollbarSize="3dp"
+                    android:scrollbarSize="@dimen/table_scrollbar_size"
                     android:scrollbarThumbVertical="@android:color/darker_gray"/>
             </TableLayout>
         </LinearLayout>
     </LinearLayout>
     <!-- Floating action button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/fab_style"
         android:id="@+id/drops_show_add_sheet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
         android:src="@drawable/ic_baseline_add_24"
-        app:fabSize="normal"
+        app:backgroundTint="@color/cardview_light_background"
         app:maxImageSize="20dp"
-        app:backgroundTint="@color/cardview_light_background"/>
+        app:fabSize="normal"
+        android:contentDescription="@string/fab_description_add_drops" />
 </FrameLayout>

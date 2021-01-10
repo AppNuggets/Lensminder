@@ -1,30 +1,34 @@
 <resources>
     <string name="app_name">Lensminder</string>
-
     <!-- Dashboard layout -->
     <string name="text_expiration_date">Exp. date</string>
     <string name="text_usage_count">Days of use</string>
-
     <string name="title_lenses">Lenses</string>
     <string name="icon_description_lenses">Lenses icon</string>
-
     <string name="title_drops">Drops</string>
     <string name="icon_description_drops">Drops icon</string>
-
     <string name="title_solution">Solution</string>
     <string name="icon_description_solution">Solution icon</string>
-
     <string name="title_container">Container</string>
     <string name="icon_description_container">Container icon</string>
-
     <!-- Drops layout -->
-
+    <string name="drops_history">Drops history</string>
+    <string name="fab_description_add_drops">add new drops</string>
     <!-- Lenses layout -->
-
+    <string name="lenses_stock">Lenses stock</string>
+    <string name="lenses_history">Lenses history</string>
+    <string name="fab_description_add_lenses_stock">add lenses to stock</string>
+    <string name="fab_description_add_lenses_current">add current lenses</string>
     <!-- Solution layout -->
-
-    <!-- Container layout -->
-
+    <string name="solution_history">Solution history</string>
+    <string name="container_history">Container history</string>
+    <string name="fab_description_add_container">add new container</string>
+    <string name="fab_description_add_solution">add new solution</string>
     <!--Common -->
     <string name="delete_button_text">Delete</string>
+    <string name="name_column_header">NAME</string>
+    <string name="from_column_header">FROM</string>
+    <string name="to_column_header">TO</string>
+    <string name="quantity_column_header">QUANTITY</string>
+    <string name="exp_date_column_header">EXP. DATE</string>
 </resources>

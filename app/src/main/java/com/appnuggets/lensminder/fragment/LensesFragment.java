@@ -59,7 +59,7 @@ public class LensesFragment extends Fragment {
         MaterialButton deleteCurrentLenses = view.findViewById(R.id.lenses_delete_button);
         lensesProgressbar = view.findViewById(R.id.lenses_progressbar);
         lensesLeftDaysCount = view.findViewById(R.id.lenses_days_count);
-        lensesHistoryRecyclerView = view.findViewById(R.id.lenses_histroy_recycler_view);
+        lensesHistoryRecyclerView = view.findViewById(R.id.lenses_history_recycler_view);
         lensesStockRecyclerView = view.findViewById(R.id.lenses_stock_recycler_view);
 
         // Add new current lenses listener

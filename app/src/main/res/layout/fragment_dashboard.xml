@@ -51,8 +51,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/additional_text_margin_left"
-                    android:layout_marginVertical="@dimen/additional_text_margin_top"
+                    android:layout_marginHorizontal="@dimen/card_additional_text_margin_left"
+                    android:layout_marginVertical="@dimen/card_additional_text_margin_top"
                     android:orientation="vertical">
                     <!-- Expiration date -->
                     <LinearLayout
@@ -119,8 +119,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/additional_text_margin_left"
-                    android:layout_marginVertical="@dimen/additional_text_margin_top"
+                    android:layout_marginHorizontal="@dimen/card_additional_text_margin_left"
+                    android:layout_marginVertical="@dimen/card_additional_text_margin_top"
                     android:orientation="vertical">
                     <!-- Expiration date -->
                     <LinearLayout
@@ -194,8 +194,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/additional_text_margin_left"
-                    android:layout_marginVertical="@dimen/additional_text_margin_top"
+                    android:layout_marginHorizontal="@dimen/card_additional_text_margin_left"
+                    android:layout_marginVertical="@dimen/card_additional_text_margin_top"
                     android:orientation="vertical">
                     <!-- Expiration date -->
                     <LinearLayout
@@ -262,8 +262,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/additional_text_margin_left"
-                    android:layout_marginVertical="@dimen/additional_text_margin_top"
+                    android:layout_marginHorizontal="@dimen/card_additional_text_margin_left"
+                    android:layout_marginVertical="@dimen/card_additional_text_margin_top"
                     android:orientation="vertical">
                     <!-- Expiration date -->
                     <LinearLayout
