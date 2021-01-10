@@ -22,10 +22,6 @@
         </activity>
         <activity android:name=".activity.SettingsActivity"/>
         <!-- To be removed -->
-        <activity android:name=".activity.LensesActivity" />
-        <activity android:name=".activity.DashboardActivity"/>
-        <activity android:name=".activity.DropsActivity" />
-        <activity android:name=".activity.SolutionActivity" />
 
         <uses-library
             android:name="com.google.android.maps"

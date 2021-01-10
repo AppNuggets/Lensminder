@@ -93,32 +93,20 @@ public class DashboardFragment extends Fragment {
         solutionDaysUsedCount = view.findViewById(R.id.solution_card_day_usage);
 
 
-        lensesCardView.setOnClickListener(new MaterialCardView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Implement transition to lenses fragment
-            }
+        lensesCardView.setOnClickListener(v -> {
+            // TODO Implement transition to lenses fragment
         });
 
-        containerCardView.setOnClickListener(new MaterialCardView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Implement transition to solution fragment
-            }
+        containerCardView.setOnClickListener(v -> {
+            // TODO Implement transition to solution fragment
         });
 
-        dropsCardView.setOnClickListener(new MaterialCardView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Implement transition to drops fragment
-            }
+        dropsCardView.setOnClickListener(v -> {
+            // TODO Implement transition to drops fragment
         });
 
-        solutionCardView.setOnClickListener(new MaterialCardView.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Implement transition to solution fragment
-            }
+        solutionCardView.setOnClickListener(v -> {
+            // TODO Implement transition to solution fragment
         });
     }
 
