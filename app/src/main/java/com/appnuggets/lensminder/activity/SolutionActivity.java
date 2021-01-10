@@ -90,8 +90,8 @@ public class SolutionActivity extends AppCompatActivity {
             }
         });
 
-        solutionsRecycleView = findViewById(R.id.solutionsRecycleView);
-        containersRecycleView = findViewById(R.id.containersRecycleView);
+        solutionsRecycleView = findViewById(R.id.solutions_history_recycler_view);
+        containersRecycleView = findViewById(R.id.container_history_recycler_view);
         setRecyclerViews();
 
         showAddSolutionButton = findViewById(R.id.showAddSolution);

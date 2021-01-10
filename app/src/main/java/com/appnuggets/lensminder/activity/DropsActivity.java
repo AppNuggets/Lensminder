@@ -46,7 +46,7 @@ public class DropsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drops);
 
-        MaterialButton deleteDrops = findViewById(R.id.dropsDeleteButton);
+        MaterialButton deleteDrops = findViewById(R.id.delete_button);
 
         updateDropsSummary();
 
@@ -78,7 +78,7 @@ public class DropsActivity extends AppCompatActivity {
             }
         });
 
-        showAddDropsButton = findViewById(R.id.showAddDrops);
+        showAddDropsButton = findViewById(R.id.drops_show_add_sheet);
         showAddDropsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +89,7 @@ public class DropsActivity extends AppCompatActivity {
             }
         });
 
-        deleteDrops = findViewById(R.id.dropsDeleteButton);
+        deleteDrops = findViewById(R.id.delete_button);
         deleteDrops.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +97,7 @@ public class DropsActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = findViewById(R.id.dropsRecycleView);
+        recyclerView = findViewById(R.id.drops_recycler_view);
         setRecyclerView();
     }
 
@@ -111,8 +111,8 @@ public class DropsActivity extends AppCompatActivity {
     }
 
     private void updateDropsSummary() {
-        CircularProgressBar progressBar = findViewById(R.id.drops_card_progressbar);
-        TextView leftDays = findViewById(R.id.dropsLeftDays);
+        CircularProgressBar progressBar = findViewById(R.id.drops_progressbar);
+        TextView leftDays = findViewById(R.id.drops_days_count);
         AppDatabase db = AppDatabase.getInstance(this);
 
         Drops currentDrops = db.dropsDao().getInUse();

@@ -175,7 +175,7 @@
                     </TableRow>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/stockRecycleView"
+                        android:id="@+id/lenses_stock_recycler_view"
                         android:layout_gravity="center"
                         android:scrollbars="vertical"
                         android:scrollbarThumbVertical="@android:color/darker_gray"
@@ -243,7 +243,7 @@
                     </TableRow>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/lensesRecycleView"
+                        android:id="@+id/lenses_histroy_recycler_view"
                         android:layout_gravity="center"
                         android:scrollbars="vertical"
                         android:scrollbarThumbVertical="@android:color/darker_gray"

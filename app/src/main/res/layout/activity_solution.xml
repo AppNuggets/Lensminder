@@ -264,7 +264,7 @@
                     </TableRow>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/solutionsRecycleView"
+                        android:id="@+id/solutions_history_recycler_view"
                         android:layout_gravity="center"
                         android:scrollbars="vertical"
                         android:scrollbarThumbVertical="@android:color/darker_gray"
@@ -332,7 +332,7 @@
                     </TableRow>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/containersRecycleView"
+                        android:id="@+id/container_history_recycler_view"
                         android:layout_gravity="center"
                         android:scrollbars="vertical"
                         android:scrollbarThumbVertical="@android:color/darker_gray"

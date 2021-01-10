@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.DropsActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".fragment.DropsFragment">
+    <!-- Main layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -44,17 +45,17 @@
             </FrameLayout>
             <!-- Delete current drops button -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/delete_button"
+                android:id="@+id/delete_drops_button"
                 style="@style/delete_button_style"
                 android:layout_marginBottom="5dp"/>
         </LinearLayout>
         <!-- Middle screen section - history table -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginHorizontal="20dp">
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="20dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,9 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:stretchColumns="1,2,3">
-
                 <TableRow>
-
                     <TextView
                         android:text="NAME"
                         android:textStyle="bold"
@@ -77,7 +76,6 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:layout_column="1"/>
-
                     <TextView
                         android:text="FROM"
                         android:textStyle="bold"
@@ -87,7 +85,6 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:layout_column="2"/>
-
                     <TextView
                         android:text="TO"
                         android:textStyle="bold"
@@ -97,9 +94,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:layout_column="3" />
-
                 </TableRow>
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/drops_recycler_view"
                     android:layout_gravity="center"
@@ -108,45 +103,20 @@
                     android:scrollbarSize="3dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
                 </androidx.recyclerview.widget.RecyclerView>
-
             </TableLayout>
         </LinearLayout>
-        <!-- Floating action button -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/drops_show_add_sheet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_add_24"
-                app:maxImageSize="20dp"
-                app:backgroundTint="@color/cardview_light_background"
-                android:layout_gravity="end|bottom"
-                app:fabSize="normal"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp" />
-        </LinearLayout>
-        <!-- Navigation panel -->
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
-            android:background="@color/white"
-            android:outlineAmbientShadowColor="#001a4d"
-            app:itemTextColor="#001a4d"
-            app:itemRippleColor="#001a4d"
-            android:outlineSpotShadowColor="#001a4d"
-            app:fabCradleMargin="5dp"
-            app:fabAlignmentMode="center"
-            app:hideOnScroll="true"
-            app:fabCradleRoundedCornerRadius="15dp"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/bottom_nav_menu" />
     </LinearLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <!-- Floating action button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/drops_show_add_sheet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_baseline_add_24"
+        app:fabSize="normal"
+        app:maxImageSize="20dp"
+        app:backgroundTint="@color/cardview_light_background"/>
+</FrameLayout>

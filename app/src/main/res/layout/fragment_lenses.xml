@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.DropsActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragment.LensesFragment">
+    <!-- Main layout -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,7 +20,7 @@
             <!-- Page header -->
             <TextView
                 style="@style/page_summary_header"
-                android:text="@string/title_drops"/>
+                android:text="@string/title_lenses"/>
             <!-- Progressbar  -->
             <FrameLayout
                 android:layout_width="@dimen/circular_progressbar_size"
@@ -29,7 +29,7 @@
                 android:orientation="vertical"
                 android:gravity="center">
                 <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                    android:id="@+id/drops_progressbar"
+                    android:id="@+id/lenses_progressbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -39,28 +39,96 @@
                     app:cpb_background_progressbar_width=
                         "@dimen/background_circular_progressbar_width"/>
                 <TextView
-                    android:id="@+id/drops_days_count"
+                    android:id="@+id/lenses_days_count"
                     style="@style/dashboard_card_counter_style"/>
             </FrameLayout>
             <!-- Delete current drops button -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/delete_button"
+                android:id="@+id/lenses_delete_button"
                 style="@style/delete_button_style"
                 android:layout_marginBottom="5dp"/>
         </LinearLayout>
-        <!-- Middle screen section - history table -->
+        <!-- Stock table -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="200dp"
             android:orientation="vertical"
-            android:layout_marginHorizontal="20dp">
+            android:layout_marginHorizontal="30dp"
+            android:padding="5dp">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="18dp"
                 android:textStyle="bold"
-                android:text="Drops history"/>
+                android:text="Lenses stock"/>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1,2,3">
+
+                <TableRow>
+
+                    <TextView
+                        android:text="NAME"
+                        android:textStyle="bold"
+                        android:padding="10dp"
+                        android:textSize="15dp"
+                        android:layout_width="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_column="1"/>
+
+                    <TextView
+                        android:text="QUANTITY"
+                        android:textStyle="bold"
+                        android:padding="10dp"
+                        android:textSize="15dp"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_column="2"/>
+
+                    <TextView
+                        android:text="EXP. DATE"
+                        android:textStyle="bold"
+                        android:padding="10dp"
+                        android:textSize="15dp"
+                        android:layout_width="40dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_column="3" />
+
+                </TableRow>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/lenses_stock_recycler_view"
+                    android:layout_gravity="center"
+                    android:scrollbars="vertical"
+                    android:scrollbarThumbVertical="@android:color/darker_gray"
+                    android:scrollbarSize="3dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+            </TableLayout>
+        </LinearLayout>
+        <!-- History table -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="30dp"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:text="Lenses history"/>
+
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -101,7 +169,7 @@
                 </TableRow>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/drops_recycler_view"
+                    android:id="@+id/lenses_histroy_recycler_view"
                     android:layout_gravity="center"
                     android:scrollbars="vertical"
                     android:scrollbarThumbVertical="@android:color/darker_gray"
@@ -110,43 +178,39 @@
                     android:layout_height="match_parent">
 
                 </androidx.recyclerview.widget.RecyclerView>
-
             </TableLayout>
         </LinearLayout>
-        <!-- Floating action button -->
+    </LinearLayout>
+    <!-- Double FAB  -->
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/drops_show_add_sheet"
+                android:id="@+id/showAddLensesToStock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_lens"
+                app:maxImageSize="20dp"
+                app:backgroundTint="@color/white"
+                android:layout_gravity="end|bottom"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/showAddLenses"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_add_24"
                 app:maxImageSize="20dp"
-                app:backgroundTint="@color/cardview_light_background"
+                app:backgroundTint="@color/white"
                 android:layout_gravity="end|bottom"
                 app:fabSize="normal"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp" />
         </LinearLayout>
-        <!-- Navigation panel -->
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
-            android:background="@color/white"
-            android:outlineAmbientShadowColor="#001a4d"
-            app:itemTextColor="#001a4d"
-            app:itemRippleColor="#001a4d"
-            android:outlineSpotShadowColor="#001a4d"
-            app:fabCradleMargin="5dp"
-            app:fabAlignmentMode="center"
-            app:hideOnScroll="true"
-            app:fabCradleRoundedCornerRadius="15dp"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/bottom_nav_menu" />
-    </LinearLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </FrameLayout>
+</FrameLayout>

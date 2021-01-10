@@ -17,7 +17,7 @@
     </style>
 
     <style name="dashboard_card_counter_style" parent="Widget.AppCompat.TextView">
-        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
@@ -30,6 +30,32 @@
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:textAppearance">?attr/textAppearanceBody2</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <!-- Drops, Solution, Container, Lenses layouts elements' styles -->
+    <style name="page_summary_header" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textAppearance">?attr/textAppearanceHeadline6</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="page_table_header_style" parent="Widget.AppCompat.TextView">
+
+    </style>
+
+    <style name="delete_button_style" parent="Widget.MaterialComponents.Button" >
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:backgroundTint">#8B0000</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:text">@string/delete_button_text</item>
     </style>
 
 </resources>

@@ -100,8 +100,8 @@ public class LensesActivity extends AppCompatActivity {
             }
         });
 
-        lensesRecycleView = findViewById(R.id.lensesRecycleView);
-        lensesStockRecycleView = findViewById(R.id.stockRecycleView);
+        lensesRecycleView = findViewById(R.id.lenses_histroy_recycler_view);
+        lensesStockRecycleView = findViewById(R.id.lenses_stock_recycler_view);
         setRecyclerView();
     }
 

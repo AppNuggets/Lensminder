@@ -1,23 +1,30 @@
 <resources>
     <string name="app_name">Lensminder</string>
-    <string name="title_activity_solution">SolutionActivity</string>
-    <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Dashboard layout -->
     <string name="text_expiration_date">Exp. date</string>
     <string name="text_usage_count">Days of use</string>
 
-    <string name="title_card_lenses">Lenses</string>
+    <string name="title_lenses">Lenses</string>
     <string name="icon_description_lenses">Lenses icon</string>
 
-    <string name="title_card_drops">Drops</string>
+    <string name="title_drops">Drops</string>
     <string name="icon_description_drops">Drops icon</string>
 
-    <string name="title_card_solution">Solution</string>
+    <string name="title_solution">Solution</string>
     <string name="icon_description_solution">Solution icon</string>
 
-    <string name="title_card_container">Container</string>
+    <string name="title_container">Container</string>
     <string name="icon_description_container">Container icon</string>
 
+    <!-- Drops layout -->
 
+    <!-- Lenses layout -->
+
+    <!-- Solution layout -->
+
+    <!-- Container layout -->
+
+    <!--Common -->
+    <string name="delete_button_text">Delete</string>
 </resources>
