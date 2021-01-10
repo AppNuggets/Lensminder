@@ -44,7 +44,19 @@
     </style>
 
     <style name="page_table_header_style" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
+    <style name="page_table_row_style" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">10dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">15dp</item>
     </style>
 
     <style name="delete_button_style" parent="Widget.MaterialComponents.Button" >

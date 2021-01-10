@@ -129,7 +129,6 @@ public class DashboardFragment extends Fragment {
         updateSolutionSummary(solutionsInUse);
     }
 
-
     private void updateLensesSummary(Lenses lenses) {
         if(null == lenses) {
             updateCardInfoUnavailable(lensesProgressbar, lensesLeftDaysCount,

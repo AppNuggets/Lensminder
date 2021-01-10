@@ -51,55 +51,32 @@
         <!-- Stock table -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="35dp"
+            android:layout_marginVertical="5dp"
             android:orientation="vertical"
-            android:layout_marginHorizontal="30dp"
-            android:padding="5dp">
+            android:layout_weight="1">
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18dp"
-                android:textStyle="bold"
+                style="@style/page_table_header_style"
                 android:text="Lenses stock"/>
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:stretchColumns="1,2,3">
-
                 <TableRow>
-
                     <TextView
-                        android:text="NAME"
-                        android:textStyle="bold"
-                        android:padding="10dp"
-                        android:textSize="15dp"
-                        android:layout_width="10dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_column="1"/>
-
+                        style="@style/page_table_row_style"
+                        android:layout_column="1"
+                        android:text="NAME"/>
                     <TextView
-                        android:text="QUANTITY"
-                        android:textStyle="bold"
-                        android:padding="10dp"
-                        android:textSize="15dp"
-                        android:layout_width="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_column="2"/>
-
+                        style="@style/page_table_row_style"
+                        android:layout_column="2"
+                        android:text="QUANTITY"/>
                     <TextView
-                        android:text="EXP. DATE"
-                        android:textStyle="bold"
-                        android:padding="10dp"
-                        android:textSize="15dp"
-                        android:layout_width="40dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_column="3" />
-
+                        style="@style/page_table_row_style"
+                        android:layout_column="3"
+                        android:text="EXP. DATE"/>
                 </TableRow>
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/lenses_stock_recycler_view"
                     android:layout_gravity="center"
@@ -107,67 +84,39 @@
                     android:scrollbarThumbVertical="@android:color/darker_gray"
                     android:scrollbarSize="3dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
+                    android:layout_height="match_parent"
+                    android:maxHeight="50dp"/>
             </TableLayout>
         </LinearLayout>
         <!-- History table -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="35dp"
+            android:layout_marginVertical="5dp"
             android:orientation="vertical"
-            android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="30dp"
-            android:padding="5dp">
-
+            android:layout_weight="1">
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18dp"
-                android:textStyle="bold"
+                style="@style/page_table_header_style"
                 android:text="Lenses history"/>
-
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:stretchColumns="1,2,3">
-
                 <TableRow>
-
                     <TextView
-                        android:text="NAME"
-                        android:textStyle="bold"
-                        android:padding="10dp"
-                        android:textSize="15dp"
-                        android:layout_width="10dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_column="1"/>
-
+                        style="@style/page_table_row_style"
+                        android:layout_column="1"
+                        android:text="NAME"/>
                     <TextView
-                        android:text="FROM"
-                        android:textStyle="bold"
-                        android:padding="10dp"
-                        android:textSize="15dp"
-                        android:layout_width="40dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_column="2"/>
-
+                        style="@style/page_table_row_style"
+                        android:layout_column="2"
+                        android:text="FROM"/>
                     <TextView
-                        android:text="TO"
-                        android:textStyle="bold"
-                        android:padding="10dp"
-                        android:textSize="15dp"
-                        android:layout_width="40dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:layout_column="3" />
-
+                        style="@style/page_table_row_style"
+                        android:layout_column="3"
+                        android:text="TO"/>
                 </TableRow>
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/lenses_histroy_recycler_view"
                     android:layout_gravity="center"
@@ -175,9 +124,7 @@
                     android:scrollbarThumbVertical="@android:color/darker_gray"
                     android:scrollbarSize="3dp"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                </androidx.recyclerview.widget.RecyclerView>
+                    android:layout_height="match_parent"/>
             </TableLayout>
         </LinearLayout>
     </LinearLayout>

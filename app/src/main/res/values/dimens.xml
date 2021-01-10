@@ -3,7 +3,7 @@
     <!-- Circular progressbar -->
     <dimen name="circular_progressbar_size">130dp</dimen>
     <dimen name="circular_progressbar_width">10dp</dimen>
-    <dimen name="background_circular_progressbar_width">15dp</dimen>
+    <dimen name="background_circular_progressbar_width">10dp</dimen>
 
     <!-- Dashboard layout -->
     <dimen name="dashboard_area_margin_top">40dp</dimen>
