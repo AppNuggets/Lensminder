@@ -17,19 +17,15 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
 public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
 
-    private TextInputLayout stockLensesWearCycle;
     private AutoCompleteTextView autoCompleteTextView;
     private TextInputEditText stockLensesExpDate;
-    private MaterialButton saveButton;
 
     MaterialDatePicker expDatePicker;
 
@@ -38,39 +34,23 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.lenses_stock_bottom_sheret_layout, container, false);
 
-        stockLensesWearCycle = (TextInputLayout) v.findViewById(R.id.stockLensesWearCycle);
         autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_stockLenses);
         completeDropdownList();
 
         stockLensesExpDate = (TextInputEditText) v.findViewById(R.id.stockLensesExpDate);
         setCalendar();
 
-        stockLensesExpDate.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
+        stockLensesExpDate.setOnClickListener(v1 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+
+        stockLensesExpDate.setOnFocusChangeListener((v12, hasFocus) -> {
+            if (hasFocus) {
                 expDatePicker.show(getFragmentManager(), "DATE_PICKER");
             }
         });
 
-        stockLensesExpDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    expDatePicker.show(getFragmentManager(), "DATE_PICKER");
-                }
-            }
-        });
+        expDatePicker.addOnPositiveButtonClickListener(selection -> stockLensesExpDate.setText(expDatePicker.getHeaderText()));
 
-        expDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                stockLensesExpDate.setText(expDatePicker.getHeaderText());
-            }
-        });
-
-        saveButton = (MaterialButton) v.findViewById(R.id.stockLensesSaveButton);
+        MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.stockLensesSaveButton);
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

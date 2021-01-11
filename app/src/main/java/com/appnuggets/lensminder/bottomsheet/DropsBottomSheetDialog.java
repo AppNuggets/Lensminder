@@ -17,21 +17,17 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
 public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
 
-    private TextInputLayout textInputLayout;
     private AutoCompleteTextView autoCompleteTextView;
 
     private TextInputEditText dropsStartDate;
     private TextInputEditText dropsExpDate;
-    private MaterialButton saveButton;
 
     MaterialDatePicker startDatePicker;
     MaterialDatePicker expDatePicker;
@@ -41,7 +37,6 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.drops_bottom_sheet_layout, container, false);
 
-        textInputLayout = (TextInputLayout) v.findViewById(R.id.dropsExpPeriod);
         autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_drops);
         completeDropdownList();
 
@@ -50,66 +45,35 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         dropsExpDate = (TextInputEditText) v.findViewById(R.id.dropsExpDate);
         setCalendar();
 
-        dropsStartDate.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
+        dropsStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+
+        dropsStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
+            if (hasFocus) {
                 startDatePicker.show(getFragmentManager(), "DATE_PICKER");
             }
         });
 
-        dropsStartDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    startDatePicker.show(getFragmentManager(), "DATE_PICKER");
-                }
-            }
+        startDatePicker.addOnPositiveButtonClickListener(selection -> {
+            dropsStartDate.setText(startDatePicker.getHeaderText());
+
+            /*String myFormat = "MM/dd/yy";
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            startDateDrops.setText(sdf.format(materialDatePicker.getHeaderText()));*/
         });
 
-        startDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                dropsStartDate.setText(startDatePicker.getHeaderText());
+        dropsExpDate.setOnClickListener(v15 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
 
-                /*String myFormat = "MM/dd/yy";
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-                startDateDrops.setText(sdf.format(materialDatePicker.getHeaderText()));*/
-            }
-        });
-
-        dropsExpDate.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
+        dropsExpDate.setOnFocusChangeListener((v13, hasFocus) -> {
+            if (hasFocus) {
                 expDatePicker.show(getFragmentManager(), "DATE_PICKER");
             }
         });
 
-        dropsExpDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    expDatePicker.show(getFragmentManager(), "DATE_PICKER");
-                }
-            }
-        });
+        expDatePicker.addOnPositiveButtonClickListener(selection -> dropsExpDate.setText(expDatePicker.getHeaderText()));
 
-        expDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                dropsExpDate.setText(expDatePicker.getHeaderText());
-            }
-        });
-
-        saveButton = (MaterialButton) v.findViewById(R.id.dropsSaveButton);
-        saveButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //TODO
-            }
+        MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.dropsSaveButton);
+        saveButton.setOnClickListener(v14 -> {
+            //TODO
         });
 
        return v;

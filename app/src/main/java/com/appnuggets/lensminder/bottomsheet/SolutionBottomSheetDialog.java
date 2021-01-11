@@ -5,7 +5,6 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +25,6 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
 
     private TextInputEditText solutionStartDate;
     private TextInputEditText solutionExpDate;
-    private MaterialButton saveButton;
 
     MaterialDatePicker startDatePicker;
     MaterialDatePicker expDatePicker;
@@ -40,57 +38,27 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
         solutionExpDate = (TextInputEditText) v.findViewById(R.id.solutionExpDate);
         setCalendar();
 
-        solutionStartDate.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
+        solutionStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+
+        solutionStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
+            if (hasFocus) {
                 startDatePicker.show(getFragmentManager(), "DATE_PICKER");
             }
         });
 
-        solutionStartDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    startDatePicker.show(getFragmentManager(), "DATE_PICKER");
-                }
-            }
-        });
+        startDatePicker.addOnPositiveButtonClickListener(selection -> solutionStartDate.setText(startDatePicker.getHeaderText()));
 
-        startDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                solutionStartDate.setText(startDatePicker.getHeaderText());
-            }
-        });
+        solutionExpDate.setOnClickListener(v13 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
 
-        solutionExpDate.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
+        solutionExpDate.setOnFocusChangeListener((v14, hasFocus) -> {
+            if (hasFocus) {
                 expDatePicker.show(getFragmentManager(), "DATE_PICKER");
             }
         });
 
-        solutionExpDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    expDatePicker.show(getFragmentManager(), "DATE_PICKER");
-                }
-            }
-        });
+        expDatePicker.addOnPositiveButtonClickListener(selection -> solutionExpDate.setText(expDatePicker.getHeaderText()));
 
-        expDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                solutionExpDate.setText(expDatePicker.getHeaderText());
-            }
-        });
-
-        saveButton = (MaterialButton) v.findViewById(R.id.solutionSaveButton);
+        MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.solutionSaveButton);
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

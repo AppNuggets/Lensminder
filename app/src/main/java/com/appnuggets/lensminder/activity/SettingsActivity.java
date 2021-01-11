@@ -49,7 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
             if(null != darkModeSwitch) {
                 darkModeSwitch.setOnPreferenceChangeListener((preference, isVibrateOnObject) -> {
                     boolean enableDarkMode = !((SwitchPreference)preference).isChecked();
-                    if( true ==  enableDarkMode) {
+                    if(enableDarkMode) {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     }
                     else {

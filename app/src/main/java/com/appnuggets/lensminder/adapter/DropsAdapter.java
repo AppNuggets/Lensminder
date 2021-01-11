@@ -41,9 +41,6 @@ public class DropsAdapter extends RecyclerView.Adapter<DropsAdapter.ViewHolder> 
             holder.dropsStartDate.setText(dateProcessor.dateToString(dropsItem.startDate));
             holder.dropsExpDate.setText(dateProcessor.dateToString(dropsItem.expirationDate));
         }
-        else {
-            return;
-        }
     }
 
     @Override
@@ -51,7 +48,7 @@ public class DropsAdapter extends RecyclerView.Adapter<DropsAdapter.ViewHolder> 
         return dropsList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView dropsName, dropsStartDate, dropsExpDate;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -131,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
         fragmentTransaction.commit();
     }
 
+    @SuppressLint("SimpleDateFormat")
     private void DEBUG_populateDataBase(AppDatabase db) {
         try {
             Lenses lenses1 = new Lenses("lenses", true,
