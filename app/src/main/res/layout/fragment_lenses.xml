@@ -140,14 +140,12 @@
                 style="@style/fab_style"
                 android:id="@+id/showAddLensesToStock"
                 android:src="@drawable/ic_lens"
-                app:maxImageSize="20dp"
                 app:fabSize="normal"
                 android:contentDescription="@string/fab_description_add_lenses_stock" />
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 style="@style/fab_style"
                 android:id="@+id/showAddLenses"
                 android:src="@drawable/ic_baseline_add_24"
-                app:maxImageSize="20dp"
                 app:fabSize="normal"
                 android:contentDescription="@string/fab_description_add_lenses_current" />
         </LinearLayout>

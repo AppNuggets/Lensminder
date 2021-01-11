@@ -101,7 +101,8 @@
                 <TextView
                     style="@style/dashboard_card_title_style"
                     android:text="@string/title_container"
-                    app:drawableLeftCompat="@drawable/ic_lens" />
+                    android:padding="10dp"
+                    app:drawableLeftCompat="@drawable/ic_container" />
                 <!-- Progress bar and countdown -->
                 <FrameLayout
                     android:layout_width="@dimen/circular_progressbar_size"
