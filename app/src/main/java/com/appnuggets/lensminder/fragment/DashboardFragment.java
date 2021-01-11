@@ -113,21 +113,13 @@ public class DashboardFragment extends Fragment {
             return true;
         });
 
-        lensesCardView.setOnClickListener(v -> {
-            navigationInterface.navigateToFragmentLenses();
-        });
+        lensesCardView.setOnClickListener(v -> navigationInterface.navigateToFragmentLenses());
 
-        containerCardView.setOnClickListener(v -> {
-            navigationInterface.navigateToFragmentSolution();
-        });
+        containerCardView.setOnClickListener(v -> navigationInterface.navigateToFragmentSolution());
 
-        dropsCardView.setOnClickListener(v -> {
-            navigationInterface.navigateToFragmentDrops();
-        });
+        dropsCardView.setOnClickListener(v -> navigationInterface.navigateToFragmentDrops());
 
-        solutionCardView.setOnClickListener(v -> {
-            navigationInterface.navigateToFragmentSolution();
-        });
+        solutionCardView.setOnClickListener(v -> navigationInterface.navigateToFragmentSolution());
     }
 
     @Override
@@ -223,10 +215,10 @@ public class DashboardFragment extends Fragment {
         progressBar.setProgressWithAnimation(useInterval - leftDays, 1000L);
 
         if( leftDays <= 0) {
-            // Set progressbar red
+            // TODO Set progressbar red
         }
         else {
-            // Set progress bar default color
+            // TODO Set progress bar default color
         }
     }
 

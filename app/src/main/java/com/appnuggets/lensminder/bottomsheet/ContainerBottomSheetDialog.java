@@ -5,7 +5,6 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,8 +12,6 @@ import androidx.annotation.Nullable;
 import com.appnuggets.lensminder.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.datepicker.CalendarConstraints;
-import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -25,11 +22,7 @@ import java.util.TimeZone;
 public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
 
     private TextInputEditText containerStartDate;
-    private TextInputEditText containerExpDate;
-    private MaterialButton saveButton;
-
-    MaterialDatePicker startDatePicker;
-    MaterialDatePicker expDatePicker;
+    private MaterialDatePicker startDatePicker;
 
     @Nullable
     @Override
@@ -39,21 +32,11 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         containerStartDate = (TextInputEditText) v.findViewById(R.id.containerStartDate);
         setCalendar();
 
-        containerStartDate.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startDatePicker.show(getFragmentManager(), "DATE_PICKER");
-            }
-        });
+        containerStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
 
-        containerStartDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    startDatePicker.show(getFragmentManager(), "DATE_PICKER");
-                }
+        containerStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
+            if (hasFocus) {
+                startDatePicker.show(getFragmentManager(), "DATE_PICKER");
             }
         });
 
@@ -64,12 +47,9 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        saveButton = (MaterialButton) v.findViewById(R.id.containerSaveButton);
-        saveButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //TODO
-            }
+        MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.containerSaveButton);
+        saveButton.setOnClickListener(v13 -> {
+            //TODO
         });
 
         return v;

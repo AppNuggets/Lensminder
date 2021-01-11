@@ -15,7 +15,7 @@
         android:text="Add lenses to stock"
         android:textSize="20dp"
         android:textColor="@color/black"
-        android:gravity="left"
+        android:gravity="start"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="8dp">
     </TextView>
@@ -34,6 +34,8 @@
             android:hint="Quantity"
             app:boxBackgroundMode="outline"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:endIconDrawable="@drawable/ic_calendar"
+            app:endIconMode="custom"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusTopStart="8dp"
             app:hintTextColor="#001a4d"
@@ -41,9 +43,7 @@
             app:placeholderTextColor="#001a4d"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginStart="50dp"
-            app:endIconMode="custom"
-            >
+            android:layout_marginStart="50dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/stockLensesQuantity"
@@ -51,8 +51,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="date"
                 android:focusable="false"
-                android:clickable="true"
-                />
+                android:clickable="true"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,6 +62,8 @@
             android:hint="Exp. date"
             app:boxBackgroundMode="outline"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:endIconDrawable="@drawable/ic_calendar"
+            app:endIconMode="custom"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusTopStart="8dp"
             android:layout_marginTop="15dp"
@@ -74,8 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:inputType="date"
-                />
+                android:inputType="date" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -132,7 +132,6 @@
         android:id="@+id/stockLensesSaveButton"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_centerInParent="true"
         android:backgroundTint="@color/purple_200"
         android:padding="5dp"
         android:text="ADD"

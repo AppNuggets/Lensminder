@@ -29,7 +29,7 @@ public class LensesAdapter extends RecyclerView.Adapter<LensesAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.table_item_layout, parent, false);
-        return new LensesAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -41,9 +41,6 @@ public class LensesAdapter extends RecyclerView.Adapter<LensesAdapter.ViewHolder
             holder.lensesStartDate.setText(dateProcessor.dateToString(lensesItem.startDate));
             holder.lensesExpDate.setText(dateProcessor.dateToString(lensesItem.expirationDate));
         }
-        else {
-            return;
-        }
     }
 
     @Override
@@ -51,7 +48,7 @@ public class LensesAdapter extends RecyclerView.Adapter<LensesAdapter.ViewHolder
         return lensesList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView lensesName, lensesStartDate, lensesExpDate;
 
         public ViewHolder(@NonNull View itemView) {

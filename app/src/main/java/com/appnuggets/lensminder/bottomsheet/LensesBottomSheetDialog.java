@@ -19,18 +19,15 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
 public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
-    private TextInputLayout lensesWearCycle;
     private AutoCompleteTextView autoCompleteTextView;
     private TextInputEditText lensesStartDate;
     private TextInputEditText lensesExpDate;
-    private MaterialButton saveButton;
 
     MaterialDatePicker startDatePicker;
     MaterialDatePicker expDatePicker;
@@ -40,7 +37,6 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.lenses_bottom_sheet_layout, container, false);
 
-        lensesWearCycle = (TextInputLayout) v.findViewById(R.id.lensesWearCycle);
         autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_lenses);
         completeDropdownList();
 
@@ -48,57 +44,27 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
         lensesExpDate = (TextInputEditText) v.findViewById(R.id.lensesExpDate);
         setCalendar();
 
-        lensesStartDate.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
+        lensesStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+
+        lensesStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
+            if (hasFocus) {
                 startDatePicker.show(getFragmentManager(), "DATE_PICKER");
             }
         });
 
-        lensesStartDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    startDatePicker.show(getFragmentManager(), "DATE_PICKER");
-                }
-            }
-        });
+        startDatePicker.addOnPositiveButtonClickListener(selection -> lensesStartDate.setText(startDatePicker.getHeaderText()));
 
-        startDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                lensesStartDate.setText(startDatePicker.getHeaderText());
-            }
-        });
+        lensesExpDate.setOnClickListener(v13 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
 
-        lensesExpDate.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
+        lensesExpDate.setOnFocusChangeListener((v14, hasFocus) -> {
+            if (hasFocus) {
                 expDatePicker.show(getFragmentManager(), "DATE_PICKER");
             }
         });
 
-        lensesExpDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    expDatePicker.show(getFragmentManager(), "DATE_PICKER");
-                }
-            }
-        });
+        expDatePicker.addOnPositiveButtonClickListener(selection -> lensesExpDate.setText(expDatePicker.getHeaderText()));
 
-        expDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                lensesExpDate.setText(expDatePicker.getHeaderText());
-            }
-        });
-
-        saveButton = (MaterialButton) v.findViewById(R.id.lensesSaveButton);
+        MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.lensesSaveButton);
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

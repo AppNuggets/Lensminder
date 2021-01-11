@@ -15,8 +15,8 @@
         android:text="Start new container"
         android:textSize="20dp"
         android:textColor="@color/black"
-        android:gravity="left"
-        android:layout_marginLeft="15dp"
+        android:gravity="start"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="8dp">
     </TextView>
 
@@ -34,6 +34,8 @@
             android:layout_marginEnd="50dp"
             android:hint="Start date"
             app:boxBackgroundMode="outline"
+            app:endIconDrawable="@drawable/ic_calendar"
+            app:endIconMode="custom"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:boxCornerRadiusTopEnd="8dp"
             app:boxCornerRadiusTopStart="8dp"
@@ -41,8 +43,7 @@
             app:boxStrokeColor="#001a4d"
             app:placeholderTextColor="#001a4d"
             android:layout_marginTop="15dp"
-            android:layout_marginStart="50dp"
-            app:endIconMode="custom">
+            android:layout_marginStart="50dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/containerStartDate"
@@ -84,7 +85,6 @@
         android:id="@+id/containerSaveButton"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_centerInParent="true"
         android:backgroundTint="@color/purple_200"
         android:padding="5dp"
         android:text="Add"

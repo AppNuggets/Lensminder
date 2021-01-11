@@ -29,7 +29,7 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.table_item_layout, parent, false);
-        return new SolutionAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -41,9 +41,6 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
             holder.solutionStartDate.setText(dateProcessor.dateToString(solutionItem.startDate));
             holder.solutionExpDate.setText(dateProcessor.dateToString(solutionItem.expirationDate));
         }
-        else {
-            return;
-        }
     }
 
     @Override
@@ -51,7 +48,7 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
         return solutionList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView solutionName, solutionStartDate, solutionExpDate;
 
         public ViewHolder(@NonNull View itemView) {

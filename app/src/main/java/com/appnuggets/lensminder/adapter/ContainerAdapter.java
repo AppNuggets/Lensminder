@@ -41,9 +41,6 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.View
             holder.containerStartDate.setText(dateProcessor.dateToString(containerItem.startDate));
             holder.containerExpDate.setText(dateProcessor.dateToString(containerItem.expirationDate));
         }
-        else {
-            return;
-        }
     }
 
     @Override
@@ -51,7 +48,7 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.View
         return containerList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView containerName, containerStartDate, containerExpDate;
 
         public ViewHolder(@NonNull View itemView) {
