@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Circular progressbar -->
+    <dimen name="circular_progressbar_size">130dp</dimen>
+    <dimen name="circular_progressbar_width">8dp</dimen>
+    <dimen name="background_circular_progressbar_width">8dp</dimen>
+    <!-- Summary in fragment view -->
+    <dimen name="progressbar_margin_bottom">10dp</dimen>
+    <dimen name="delete_button_margin_bottom">3dp</dimen>
+    <!-- Table in fragment view -->
+    <dimen name="table_margin_horizontal">20dp</dimen>
+    <dimen name="table_margin_vertical">10dp</dimen>
+    <dimen name="table_scrollbar_size">3dp</dimen>
+    <!-- Floating action button -->
+    <dimen name="fab_margin_bottom">10dp</dimen>
+    <dimen name="fab_margin_end">20dp</dimen>
+    <!-- Dashboard layout -->
+    <dimen name="dashboard_area_margin_top">40dp</dimen>
+    <!-- Dashboard card -->
+    <dimen name="card_width">180dp</dimen>
+    <dimen name="card_height">250dp</dimen>
+    <dimen name="card_margin">8dp</dimen>
+    <dimen name="card_title_height">50dp</dimen>
+    <dimen name="card_title_margin_top">10dp</dimen>
+    <dimen name="card_title_icon_padding">10dp</dimen>
+    <dimen name="card_additional_text_margin_top">15dp</dimen>
+    <dimen name="card_additional_text_margin_left">10dp</dimen>
+</resources>

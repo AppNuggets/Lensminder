@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragment.DashboardFragment">
+    <!-- First row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dashboard_area_margin_top"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <!-- Lenses card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_lenses"
+            style="@style/dashboard_card_style">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+                <!-- Card title and icon -->
+                <TextView
+                    style="@style/dashboard_card_title_style"
+                    android:text="@string/title_lenses"
+                    app:drawableLeftCompat="@drawable/ic_lens" />
+                <!-- Progress bar and countdown -->
+                <FrameLayout
+                    android:layout_width="@dimen/circular_progressbar_size"
+                    android:layout_height="@dimen/circular_progressbar_size"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                        android:id="@+id/lenses_card_progressbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        app:cpb_background_progressbar_width="@dimen/background_circular_progressbar_width"
+                        app:cpb_progress_direction="to_right"
+                        app:cpb_progressbar_width="@dimen/circular_progressbar_width"
+                        app:cpb_round_border="false" />
+
+                    <TextView
+                        android:id="@+id/lenses_card_day_count"
+                        style="@style/dashboard_card_counter_style" />
+                </FrameLayout>
+                <!-- Additional text -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/card_additional_text_margin_left"
+                    android:layout_marginVertical="@dimen/card_additional_text_margin_top"
+                    android:orientation="vertical">
+                    <!-- Expiration date -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/dashboard_card_additional_text_style"
+                            android:text="@string/text_expiration_date" />
+
+                        <TextView
+                            android:id="@+id/lenses_card_expiration_date"
+                            style="@style/dashboard_card_additional_text_style" />
+                    </LinearLayout>
+                    <!-- Days of use -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/dashboard_card_additional_text_style"
+                            android:text="@string/text_usage_count" />
+
+                        <TextView
+                            android:id="@+id/lenses_card_day_usage"
+                            style="@style/dashboard_card_additional_text_style" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <!-- Container card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_container"
+            style="@style/dashboard_card_style">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+                <!-- Card title and icon -->
+                <TextView
+                    style="@style/dashboard_card_title_style"
+                    android:text="@string/title_container"
+                    app:drawableLeftCompat="@drawable/ic_lens" />
+                <!-- Progress bar and countdown -->
+                <FrameLayout
+                    android:layout_width="@dimen/circular_progressbar_size"
+                    android:layout_height="@dimen/circular_progressbar_size"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                        android:id="@+id/container_card_progressbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        app:cpb_background_progressbar_width="@dimen/background_circular_progressbar_width"
+                        app:cpb_progress_direction="to_right"
+                        app:cpb_progressbar_width="@dimen/circular_progressbar_width"
+                        app:cpb_round_border="false" />
+
+                    <TextView
+                        android:id="@+id/container_card_day_count"
+                        style="@style/dashboard_card_counter_style" />
+                </FrameLayout>
+                <!-- Additional text -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/card_additional_text_margin_left"
+                    android:layout_marginVertical="@dimen/card_additional_text_margin_top"
+                    android:orientation="vertical">
+                    <!-- Expiration date -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/dashboard_card_additional_text_style"
+                            android:text="@string/text_expiration_date" />
+
+                        <TextView
+                            android:id="@+id/container_card_expiration_date"
+                            style="@style/dashboard_card_additional_text_style" />
+                    </LinearLayout>
+                    <!-- Days of use -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/dashboard_card_additional_text_style"
+                            android:text="@string/text_usage_count" />
+
+                        <TextView
+                            android:id="@+id/container_card_day_usage"
+                            style="@style/dashboard_card_additional_text_style" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+    <!-- Second row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <!-- Drops card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/dropsCard"
+            style="@style/dashboard_card_style">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+                <!-- Card title and icon -->
+                <TextView
+                    style="@style/dashboard_card_title_style"
+                    android:text="@string/title_drops"
+                    app:drawableLeftCompat="@drawable/ic_drops" />
+                <!-- Progress bar and countdown -->
+                <FrameLayout
+                    android:layout_width="@dimen/circular_progressbar_size"
+                    android:layout_height="@dimen/circular_progressbar_size"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                        android:id="@+id/drops_card_progressbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        app:cpb_background_progressbar_width="@dimen/background_circular_progressbar_width"
+                        app:cpb_progress_direction="to_right"
+                        app:cpb_progressbar_width="@dimen/circular_progressbar_width"
+                        app:cpb_round_border="false" />
+
+                    <TextView
+                        android:id="@+id/drops_card_day_count"
+                        style="@style/dashboard_card_counter_style" />
+                </FrameLayout>
+                <!-- Additional text -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/card_additional_text_margin_left"
+                    android:layout_marginVertical="@dimen/card_additional_text_margin_top"
+                    android:orientation="vertical">
+                    <!-- Expiration date -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/dashboard_card_additional_text_style"
+                            android:text="@string/text_expiration_date" />
+
+                        <TextView
+                            android:id="@+id/drops_card_expiration_date"
+                            style="@style/dashboard_card_additional_text_style" />
+                    </LinearLayout>
+                    <!-- Days of use -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/dashboard_card_additional_text_style"
+                            android:text="@string/text_usage_count" />
+
+                        <TextView
+                            android:id="@+id/drops_card_day_usage"
+                            style="@style/dashboard_card_additional_text_style" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <!-- Solution card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/solutionCard"
+            style="@style/dashboard_card_style">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+                <!-- Card title and icon -->
+                <TextView
+                    style="@style/dashboard_card_title_style"
+                    android:text="@string/title_solution"
+                    app:drawableLeftCompat="@drawable/ic_solution" />
+                <!-- Progress bar and countdown -->
+                <FrameLayout
+                    android:layout_width="@dimen/circular_progressbar_size"
+                    android:layout_height="@dimen/circular_progressbar_size"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                        android:id="@+id/solution_card_progressbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        app:cpb_background_progressbar_width="@dimen/background_circular_progressbar_width"
+                        app:cpb_progress_direction="to_right"
+                        app:cpb_progressbar_width="@dimen/circular_progressbar_width"
+                        app:cpb_round_border="false" />
+
+                    <TextView
+                        android:id="@+id/solution_card_day_count"
+                        style="@style/dashboard_card_counter_style" />
+                </FrameLayout>
+                <!-- Additional text -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/card_additional_text_margin_left"
+                    android:layout_marginVertical="@dimen/card_additional_text_margin_top"
+                    android:orientation="vertical">
+                    <!-- Expiration date -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/dashboard_card_additional_text_style"
+                            android:text="@string/text_expiration_date" />
+
+                        <TextView
+                            android:id="@+id/solution_card_expiration_date"
+                            style="@style/dashboard_card_additional_text_style" />
+                    </LinearLayout>
+                    <!-- Days of use -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/dashboard_card_additional_text_style"
+                            android:text="@string/text_usage_count" />
+
+                        <TextView
+                            android:id="@+id/solution_card_day_usage"
+                            style="@style/dashboard_card_additional_text_style" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+</LinearLayout>

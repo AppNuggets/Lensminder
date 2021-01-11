@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".fragment.DropsFragment">
+    <!-- Main layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!-- Top screen summary info on current drops usage -->
+        <LinearLayout
+            android:background="@drawable/rounded_rectangle_shape"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center">
+            <!-- Page header -->
+            <TextView
+                style="@style/page_summary_header"
+                android:text="@string/title_drops"/>
+            <!-- Progressbar  -->
+            <FrameLayout
+                android:layout_width="@dimen/circular_progressbar_size"
+                android:layout_height="@dimen/circular_progressbar_size"
+                android:layout_marginBottom="@dimen/progressbar_margin_bottom"
+                android:orientation="vertical"
+                android:gravity="center">
+                <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                    android:id="@+id/drops_progressbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    app:cpb_round_border="false"
+                    app:cpb_progress_direction="to_right"
+                    app:cpb_progressbar_width="@dimen/circular_progressbar_width"
+                    app:cpb_background_progressbar_width=
+                        "@dimen/background_circular_progressbar_width"/>
+                <TextView
+                    android:id="@+id/drops_days_count"
+                    style="@style/dashboard_card_counter_style"/>
+            </FrameLayout>
+            <!-- Delete current drops button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/delete_drops_button"
+                style="@style/delete_button_style"
+                android:layout_marginBottom="@dimen/delete_button_margin_bottom"/>
+        </LinearLayout>
+        <!-- Middle screen section - history table -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/table_margin_horizontal"
+            android:layout_marginVertical="@dimen/table_margin_vertical"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <!-- Table header -->
+            <TextView
+                style="@style/page_table_header_style"
+                android:text="@string/drops_history"/>
+            <!-- Table contents -->
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:stretchColumns="1,2,3">
+                <TableRow>
+                    <TextView
+                        style="@style/page_table_row_style"
+                        android:layout_column="1"
+                        android:text="@string/name_column_header"/>
+                    <TextView
+                        style="@style/page_table_row_style"
+                        android:layout_column="2"
+                        android:text="@string/from_column_header"/>
+                    <TextView
+                        style="@style/page_table_row_style"
+                        android:layout_column="3"
+                        android:text="@string/to_column_header"/>
+                </TableRow>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/drops_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scrollbars="vertical"
+                    android:scrollbarSize="@dimen/table_scrollbar_size"
+                    android:scrollbarThumbVertical="@android:color/darker_gray"/>
+            </TableLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <!-- Floating action button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/fab_style"
+        android:id="@+id/drops_show_add_sheet"
+        android:src="@drawable/ic_baseline_add_24"
+        app:maxImageSize="20dp"
+        app:fabSize="normal"
+        android:contentDescription="@string/fab_description_add_drops" />
+</FrameLayout>
