@@ -1,17 +1,21 @@
 package com.appnuggets.lensminder.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.activity.MainActivity;
+import com.appnuggets.lensminder.activity.NavigationInterface;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Container;
 import com.appnuggets.lensminder.database.entity.Drops;
@@ -25,6 +29,8 @@ import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import java.util.Date;
 
 public class DashboardFragment extends Fragment {
+
+    private NavigationInterface navigationInterface;
 
     private CircularProgressBar lensesProgressbar;
     private TextView lensesLeftDaysCount;
@@ -54,6 +60,7 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        navigationInterface = (MainActivity) getActivity();
     }
 
     @Override
@@ -92,21 +99,34 @@ public class DashboardFragment extends Fragment {
         solutionExpirationDate = view.findViewById(R.id.solution_card_expiration_date);
         solutionDaysUsedCount = view.findViewById(R.id.solution_card_day_usage);
 
+        lensesCardView.setOnLongClickListener(v -> {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Delete current lenses")
+                    .setMessage("Are you sure you want to delete current lenses??")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            // TODO Implement current lenses deletion
+                            Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
+            return true;
+        });
 
         lensesCardView.setOnClickListener(v -> {
-            // TODO Implement transition to lenses fragment
+            navigationInterface.navigateToFragmentLenses();
         });
 
         containerCardView.setOnClickListener(v -> {
-            // TODO Implement transition to solution fragment
+            navigationInterface.navigateToFragmentSolution();
         });
 
         dropsCardView.setOnClickListener(v -> {
-            // TODO Implement transition to drops fragment
+            navigationInterface.navigateToFragmentDrops();
         });
 
         solutionCardView.setOnClickListener(v -> {
-            // TODO Implement transition to solution fragment
+            navigationInterface.navigateToFragmentSolution();
         });
     }
 

@@ -187,7 +187,6 @@
                 style="@style/fab_style"
                 android:id="@+id/showAddContainer"
                 android:src="@drawable/ic_container"
-                app:backgroundTint="@color/cardview_light_background"
                 app:maxImageSize="20dp"
                 app:fabSize="normal"
                 android:contentDescription="@string/fab_description_add_container" />
@@ -195,7 +194,6 @@
                 style="@style/fab_style"
                 android:id="@+id/showAddSolution"
                 android:src="@drawable/ic_solution"
-                app:backgroundTint="@color/cardview_light_background"
                 app:maxImageSize="20dp"
                 app:fabSize="normal"
                 android:contentDescription="@string/fab_description_add_solution" />

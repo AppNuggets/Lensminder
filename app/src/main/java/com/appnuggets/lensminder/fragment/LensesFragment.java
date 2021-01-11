@@ -107,7 +107,7 @@ public class LensesFragment extends Fragment {
     private void setLensesStockRecyclerView() {
         Context context = getContext();
         AppDatabase db = AppDatabase.getInstance(context);
-        //TODO Implement method
+        //TODO Implement method for recycler view setting
     }
 
     private void updateDropsSummary(Lenses lenses) {

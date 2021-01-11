@@ -26,7 +26,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationInterface {
+
+    private BottomNavigationView bottomNavigationView;
 
     private Fragment dashboardFragment;
     private Fragment lensesFragment;
@@ -57,20 +59,20 @@ public class MainActivity extends AppCompatActivity {
         ft.replace(R.id.fragment_container_view, dashboardFragment);
         ft.commit();
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
                     switch (item.getItemId()) {
                         case R.id.Dashboard:
-                            navigateToFragmentDashboard();
+                            navigateDashboard();
                             return true;
                         case R.id.Lenses:
-                            navigateToFragmentLenses();
+                            navigateLenses();
                             return true;
                         case R.id.Solution:
-                            navigateToFragmentSolution();
+                            navigateSolution();
                             return true;
                         case R.id.Drops:
-                            navigateToFragmentDrops();
+                            navigateDrops();
                             return true;
                         case R.id.Settings:
                             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
@@ -89,28 +91,40 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
     }
 
-    private void navigateToFragmentDashboard() {
+    public void navigateToFragmentLenses() {
+        bottomNavigationView.setSelectedItemId(R.id.Lenses);
+    }
+
+    public void navigateToFragmentSolution() {
+        bottomNavigationView.setSelectedItemId(R.id.Solution);
+    }
+
+    public void navigateToFragmentDrops() {
+        bottomNavigationView.setSelectedItemId(R.id.Drops);
+    }
+
+    private void navigateDashboard() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_view, dashboardFragment);
         fragmentTransaction.commit();
     }
 
-    private void navigateToFragmentLenses() {
+    private void navigateLenses() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_view, lensesFragment);
         fragmentTransaction.commit();
     }
 
-    private void navigateToFragmentSolution() {
+    private void navigateSolution() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_view, solutionFragment);
         fragmentTransaction.commit();
     }
 
-    private void navigateToFragmentDrops() {
+    private void navigateDrops() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_view, dropsFragment);
