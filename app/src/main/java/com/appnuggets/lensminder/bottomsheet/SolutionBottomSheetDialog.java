@@ -18,7 +18,9 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
@@ -36,6 +38,7 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
 
         solutionStartDate = (TextInputEditText) v.findViewById(R.id.solutionStartDate);
         solutionExpDate = (TextInputEditText) v.findViewById(R.id.solutionExpDate);
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
         setCalendar();
 
         solutionStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
@@ -46,7 +49,10 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        startDatePicker.addOnPositiveButtonClickListener(selection -> solutionStartDate.setText(startDatePicker.getHeaderText()));
+        startDatePicker.addOnPositiveButtonClickListener(selection -> {
+            Date date = new Date((Long) startDatePicker.getSelection()) ;
+            solutionStartDate.setText(simpleFormat.format(date));
+        });
 
         solutionExpDate.setOnClickListener(v13 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
 
@@ -56,7 +62,10 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        expDatePicker.addOnPositiveButtonClickListener(selection -> solutionExpDate.setText(expDatePicker.getHeaderText()));
+        expDatePicker.addOnPositiveButtonClickListener(selection -> {
+            Date date = new Date((Long) expDatePicker.getSelection()) ;
+            solutionExpDate.setText(simpleFormat.format(date));
+        });
 
         MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.solutionSaveButton);
         saveButton.setOnClickListener(new View.OnClickListener(){

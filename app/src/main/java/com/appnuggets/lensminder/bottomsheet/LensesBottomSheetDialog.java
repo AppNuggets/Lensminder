@@ -20,7 +20,9 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
@@ -42,6 +44,7 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
         lensesStartDate = (TextInputEditText) v.findViewById(R.id.lensesStartDate);
         lensesExpDate = (TextInputEditText) v.findViewById(R.id.lensesExpDate);
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
         setCalendar();
 
         lensesStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
@@ -52,7 +55,10 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        startDatePicker.addOnPositiveButtonClickListener(selection -> lensesStartDate.setText(startDatePicker.getHeaderText()));
+        startDatePicker.addOnPositiveButtonClickListener(selection -> {
+            Date date = new Date((Long) startDatePicker.getSelection()) ;
+            lensesStartDate.setText(simpleFormat.format(date));
+        });
 
         lensesExpDate.setOnClickListener(v13 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
 
@@ -62,7 +68,10 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        expDatePicker.addOnPositiveButtonClickListener(selection -> lensesExpDate.setText(expDatePicker.getHeaderText()));
+        expDatePicker.addOnPositiveButtonClickListener(selection -> {
+            Date date = new Date((Long) expDatePicker.getSelection()) ;
+            lensesExpDate.setText(simpleFormat.format(date));
+        });
 
         MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.lensesSaveButton);
         saveButton.setOnClickListener(new View.OnClickListener(){

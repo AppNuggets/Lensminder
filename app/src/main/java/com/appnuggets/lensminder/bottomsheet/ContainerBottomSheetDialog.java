@@ -16,7 +16,9 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
@@ -30,6 +32,7 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.container_bottom_sheet_layout, container, false);
 
         containerStartDate = (TextInputEditText) v.findViewById(R.id.containerStartDate);
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
         setCalendar();
 
         containerStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
@@ -43,7 +46,8 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         startDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
-                containerStartDate.setText(startDatePicker.getHeaderText());
+                Date date = new Date((Long) startDatePicker.getSelection()) ;
+                containerStartDate.setText(simpleFormat.format(date));
             }
         });
 

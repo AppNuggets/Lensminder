@@ -19,7 +19,9 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
 
 public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
@@ -38,6 +40,7 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
         completeDropdownList();
 
         stockLensesExpDate = (TextInputEditText) v.findViewById(R.id.stockLensesExpDate);
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
         setCalendar();
 
         stockLensesExpDate.setOnClickListener(v1 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
@@ -48,7 +51,10 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        expDatePicker.addOnPositiveButtonClickListener(selection -> stockLensesExpDate.setText(expDatePicker.getHeaderText()));
+        expDatePicker.addOnPositiveButtonClickListener(selection -> {
+            Date date = new Date((Long) expDatePicker.getSelection()) ;
+            stockLensesExpDate.setText(simpleFormat.format(date));
+        });
 
         MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.stockLensesSaveButton);
         saveButton.setOnClickListener(new View.OnClickListener(){
