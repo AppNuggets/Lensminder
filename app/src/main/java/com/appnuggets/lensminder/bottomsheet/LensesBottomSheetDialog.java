@@ -1,5 +1,6 @@
 package com.appnuggets.lensminder.bottomsheet;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -12,24 +13,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.database.AppDatabase;
+import com.appnuggets.lensminder.database.entity.Lenses;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
-    private AutoCompleteTextView autoCompleteTextView;
+    private AutoCompleteTextView lensesWearCycle;
     private TextInputEditText lensesStartDate;
     private TextInputEditText lensesExpDate;
+    String[] items;
 
     MaterialDatePicker startDatePicker;
     MaterialDatePicker expDatePicker;
@@ -39,11 +44,11 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.lenses_bottom_sheet_layout, container, false);
 
-        autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_lenses);
+        lensesWearCycle = v.findViewById(R.id.autoComplete_lenses);
         completeDropdownList();
 
-        lensesStartDate = (TextInputEditText) v.findViewById(R.id.lensesStartDate);
-        lensesExpDate = (TextInputEditText) v.findViewById(R.id.lensesExpDate);
+        lensesStartDate = v.findViewById(R.id.lensesStartDate);
+        lensesExpDate = v.findViewById(R.id.lensesExpDate);
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
         setCalendar();
 
@@ -74,10 +79,50 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
         });
 
         MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.lensesSaveButton);
+        TextInputEditText lensesName = v.findViewById(R.id.lensesName);
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //TODO
+
+                if(lensesWearCycle.getText().toString().isEmpty() ||
+                        lensesExpDate.getText().toString().isEmpty() ||
+                        lensesStartDate.getText().toString().isEmpty() ||
+                        lensesName.getText().toString().isEmpty()) {
+                    dismiss();
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Fields must not be empty")
+                            .setMessage("").show();
+                }
+                else
+                {
+                    long expPeriod = 0L;
+
+                    if(lensesWearCycle.getText().toString().equals(items[0])) expPeriod = 14L;
+                    else if(lensesWearCycle.getText().toString().equals(items[1])) expPeriod = 31L;
+                    else if(lensesWearCycle.getText().toString().equals(items[2])) expPeriod = 93L;
+                    else if(lensesWearCycle.getText().toString().equals(items[3])) expPeriod = 186L;
+
+                    try {
+                        Lenses lenses = new Lenses(Objects.requireNonNull(lensesName.getText()).toString(), true,
+                                new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(lensesExpDate.getText()).toString()),
+                                new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(lensesStartDate.getText()).toString()),
+                                expPeriod);
+
+                        AppDatabase db = AppDatabase.getInstance(getContext());
+                        Lenses inUseLenses = db.lensesDao().getInUse();
+                        if(inUseLenses != null)
+                        {
+                            inUseLenses.inUse = false;
+                            db.lensesDao().update(inUseLenses);
+                        }
+
+                        db.lensesDao().insert(lenses);
+                        dismiss();
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 
@@ -113,7 +158,7 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
     }
 
     public void completeDropdownList() {
-        String[] items = new String[] {
+        items = new String[] {
                 "Two Weeks",
                 "One month",
                 "Three months",
@@ -126,6 +171,6 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
                 items
         );
 
-        autoCompleteTextView.setAdapter(adapter);
+        lensesWearCycle.setAdapter(adapter);
     }
 }

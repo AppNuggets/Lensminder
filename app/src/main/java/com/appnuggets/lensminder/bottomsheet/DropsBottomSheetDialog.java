@@ -1,5 +1,6 @@
 package com.appnuggets.lensminder.bottomsheet;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -21,9 +22,11 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
@@ -78,23 +81,50 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         });
 
         MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.dropsSaveButton);
+        TextInputEditText dropsName = v.findViewById(R.id.dropsName);
         saveButton.setOnClickListener(v14 -> {
 
-            AppDatabase db = AppDatabase.getInstance(getContext());
-            TextInputEditText dropsName = v.findViewById(R.id.dropsName);
-            Long expPeriod = 0L;
+            if(dropsExpPeriod.getText().toString().isEmpty() ||
+                    dropsExpDate.getText().toString().isEmpty() ||
+                 dropsStartDate.getText().toString().isEmpty() ||
+                   dropsName.getText().toString().isEmpty()) {
+                dismiss();
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Fields must not be empty")
+                        .setMessage("").show();
+            }
+            else
+            {
+                long expPeriod = 0L;
 
-            if(dropsExpPeriod.getText().equals(items[0])) expPeriod = 31L;
-            else if(dropsExpPeriod.getText().equals(items[1])) expPeriod = 93L;
-            else if(dropsExpPeriod.getText().equals(items[2])) expPeriod = 186L;
+                if(dropsExpPeriod.getText().toString().equals(items[0])) expPeriod = 31L;
+                else if(dropsExpPeriod.getText().toString().equals(items[1])) expPeriod = 93L;
+                else if(dropsExpPeriod.getText().toString().equals(items[2])) expPeriod = 186L;
 
-            /*Drops drops = new Drops(dropsName.getText(), true,
-                    new SimpleDateFormat("dd.MM.yyyy").parse(dropsStartDate.getText().toString()),
-                    new SimpleDateFormat("dd.MM.yyyy").parse(dropsExpDate),
-                    expPeriod);
+                try {
+                    Drops drops = new Drops(Objects.requireNonNull(dropsName.getText()).toString(), true,
+                            new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(dropsExpDate.getText()).toString()),
+                            new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(dropsStartDate.getText()).toString()),
+                            expPeriod);
 
-            db.dropsDao().insert(drops);*/
+                    AppDatabase db = AppDatabase.getInstance(getContext());
+
+                    Drops inUseDrops = db.dropsDao().getInUse();
+                    if(inUseDrops != null)
+                    {
+                        inUseDrops.inUse = false;
+                        db.dropsDao().update(inUseDrops);
+                    }
+
+                    db.dropsDao().insert(drops);
+                    dismiss();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
         });
+
 
        return v;
     }

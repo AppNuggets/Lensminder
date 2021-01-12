@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.adapter.LensesAdapter;
@@ -78,7 +79,11 @@ public class LensesFragment extends Fragment {
 
         // Delete current lenses listener
         deleteCurrentLenses.setOnClickListener(v -> {
-            // TODO Implement method for current lenses deletion
+            AppDatabase db = AppDatabase.getInstance(getContext());
+            Lenses inUseLenses = db.lensesDao().getInUse();
+            inUseLenses.inUse = false;
+            db.lensesDao().update(inUseLenses);
+            Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
         });
 
         setLensesHistoryRecyclerView();
@@ -122,7 +127,7 @@ public class LensesFragment extends Fragment {
                     lenses.expirationDate, lenses.useInterval);
 
             lensesProgressbar.setProgressMax(lenses.useInterval);
-            lensesProgressbar.setProgressWithAnimation(lenses.useInterval - daysLeft,
+            lensesProgressbar.setProgressWithAnimation(Math.max(daysLeft, 0),
                     1000L);
 
             lensesLeftDaysCount.setText(daysLeft.toString());

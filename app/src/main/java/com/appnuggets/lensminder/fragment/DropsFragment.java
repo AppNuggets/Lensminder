@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.adapter.DropsAdapter;
@@ -67,7 +68,11 @@ public class DropsFragment extends Fragment {
         });
         // Delete current drops listener
         deleteCurrentDrops.setOnClickListener(v -> {
-            // TODO Implement method for current drops deletion
+            AppDatabase db = AppDatabase.getInstance(getContext());
+            Drops inUseDrops = db.dropsDao().getInUse();
+            inUseDrops.inUse = false;
+            db.dropsDao().update(inUseDrops);
+            Toast.makeText(getContext(), "Drops deleted", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -102,7 +107,7 @@ public class DropsFragment extends Fragment {
                     drops.expirationDate, drops.useInterval);
 
             dropsProgressbar.setProgressMax(drops.useInterval);
-            dropsProgressbar.setProgressWithAnimation(drops.useInterval - daysLeft,
+            dropsProgressbar.setProgressWithAnimation(Math.max(daysLeft, 0),
                     1000L);
 
             dropsLeftDaysCount.setText(daysLeft.toString());

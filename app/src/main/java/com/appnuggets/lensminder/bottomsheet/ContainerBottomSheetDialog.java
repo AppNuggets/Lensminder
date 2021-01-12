@@ -1,5 +1,6 @@
 package com.appnuggets.lensminder.bottomsheet;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -10,15 +11,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.database.AppDatabase;
+import com.appnuggets.lensminder.database.entity.Container;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
@@ -31,7 +36,7 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.container_bottom_sheet_layout, container, false);
 
-        containerStartDate = (TextInputEditText) v.findViewById(R.id.containerStartDate);
+        containerStartDate = v.findViewById(R.id.containerStartDate);
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
         setCalendar();
 
@@ -51,9 +56,40 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.containerSaveButton);
+        MaterialButton saveButton = v.findViewById(R.id.containerSaveButton);
+        TextInputEditText containerName = v.findViewById(R.id.containerName);
         saveButton.setOnClickListener(v13 -> {
-            //TODO
+
+            if(containerStartDate.getText().toString().isEmpty() ||
+                    containerName.getText().toString().isEmpty()) {
+                dismiss();
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Fields must not be empty")
+                        .setMessage("").show();
+            }
+            else {
+                try {
+                    Container newContainer = new Container(Objects.requireNonNull(containerName.getText()).toString(), true,
+                            null, new SimpleDateFormat("dd.MM.yyyy")
+                            .parse(Objects.requireNonNull(containerStartDate.getText()).toString()),
+                            93L);
+
+                    AppDatabase db = AppDatabase.getInstance(getContext());
+
+                    Container inUseContainer = db.containerDao().getInUse();
+                    if(inUseContainer != null)
+                    {
+                        inUseContainer.inUse = false;
+                        db.containerDao().update(inUseContainer);
+                    }
+
+                    db.containerDao().insert(newContainer);
+                    dismiss();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
         return v;
