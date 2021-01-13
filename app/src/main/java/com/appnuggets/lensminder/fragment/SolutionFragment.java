@@ -154,7 +154,7 @@ public class SolutionFragment extends Fragment {
         else {
             UsageProcessor usageProcessor = new UsageProcessor();
             Long daysLeft = usageProcessor.calculateUsageLeft(container.startDate,
-                    container.expirationDate, container.useInterval);
+                    null, container.useInterval);
 
             containerProgressBar.setProgressMax(container.useInterval);
             containerProgressBar.setProgressWithAnimation(container.useInterval - daysLeft,

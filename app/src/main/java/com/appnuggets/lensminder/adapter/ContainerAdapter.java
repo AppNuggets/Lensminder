@@ -39,7 +39,6 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.View
             Container containerItem = containerList.get(position);
             holder.containerName.setText(containerItem.name);
             holder.containerStartDate.setText(dateProcessor.dateToString(containerItem.startDate));
-            holder.containerExpDate.setText(dateProcessor.dateToString(containerItem.expirationDate));
         }
         else {
             return;

@@ -169,7 +169,7 @@ public class DashboardFragment extends Fragment {
         else {
             updateCardInfoAvailable(containerProgressbar, containerLeftDaysCount,
                     containerDaysUsedCount, containerExpirationDate,
-                    container.expirationDate, container.startDate, container.useInterval);
+                    null, container.startDate, container.useInterval);
         }
     }
 
