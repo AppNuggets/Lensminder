@@ -2,6 +2,9 @@ package com.appnuggets.lensminder.database;
 
 import androidx.room.TypeConverter;
 
+import com.appnuggets.lensminder.activity.NavigationInterface;
+import com.appnuggets.lensminder.database.entity.State;
+
 import java.util.Date;
 
 public class Converters {

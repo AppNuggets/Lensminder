@@ -17,19 +17,15 @@ public class Container {
     @ColumnInfo(name = "in_use")
     public Boolean inUse;
 
-    @ColumnInfo(name = "expiration_date")
-    public Date expirationDate;
-
     @ColumnInfo(name = "start_date")
     public Date startDate;
 
     @ColumnInfo(name = "use_interval")
     public Long useInterval;
 
-    public Container(String name, Boolean inUse, Date expirationDate, Date startDate, Long useInterval) {
+    public Container(String name, Boolean inUse, Date startDate, Long useInterval) {
         this.name = name;
         this.inUse = inUse;
-        this.expirationDate = expirationDate;
         this.startDate = startDate;
         this.useInterval = useInterval;
     }

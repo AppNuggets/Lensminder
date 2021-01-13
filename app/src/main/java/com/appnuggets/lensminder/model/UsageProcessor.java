@@ -18,12 +18,15 @@ public class UsageProcessor {
 
     public Long calculateUsageLeft(Date startDate, Date expirationDate, Long useInterval ){
         Date now = Calendar.getInstance().getTime();
-
-        long daysToExpiration =  TimeUnit.DAYS.
-                convert((expirationDate.getTime() - now.getTime()), TimeUnit.MILLISECONDS);
         long daysLeftForUsage = useInterval - calculateCurrentUsage(startDate);
-
-        return Math.min(daysToExpiration, daysLeftForUsage);
+        if( null != expirationDate ) {
+            long daysToExpiration =  TimeUnit.DAYS.
+                    convert((expirationDate.getTime() - now.getTime()), TimeUnit.MILLISECONDS);
+            return Math.min(daysToExpiration, daysLeftForUsage);
+        }
+        else {
+            return daysLeftForUsage;
+        }
     }
 
 }

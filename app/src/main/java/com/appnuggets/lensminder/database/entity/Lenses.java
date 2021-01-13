@@ -14,8 +14,8 @@ public class Lenses {
     @ColumnInfo(name = "name")
     public String name;
 
-    @ColumnInfo(name = "in_use")
-    public Boolean inUse;
+    @ColumnInfo(name = "state")
+    public State state;
 
     @ColumnInfo(name = "expiration_date")
     public Date expirationDate;
@@ -26,9 +26,9 @@ public class Lenses {
     @ColumnInfo(name = "use_interval")
     public Long useInterval;
 
-    public Lenses(String name, Boolean inUse, Date expirationDate, Date startDate, Long useInterval) {
+    public Lenses(String name, State state, Date expirationDate, Date startDate, Long useInterval) {
         this.name = name;
-        this.inUse = inUse;
+        this.state = state;
         this.expirationDate = expirationDate;
         this.startDate = startDate;
         this.useInterval = useInterval;
