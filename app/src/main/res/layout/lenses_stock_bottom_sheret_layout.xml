@@ -20,66 +20,29 @@
         android:layout_marginTop="8dp">
     </TextView>
 
-    <LinearLayout
-        android:id="@+id/page_buttons"
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/stockLensesExpDateField"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+        android:hint="Exp. date"
+        app:boxBackgroundMode="outline"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:endIconDrawable="@drawable/ic_calendar"
+        app:endIconMode="custom"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/stockLensesQuantityField"
-            android:layout_width="150dp"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/stockLensesExpDate"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Quantity"
-            app:boxBackgroundMode="outline"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:endIconDrawable="@drawable/ic_calendar"
-            app:endIconMode="custom"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusTopStart="8dp"
-            app:hintTextColor="#001a4d"
-            app:boxStrokeColor="#001a4d"
-            app:placeholderTextColor="#001a4d"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="50dp">
+            android:focusable="false"
+            android:inputType="date" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/stockLensesQuantity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="date"
-                android:focusable="false"
-                android:clickable="true"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/stockLensesExpDateField"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:hint="Exp. date"
-            app:boxBackgroundMode="outline"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:endIconDrawable="@drawable/ic_calendar"
-            app:endIconMode="custom"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusTopStart="8dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginStart="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/stockLensesExpDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:inputType="date" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout

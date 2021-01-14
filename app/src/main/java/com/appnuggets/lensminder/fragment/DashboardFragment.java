@@ -21,6 +21,7 @@ import com.appnuggets.lensminder.database.entity.Container;
 import com.appnuggets.lensminder.database.entity.Drops;
 import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.Solution;
+import com.appnuggets.lensminder.database.entity.State;
 import com.appnuggets.lensminder.model.DateProcessor;
 import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.card.MaterialCardView;
@@ -107,7 +108,7 @@ public class DashboardFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             AppDatabase db = AppDatabase.getInstance(getContext());
                             Lenses inUseLenses = db.lensesDao().getInUse();
-                            inUseLenses.inUse = false;
+                            inUseLenses.state = State.IN_HISTORY;
                             db.lensesDao().update(inUseLenses);
                             Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
                         }})

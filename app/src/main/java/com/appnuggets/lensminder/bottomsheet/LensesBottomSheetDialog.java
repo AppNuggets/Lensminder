@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Lenses;
+import com.appnuggets.lensminder.database.entity.State;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -103,7 +104,7 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
                     else if(lensesWearCycle.getText().toString().equals(items[3])) expPeriod = 186L;
 
                     try {
-                        Lenses lenses = new Lenses(Objects.requireNonNull(lensesName.getText()).toString(), true,
+                        Lenses lenses = new Lenses(Objects.requireNonNull(lensesName.getText()).toString(), State.IN_USE,
                                 new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(lensesExpDate.getText()).toString()),
                                 new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(lensesStartDate.getText()).toString()),
                                 expPeriod);
@@ -112,7 +113,7 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
                         Lenses inUseLenses = db.lensesDao().getInUse();
                         if(inUseLenses != null)
                         {
-                            inUseLenses.inUse = false;
+                            inUseLenses.state = State.IN_HISTORY;
                             db.lensesDao().update(inUseLenses);
                         }
 

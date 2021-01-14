@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Circular progressbar -->
     <dimen name="circular_progressbar_size">130dp</dimen>
     <dimen name="circular_progressbar_width">8dp</dimen>
@@ -13,7 +13,8 @@
     <dimen name="table_scrollbar_size">3dp</dimen>
     <!-- Floating action button -->
     <dimen name="fab_margin_bottom">10dp</dimen>
-    <dimen name="fab_margin_end">20dp</dimen>
+    <dimen name="fab_margin_end">10dp</dimen>
+    <dimen name="design_fab_size_mini" tools:override="true">48dp</dimen>
     <!-- Dashboard layout -->
     <dimen name="dashboard_area_margin_top">40dp</dimen>
     <!-- Dashboard card -->

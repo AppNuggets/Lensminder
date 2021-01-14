@@ -29,6 +29,6 @@
     <string name="name_column_header">NAME</string>
     <string name="from_column_header">FROM</string>
     <string name="to_column_header">TO</string>
-    <string name="quantity_column_header">QUANTITY</string>
+    <string name="wear_cycle_column_header">WEAR CYCLE</string>
     <string name="exp_date_column_header">EXP. DATE</string>
 </resources>

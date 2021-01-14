@@ -187,13 +187,13 @@
                 style="@style/fab_style"
                 android:id="@+id/showAddContainer"
                 android:src="@drawable/ic_container"
-                app:fabSize="normal"
+                app:fabSize="mini"
                 android:contentDescription="@string/fab_description_add_container" />
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 style="@style/fab_style"
                 android:id="@+id/showAddSolution"
                 android:src="@drawable/ic_solution"
-                app:fabSize="normal"
+                app:fabSize="mini"
                 android:contentDescription="@string/fab_description_add_solution" />
         </LinearLayout>
     </FrameLayout>
