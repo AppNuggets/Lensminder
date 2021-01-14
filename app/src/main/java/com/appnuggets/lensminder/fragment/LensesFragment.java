@@ -17,10 +17,12 @@ import android.widget.Toast;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.adapter.LensesAdapter;
+import com.appnuggets.lensminder.adapter.LensesStockAdapter;
 import com.appnuggets.lensminder.bottomsheet.LensesBottomSheetDialog;
 import com.appnuggets.lensminder.bottomsheet.LensesStockBottomSheetDialog;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Lenses;
+import com.appnuggets.lensminder.database.entity.State;
 import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -79,9 +81,9 @@ public class LensesFragment extends Fragment {
 
         // Delete current lenses listener
         deleteCurrentLenses.setOnClickListener(v -> {
-            AppDatabase db = AppDatabase.getInstance(getContext());
+            AppDatabase db = AppDatabase.getInstance(getContext(  ));
             Lenses inUseLenses = db.lensesDao().getInUse();
-            inUseLenses.inUse = false;
+            inUseLenses.state = State.IN_HISTORY;
             db.lensesDao().update(inUseLenses);
             Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
         });
@@ -96,7 +98,7 @@ public class LensesFragment extends Fragment {
 
         AppDatabase db = AppDatabase.getInstance(getContext());
         Lenses lensesInUse = db.lensesDao().getInUse();
-        updateDropsSummary(lensesInUse);
+        updateLensesSummary(lensesInUse);
     }
 
     private void setLensesHistoryRecyclerView() {
@@ -112,10 +114,14 @@ public class LensesFragment extends Fragment {
     private void setLensesStockRecyclerView() {
         Context context = getContext();
         AppDatabase db = AppDatabase.getInstance(context);
-        //TODO Implement method for recycler view setting
+        LensesStockAdapter lensesStockAdapter = new LensesStockAdapter(context, db.lensesDao().getAllInStock());
+
+        lensesStockRecyclerView.setHasFixedSize(true);
+        lensesStockRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        lensesStockRecyclerView.setAdapter(lensesStockAdapter);
     }
 
-    private void updateDropsSummary(Lenses lenses) {
+    private void updateLensesSummary(Lenses lenses) {
         if (null == lenses) {
             lensesProgressbar.setProgressMax(100f);
             lensesProgressbar.setProgressWithAnimation(0f, (long) 1000); // =1s

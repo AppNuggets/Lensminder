@@ -15,7 +15,8 @@ import com.appnuggets.lensminder.model.DateProcessor;
 
 import java.util.List;
 
-public class LensesAdapter extends RecyclerView.Adapter<LensesAdapter.ViewHolder>{
+public class
+LensesAdapter extends RecyclerView.Adapter<LensesAdapter.ViewHolder>{
 
     Context context;
     List<Lenses> lensesList;

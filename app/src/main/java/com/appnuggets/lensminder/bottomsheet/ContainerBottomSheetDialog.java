@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Container;
+import com.appnuggets.lensminder.database.entity.State;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -69,9 +70,10 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
             }
             else {
                 try {
-                    Container newContainer = new Container(Objects.requireNonNull(containerName.getText()).toString(), true,
-                            null, new SimpleDateFormat("dd.MM.yyyy")
-                            .parse(Objects.requireNonNull(containerStartDate.getText()).toString()),
+                    Container newContainer = new Container(Objects.requireNonNull
+                            (containerName.getText()).toString(), true,
+                             new SimpleDateFormat("dd.MM.yyyy").parse(Objects.
+                                     requireNonNull(containerStartDate.getText()).toString()),
                             93L);
 
                     AppDatabase db = AppDatabase.getInstance(getContext());
