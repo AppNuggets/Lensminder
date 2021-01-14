@@ -83,7 +83,6 @@ public class DashboardFragment extends Fragment {
         MaterialCardView containerCardView = view.findViewById(R.id.card_container);
         containerProgressbar = view.findViewById(R.id.container_card_progressbar);
         containerLeftDaysCount = view.findViewById(R.id.container_card_day_count);
-        containerExpirationDate = view.findViewById(R.id.container_card_expiration_date);
         containerDaysUsedCount = view.findViewById(R.id.container_card_day_usage);
 
         MaterialCardView dropsCardView = view.findViewById(R.id.dropsCard);
@@ -217,7 +216,8 @@ public class DashboardFragment extends Fragment {
 
         leftDaysView.setText(leftDays.toString());
         daysUsedView.setText(daysUsed.toString());
-        expDateView.setText(dateProcessor.dateToString(expDate));
+        if(  null != expDate)
+            expDateView.setText(dateProcessor.dateToString(expDate));
 
         progressBar.setProgressMax(useInterval);
         progressBar.setProgressWithAnimation(useInterval - leftDays, 1000L);
