@@ -106,7 +106,10 @@ public class DashboardFragment extends Fragment {
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            // TODO Implement current lenses deletion
+                            AppDatabase db = AppDatabase.getInstance(getContext());
+                            Lenses inUseLenses = db.lensesDao().getInUse();
+                            inUseLenses.inUse = false;
+                            db.lensesDao().update(inUseLenses);
                             Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
                         }})
                     .setNegativeButton(android.R.string.no, null).show();
@@ -212,7 +215,7 @@ public class DashboardFragment extends Fragment {
         expDateView.setText(dateProcessor.dateToString(expDate));
 
         progressBar.setProgressMax(useInterval);
-        progressBar.setProgressWithAnimation(useInterval - leftDays, 1000L);
+        progressBar.setProgressWithAnimation( Math.max(leftDays, 0) , 1000L);
 
         if( leftDays <= 0) {
             // TODO Set progressbar red

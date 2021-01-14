@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.adapter.ContainerAdapter;
@@ -71,7 +72,11 @@ public class SolutionFragment extends Fragment {
         containerHistoryRecyclerView = view.findViewById(R.id.container_history_recycler_view);
 
         deleteCurrentSolution.setOnClickListener(v -> {
-            // TODO Implement method for current solution deletion
+            AppDatabase db = AppDatabase.getInstance(getContext());
+            Solution inUseSolution = db.solutionDao().getInUse();
+            inUseSolution.inUse = false;
+            db.solutionDao().update(inUseSolution);
+            Toast.makeText(getContext(), "Solution deleted", Toast.LENGTH_SHORT).show();
         });
 
         solutionShowAddCurrent.setOnClickListener(v -> {
@@ -80,7 +85,11 @@ public class SolutionFragment extends Fragment {
         });
 
         deleteCurrentContainer.setOnClickListener(v -> {
-            // TODO Implement method for current container deletion
+            AppDatabase db = AppDatabase.getInstance(getContext());
+            Container inUseContainer = db.containerDao().getInUse();
+            inUseContainer.inUse = false;
+            db.containerDao().update(inUseContainer);
+            Toast.makeText(getContext(), "Container deleted", Toast.LENGTH_SHORT).show();
         });
 
         containerShowAddCurrent.setOnClickListener(v -> {
@@ -138,7 +147,7 @@ public class SolutionFragment extends Fragment {
                     solution.expirationDate, solution.useInterval);
 
             solutionProgressBar.setProgressMax(solution.useInterval);
-            solutionProgressBar.setProgressWithAnimation(solution.useInterval - daysLeft,
+            solutionProgressBar.setProgressWithAnimation(Math.max(daysLeft, 0),
                     1000L);
 
             solutionLeftDaysCount.setText(daysLeft.toString());

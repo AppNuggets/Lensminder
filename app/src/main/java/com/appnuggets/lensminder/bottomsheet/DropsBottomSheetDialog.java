@@ -1,5 +1,6 @@
 package com.appnuggets.lensminder.bottomsheet;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.database.AppDatabase;
+import com.appnuggets.lensminder.database.entity.Drops;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -19,15 +22,20 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
 
-    private AutoCompleteTextView autoCompleteTextView;
+    private AutoCompleteTextView dropsExpPeriod;
 
     private TextInputEditText dropsStartDate;
     private TextInputEditText dropsExpDate;
+    private String[] items;
 
     MaterialDatePicker startDatePicker;
     MaterialDatePicker expDatePicker;
@@ -37,13 +45,14 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.drops_bottom_sheet_layout, container, false);
 
-        autoCompleteTextView = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_drops);
+        dropsExpPeriod = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_drops);
         completeDropdownList();
 
 
         dropsStartDate = (TextInputEditText) v.findViewById(R.id.dropsStartDate);
         dropsExpDate = (TextInputEditText) v.findViewById(R.id.dropsExpDate);
         setCalendar();
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
 
         dropsStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
 
@@ -54,11 +63,8 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         });
 
         startDatePicker.addOnPositiveButtonClickListener(selection -> {
-            dropsStartDate.setText(startDatePicker.getHeaderText());
-
-            /*String myFormat = "MM/dd/yy";
-            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-            startDateDrops.setText(sdf.format(materialDatePicker.getHeaderText()));*/
+            Date date = new Date((Long) startDatePicker.getSelection()) ;
+            dropsStartDate.setText(simpleFormat.format(date));
         });
 
         dropsExpDate.setOnClickListener(v15 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
@@ -69,12 +75,56 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        expDatePicker.addOnPositiveButtonClickListener(selection -> dropsExpDate.setText(expDatePicker.getHeaderText()));
+        expDatePicker.addOnPositiveButtonClickListener(selection -> {
+            Date date = new Date((Long) expDatePicker.getSelection()) ;
+            dropsExpDate.setText(simpleFormat.format(date));
+        });
 
         MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.dropsSaveButton);
+        TextInputEditText dropsName = v.findViewById(R.id.dropsName);
         saveButton.setOnClickListener(v14 -> {
-            //TODO
+
+            if(dropsExpPeriod.getText().toString().isEmpty() ||
+                    dropsExpDate.getText().toString().isEmpty() ||
+                 dropsStartDate.getText().toString().isEmpty() ||
+                   dropsName.getText().toString().isEmpty()) {
+                dismiss();
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Fields must not be empty")
+                        .setMessage("").show();
+            }
+            else
+            {
+                long expPeriod = 0L;
+
+                if(dropsExpPeriod.getText().toString().equals(items[0])) expPeriod = 31L;
+                else if(dropsExpPeriod.getText().toString().equals(items[1])) expPeriod = 93L;
+                else if(dropsExpPeriod.getText().toString().equals(items[2])) expPeriod = 186L;
+
+                try {
+                    Drops drops = new Drops(Objects.requireNonNull(dropsName.getText()).toString(), true,
+                            new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(dropsExpDate.getText()).toString()),
+                            new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(dropsStartDate.getText()).toString()),
+                            expPeriod);
+
+                    AppDatabase db = AppDatabase.getInstance(getContext());
+
+                    Drops inUseDrops = db.dropsDao().getInUse();
+                    if(inUseDrops != null)
+                    {
+                        inUseDrops.inUse = false;
+                        db.dropsDao().update(inUseDrops);
+                    }
+
+                    db.dropsDao().insert(drops);
+                    dismiss();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
         });
+
 
        return v;
     }
@@ -113,8 +163,7 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
     }
 
     public void completeDropdownList() {
-        String[] items = new String[] {
-                "Two Weeks",
+        items = new String[] {
                 "One month",
                 "Three months",
                 "Six months"
@@ -126,6 +175,6 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
                 items
         );
 
-        autoCompleteTextView.setAdapter(adapter);
+        dropsExpPeriod.setAdapter(adapter);
     }
 }
