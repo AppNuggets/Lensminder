@@ -105,25 +105,27 @@
                 <TableRow>
                     <TextView
                         style="@style/page_table_row_style"
+                        android:gravity="center"
                         android:layout_column="1"
                         android:text="@string/name_column_header"/>
                     <TextView
                         style="@style/page_table_row_style"
+                        android:gravity="center"
                         android:layout_column="2"
                         android:text="@string/from_column_header"/>
                     <TextView
                         style="@style/page_table_row_style"
+                        android:gravity="center"
                         android:layout_column="3"
                         android:text="@string/to_column_header"/>
                 </TableRow>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/lenses_history_recycler_view"
-                    android:layout_gravity="center"
                     android:scrollbars="vertical"
                     android:scrollbarThumbVertical="@android:color/darker_gray"
                     android:scrollbarSize="@dimen/table_scrollbar_size"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="wrap_content"/>
             </TableLayout>
         </LinearLayout>
     </LinearLayout>
