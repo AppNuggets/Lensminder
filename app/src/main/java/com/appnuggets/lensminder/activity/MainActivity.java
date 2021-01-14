@@ -18,6 +18,7 @@ import com.appnuggets.lensminder.database.entity.Container;
 import com.appnuggets.lensminder.database.entity.Drops;
 import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.Solution;
+import com.appnuggets.lensminder.database.entity.State;
 import com.appnuggets.lensminder.fragment.DashboardFragment;
 import com.appnuggets.lensminder.fragment.DropsFragment;
 import com.appnuggets.lensminder.fragment.LensesFragment;
@@ -135,43 +136,39 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
     @SuppressLint("SimpleDateFormat")
     private void DEBUG_populateDataBase(AppDatabase db) {
         try {
-            Lenses lenses1 = new Lenses("lenses", true,
+            Lenses lenses1 = new Lenses("lenses", State.IN_USE,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("15.12.2020"),
                     31L);
 
-            Lenses lenses2 = new Lenses("lenses", false,
+            Lenses lenses2 = new Lenses("lenses", State.IN_HISTORY,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("03.01.2020"),
                     31L);
 
-            Lenses lenses3 = new Lenses("lenses", false,
+            Lenses lenses3 = new Lenses("lenses", State.IN_HISTORY,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("08.02.2020"),
                     31L);
 
-            Lenses lenses4 = new Lenses("lenses", false,
+            Lenses lenses4 = new Lenses("lenses", State.IN_STOCK,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("10.03.2020"),
                     31L);
 
             Container container1 = new Container("container", true,
-                    new SimpleDateFormat("dd.MM.yyyy").parse("29.01.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("01.01.2021"),
                     93L);
 
             Container container2 = new Container("lenses", false,
-                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("11.01.2020"),
                     93L);
 
             Container container3 = new Container("lenses", false,
-                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("17.02.2020"),
                     93L);
 
             Container container4 = new Container("lenses", false,
-                    new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("02.03.2020"),
                     93L);
 
