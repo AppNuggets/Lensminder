@@ -1,6 +1,8 @@
 package com.appnuggets.lensminder.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,16 +28,29 @@ import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.State;
 import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
-public class LensesFragment extends Fragment {
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.TimeZone;
+
+public class LensesFragment extends Fragment implements LensesStockAdapter.OnLensListener {
 
     private CircularProgressBar lensesProgressbar;
     private TextView lensesLeftDaysCount;
 
     private RecyclerView lensesHistoryRecyclerView;
     private RecyclerView lensesStockRecyclerView;
+
+    private List<Lenses> lensesList;
+    private List<Lenses> stockLensesList;
 
     public LensesFragment() {
         // Required empty public constructor
@@ -88,8 +104,12 @@ public class LensesFragment extends Fragment {
             Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
         });
 
-        setLensesHistoryRecyclerView();
-        setLensesStockRecyclerView();
+        Context context = getContext();
+        AppDatabase db = AppDatabase.getInstance(context);
+        lensesList = db.lensesDao().getAllNotInUse();
+        setLensesHistoryRecyclerView(lensesList);
+        stockLensesList = db.lensesDao().getAllInStock();
+        setLensesStockRecyclerView(stockLensesList);
     }
 
     @Override
@@ -101,20 +121,17 @@ public class LensesFragment extends Fragment {
         updateLensesSummary(lensesInUse);
     }
 
-    private void setLensesHistoryRecyclerView() {
+    private void setLensesHistoryRecyclerView(List<Lenses> lenses) {
         Context context = getContext();
-        AppDatabase db = AppDatabase.getInstance(context);
-        LensesAdapter lensesAdapter = new LensesAdapter(context, db.lensesDao().getAllNotInUse());
-
+        LensesAdapter lensesAdapter = new LensesAdapter(context, lenses);
         lensesHistoryRecyclerView.setHasFixedSize(true);
         lensesHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         lensesHistoryRecyclerView.setAdapter(lensesAdapter);
     }
 
-    private void setLensesStockRecyclerView() {
+    private void setLensesStockRecyclerView(List<Lenses> lenses) {
         Context context = getContext();
-        AppDatabase db = AppDatabase.getInstance(context);
-        LensesStockAdapter lensesStockAdapter = new LensesStockAdapter(context, db.lensesDao().getAllInStock());
+        LensesStockAdapter lensesStockAdapter = new LensesStockAdapter(context, lenses, this);
 
         lensesStockRecyclerView.setHasFixedSize(true);
         lensesStockRecyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -138,5 +155,43 @@ public class LensesFragment extends Fragment {
 
             lensesLeftDaysCount.setText(daysLeft.toString());
         }
+    }
+
+    @Override
+    public void onLensClick(int position) {
+        MaterialDatePicker startDatePicker;
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.clear();
+        long today = MaterialDatePicker.todayInUtcMilliseconds();
+        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Select start date");
+        builder.setSelection(today);
+        startDatePicker = builder.build();
+        startDatePicker.show(getFragmentManager(), "DATE_PICKER");
+
+        startDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                AppDatabase db = AppDatabase.getInstance(getContext());
+                Lenses inUseLenses = db.lensesDao().getInUse();
+                if(inUseLenses != null)
+                {
+                    inUseLenses.state = State.IN_HISTORY;
+                    db.lensesDao().update(inUseLenses);
+                }
+                Lenses lenses = stockLensesList.get(position);
+                lenses.state = State.IN_USE;
+                Date date = new Date((Long) startDatePicker.getSelection());
+                SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
+                String dateValue = simpleFormat.format(date);
+                try {
+                    lenses.startDate = new SimpleDateFormat("dd.MM.yyyy").parse(dateValue);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                db.lensesDao().update(lenses);
+            }
+        });
     }
 }
