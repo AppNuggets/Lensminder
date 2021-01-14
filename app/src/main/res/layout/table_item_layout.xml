@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:stretchColumns="1,2,3">
+    android:orientation="horizontal"
+    android:weightSum ="3">
 
-    <TableRow>
         <TextView
             android:id="@+id/name"
-            android:padding="10dp"
             android:textSize="15dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_column="1" />
+            android:layout_weight = "1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/from"
-            android:padding="10dp"
             android:textSize="15dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_column="2"/>
+            android:layout_weight = "1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/to"
-            android:padding="10dp"
             android:textSize="15dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_column="3"/>
-    </TableRow>
-</TableLayout>
+            android:layout_weight = "1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+</LinearLayout >

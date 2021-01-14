@@ -45,11 +45,11 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
         setCalendar();
 
-        solutionStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+        solutionStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
         solutionStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
             if (hasFocus) {
-                startDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                startDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
 
@@ -58,11 +58,11 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
             solutionStartDate.setText(simpleFormat.format(date));
         });
 
-        solutionExpDate.setOnClickListener(v13 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+        solutionExpDate.setOnClickListener(v13 -> expDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
         solutionExpDate.setOnFocusChangeListener((v14, hasFocus) -> {
             if (hasFocus) {
-                expDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                expDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
 

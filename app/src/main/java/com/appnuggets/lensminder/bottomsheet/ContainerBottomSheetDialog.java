@@ -41,11 +41,11 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
         setCalendar();
 
-        containerStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+        containerStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
         containerStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
             if (hasFocus) {
-                startDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                startDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
 

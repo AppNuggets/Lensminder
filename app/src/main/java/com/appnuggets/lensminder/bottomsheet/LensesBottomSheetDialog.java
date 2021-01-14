@@ -53,11 +53,11 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
         setCalendar();
 
-        lensesStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+        lensesStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
         lensesStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
             if (hasFocus) {
-                startDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                startDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
 
@@ -66,11 +66,11 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
             lensesStartDate.setText(simpleFormat.format(date));
         });
 
-        lensesExpDate.setOnClickListener(v13 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+        lensesExpDate.setOnClickListener(v13 -> expDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
         lensesExpDate.setOnFocusChangeListener((v14, hasFocus) -> {
             if (hasFocus) {
-                expDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                expDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
 
