@@ -49,11 +49,11 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
         setCalendar();
 
-        stockLensesExpDate.setOnClickListener(v1 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+        stockLensesExpDate.setOnClickListener(v1 -> expDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
         stockLensesExpDate.setOnFocusChangeListener((v12, hasFocus) -> {
             if (hasFocus) {
-                expDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                expDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
 

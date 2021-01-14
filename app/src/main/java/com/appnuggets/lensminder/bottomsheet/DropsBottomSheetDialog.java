@@ -54,11 +54,11 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         setCalendar();
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
 
-        dropsStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+        dropsStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
         dropsStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
             if (hasFocus) {
-                startDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                startDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
 
@@ -67,11 +67,11 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
             dropsStartDate.setText(simpleFormat.format(date));
         });
 
-        dropsExpDate.setOnClickListener(v15 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+        dropsExpDate.setOnClickListener(v15 -> expDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
         dropsExpDate.setOnFocusChangeListener((v13, hasFocus) -> {
             if (hasFocus) {
-                expDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                expDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
 

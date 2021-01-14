@@ -1,22 +1,18 @@
 package com.appnuggets.lensminder.fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.adapter.LensesAdapter;
@@ -38,7 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.TimeZone;
 
 public class LensesFragment extends Fragment implements LensesStockAdapter.OnLensListener {
@@ -168,7 +163,7 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
         builder.setTitleText("Select start date");
         builder.setSelection(today);
         startDatePicker = builder.build();
-        startDatePicker.show(getFragmentManager(), "DATE_PICKER");
+        startDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
 
         startDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
