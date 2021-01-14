@@ -29,4 +29,15 @@ public class UsageProcessor {
         }
     }
 
+    public Date calculateEndDate(Date startDate, Date expirationDate, Long useInterval){
+        Date now = Calendar.getInstance().getTime();
+        Long daysLeft = calculateUsageLeft(startDate, expirationDate, useInterval);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(now);
+        calendar.add(Calendar.DATE, daysLeft.intValue());
+
+        return calendar.getTime();
+    }
+
 }
