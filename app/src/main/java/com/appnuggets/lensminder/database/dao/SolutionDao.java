@@ -15,7 +15,7 @@ public interface SolutionDao {
     @Query("SELECT * FROM solution WHERE in_use = 1")
     Solution getInUse();
 
-    @Query("SELECT * FROM solution WHERE in_use = 0")
+    @Query("SELECT * FROM solution WHERE in_use = 0 ORDER BY start_date DESC")
     List<Solution> getAllNotInUse();
 
     @Query("SELECT * FROM solution")
