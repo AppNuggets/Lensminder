@@ -28,6 +28,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.util.Date;
+import java.util.Locale;
 
 public class DashboardFragment extends Fragment {
 
@@ -210,8 +211,8 @@ public class DashboardFragment extends Fragment {
         Long leftDays = usageProcessor.calculateUsageLeft(startDate, expDate, useInterval);
         Long daysUsed = usageProcessor.calculateCurrentUsage(startDate);
 
-        leftDaysView.setText(leftDays.toString());
-        daysUsedView.setText(daysUsed.toString());
+        leftDaysView.setText(String.format(Locale.getDefault(), "%d", leftDays));
+        daysUsedView.setText(String.format(Locale.getDefault(), "%d", daysUsed));
         if(  null != expDate)
             expDateView.setText(dateProcessor.dateToString(expDate));
 

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean darkModeEnabled = prefs.getBoolean("dark_mode", false);
-        if( true ==  darkModeEnabled) {
+        if(darkModeEnabled) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
         else {
@@ -84,8 +84,8 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
                     return false;
                 });
 
-        //AppDatabase db = AppDatabase.getInstance(this);
-        //DEBUG_populateDataBase(db);
+        /*AppDatabase db = AppDatabase.getInstance(this);
+        DEBUG_populateDataBase(db);*/
     }
 
     @Override

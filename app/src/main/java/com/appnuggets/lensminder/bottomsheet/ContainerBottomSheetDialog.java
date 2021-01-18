@@ -29,7 +29,7 @@ import java.util.TimeZone;
 public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
 
     private TextInputEditText containerStartDate;
-    private MaterialDatePicker startDatePicker;
+    private MaterialDatePicker<Long> startDatePicker;
 
     @Nullable
     @Override
@@ -49,8 +49,10 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         });
 
         startDatePicker.addOnPositiveButtonClickListener(selection -> {
-            Date date = new Date((Long) startDatePicker.getSelection()) ;
-            containerStartDate.setText(simpleFormat.format(date));
+            if(startDatePicker.getSelection() != null) {
+                Date date = new Date(startDatePicker.getSelection());
+                containerStartDate.setText(simpleFormat.format(date));
+            }
         });
 
         MaterialButton saveButton = v.findViewById(R.id.containerSaveButton);
@@ -106,7 +108,7 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         calendar.clear();
         long today = MaterialDatePicker.todayInUtcMilliseconds();
 
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
         builder.setTitleText("Select start date");
         builder.setSelection(today);
         startDatePicker = builder.build();

@@ -38,8 +38,8 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
     private TextInputEditText dropsExpDate;
     private String[] items;
 
-    MaterialDatePicker startDatePicker;
-    MaterialDatePicker expDatePicker;
+    MaterialDatePicker<Long> startDatePicker;
+    MaterialDatePicker<Long> expDatePicker;
 
     @Nullable
     @Override
@@ -63,9 +63,12 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
+
         startDatePicker.addOnPositiveButtonClickListener(selection -> {
-            Date date = new Date((Long) startDatePicker.getSelection()) ;
-            dropsStartDate.setText(simpleFormat.format(date));
+            if(startDatePicker.getSelection() != null) {
+                Date date = new Date(startDatePicker.getSelection());
+                dropsStartDate.setText(simpleFormat.format(date));
+            }
         });
 
         dropsExpDate.setOnClickListener(v15 -> expDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
@@ -77,8 +80,10 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         });
 
         expDatePicker.addOnPositiveButtonClickListener(selection -> {
-            Date date = new Date((Long) expDatePicker.getSelection()) ;
-            dropsExpDate.setText(simpleFormat.format(date));
+            if(expDatePicker.getSelection() != null) {
+                Date date = new Date(expDatePicker.getSelection());
+                dropsExpDate.setText(simpleFormat.format(date));
+            }
         });
 
         MaterialButton saveButton = v.findViewById(R.id.dropsSaveButton);
@@ -152,7 +157,7 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
                 /*constraintBuilder.setStart(january);
                 constraintBuilder.setEnd(december);*/
 
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
         // builder.setTheme(R.style.MyDatePickerDialogTheme);
         builder.setTitleText("Select start date");
         builder.setSelection(today);
@@ -162,7 +167,7 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         dropsExpDate.setInputType(InputType.TYPE_NULL);
         dropsExpDate.setKeyListener(null);
         constraintBuilder.setValidator(DateValidatorPointForward.now());
-        MaterialDatePicker.Builder builderExp = MaterialDatePicker.Builder.datePicker();
+        MaterialDatePicker.Builder<Long> builderExp = MaterialDatePicker.Builder.datePicker();
         builderExp.setTitleText("Select exp. date");
         builderExp.setCalendarConstraints(constraintBuilder.build());
         expDatePicker = builderExp.build();

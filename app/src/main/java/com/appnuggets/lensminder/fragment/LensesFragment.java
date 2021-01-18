@@ -159,12 +159,12 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
 
     @Override
     public void onLensClick(int position) {
-        MaterialDatePicker startDatePicker;
+        MaterialDatePicker<Long> startDatePicker;
 
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.clear();
         long today = MaterialDatePicker.todayInUtcMilliseconds();
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
         builder.setTitleText("Select start date");
         builder.setSelection(today);
         startDatePicker = builder.build();
@@ -188,14 +188,16 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
             }
             Lenses lenses = stockLensesList.get(position);
             lenses.state = State.IN_USE;
-            Date date = new Date((Long) startDatePicker.getSelection());
-            String dateValue = simpleFormat.format(date);
-            try {
-                lenses.startDate = simpleFormat.parse(dateValue);
-            } catch (ParseException e) {
-                e.printStackTrace();
+            if(startDatePicker.getSelection()!=null){
+                Date date = new Date(startDatePicker.getSelection());
+                String dateValue = simpleFormat.format(date);
+                try {
+                    lenses.startDate = simpleFormat.parse(dateValue);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                db.lensesDao().update(lenses);
             }
-            db.lensesDao().update(lenses);
         });
     }
 }

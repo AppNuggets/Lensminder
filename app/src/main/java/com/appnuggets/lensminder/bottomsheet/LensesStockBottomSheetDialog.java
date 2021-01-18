@@ -35,7 +35,7 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
 
     private AutoCompleteTextView stockLensesWearCycle;
     private TextInputEditText stockLensesExpDate;
-    MaterialDatePicker expDatePicker;
+    MaterialDatePicker<Long> expDatePicker;
     String[] items;
 
     @Nullable
@@ -59,8 +59,10 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
         });
 
         expDatePicker.addOnPositiveButtonClickListener(selection -> {
-            Date date = new Date((Long) expDatePicker.getSelection()) ;
-            stockLensesExpDate.setText(simpleFormat.format(date));
+            if(expDatePicker.getSelection() != null) {
+                Date date = new Date(expDatePicker.getSelection());
+                stockLensesExpDate.setText(simpleFormat.format(date));
+            }
         });
 
         MaterialButton saveButton = v.findViewById(R.id.stockLensesSaveButton);
@@ -110,7 +112,7 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
         CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
         constraintBuilder.setValidator(DateValidatorPointForward.now());
 
-        MaterialDatePicker.Builder builderExp = MaterialDatePicker.Builder.datePicker();
+        MaterialDatePicker.Builder<Long> builderExp = MaterialDatePicker.Builder.datePicker();
         builderExp.setTitleText("Select exp. date");
         builderExp.setCalendarConstraints(constraintBuilder.build());
 

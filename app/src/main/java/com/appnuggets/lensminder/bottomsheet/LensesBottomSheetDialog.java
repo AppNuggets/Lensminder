@@ -38,8 +38,8 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
     private TextInputEditText lensesExpDate;
     String[] items;
 
-    MaterialDatePicker startDatePicker;
-    MaterialDatePicker expDatePicker;
+    MaterialDatePicker<Long> startDatePicker;
+    MaterialDatePicker<Long> expDatePicker;
 
     @Nullable
     @Override
@@ -63,8 +63,10 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
         });
 
         startDatePicker.addOnPositiveButtonClickListener(selection -> {
-            Date date = new Date((Long) startDatePicker.getSelection()) ;
-            lensesStartDate.setText(simpleFormat.format(date));
+            if(startDatePicker.getSelection() != null) {
+                Date date = new Date(startDatePicker.getSelection());
+                lensesStartDate.setText(simpleFormat.format(date));
+            }
         });
 
         lensesExpDate.setOnClickListener(v13 -> expDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
@@ -76,8 +78,10 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
         });
 
         expDatePicker.addOnPositiveButtonClickListener(selection -> {
-            Date date = new Date((Long) expDatePicker.getSelection()) ;
-            lensesExpDate.setText(simpleFormat.format(date));
+            if(expDatePicker.getSelection() != null) {
+                Date date = new Date(expDatePicker.getSelection());
+                lensesExpDate.setText(simpleFormat.format(date));
+            }
         });
 
         MaterialButton saveButton = v.findViewById(R.id.lensesSaveButton);
@@ -148,7 +152,7 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
         CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
 
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
         builder.setTitleText("Select start date");
         builder.setSelection(today);
         builder.setCalendarConstraints(constraintBuilder.build());
@@ -157,7 +161,7 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
         constraintBuilder.setValidator(DateValidatorPointForward.now());
 
-        MaterialDatePicker.Builder builderExp = MaterialDatePicker.Builder.datePicker();
+        MaterialDatePicker.Builder<Long> builderExp = MaterialDatePicker.Builder.datePicker();
         builderExp.setTitleText("Select exp. date");
         builderExp.setCalendarConstraints(constraintBuilder.build());
 
