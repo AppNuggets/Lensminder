@@ -28,6 +28,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class SolutionFragment extends Fragment {
 
     private CircularProgressBar solutionProgressBar;
@@ -71,10 +76,18 @@ public class SolutionFragment extends Fragment {
         containerLeftDaysCount = view.findViewById(R.id.container_days_count);
         containerHistoryRecyclerView = view.findViewById(R.id.container_history_recycler_view);
 
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+
         deleteCurrentSolution.setOnClickListener(v -> {
             AppDatabase db = AppDatabase.getInstance(getContext());
             Solution inUseSolution = db.solutionDao().getInUse();
             inUseSolution.inUse = false;
+            try {
+                Date today = new Date();
+                inUseSolution.endDate = simpleFormat.parse(simpleFormat.format(today));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             db.solutionDao().update(inUseSolution);
             Toast.makeText(getContext(), "Solution deleted", Toast.LENGTH_SHORT).show();
         });
@@ -88,6 +101,12 @@ public class SolutionFragment extends Fragment {
             AppDatabase db = AppDatabase.getInstance(getContext());
             Container inUseContainer = db.containerDao().getInUse();
             inUseContainer.inUse = false;
+            try {
+                Date today = new Date();
+                inUseContainer.endDate = simpleFormat.parse(simpleFormat.format(today));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             db.containerDao().update(inUseContainer);
             Toast.makeText(getContext(), "Container deleted", Toast.LENGTH_SHORT).show();
         });
@@ -150,7 +169,7 @@ public class SolutionFragment extends Fragment {
             solutionProgressBar.setProgressWithAnimation(Math.max(daysLeft, 0),
                     1000L);
 
-            solutionLeftDaysCount.setText(daysLeft.toString());
+            solutionLeftDaysCount.setText(String.format(Locale.getDefault(), "%d", daysLeft));
         }
     }
 
@@ -166,10 +185,10 @@ public class SolutionFragment extends Fragment {
                     null, container.useInterval);
 
             containerProgressBar.setProgressMax(container.useInterval);
-            containerProgressBar.setProgressWithAnimation(container.useInterval - daysLeft,
+            containerProgressBar.setProgressWithAnimation(Math.max(daysLeft, 0),
                     1000L);
 
-            containerLeftDaysCount.setText(daysLeft.toString());
+            containerLeftDaysCount.setText(String.format(Locale.getDefault(), "%d", daysLeft));
         }
     }
 }

@@ -26,6 +26,12 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class DropsFragment extends Fragment {
 
     private CircularProgressBar dropsProgressbar;
@@ -60,17 +66,23 @@ public class DropsFragment extends Fragment {
         dropsHistoryRecyclerView = view.findViewById(R.id.drops_recycler_view);
 
         setRecyclerView();
-        // Add new drops listener
         dropsShowAddSheet.setOnClickListener(v -> {
             DropsBottomSheetDialog dropsBottomSheetDialog = new DropsBottomSheetDialog();
             dropsBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
             dropsBottomSheetDialog.show(getChildFragmentManager(), "bottomSheetDrops");
         });
-        // Delete current drops listener
+
         deleteCurrentDrops.setOnClickListener(v -> {
             AppDatabase db = AppDatabase.getInstance(getContext());
             Drops inUseDrops = db.dropsDao().getInUse();
             inUseDrops.inUse = false;
+            try {
+                Date today = new Date();
+                SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+                inUseDrops.endDate = simpleFormat.parse(simpleFormat.format(today));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             db.dropsDao().update(inUseDrops);
             Toast.makeText(getContext(), "Drops deleted", Toast.LENGTH_SHORT).show();
         });
@@ -110,7 +122,7 @@ public class DropsFragment extends Fragment {
             dropsProgressbar.setProgressWithAnimation(Math.max(daysLeft, 0),
                     1000L);
 
-            dropsLeftDaysCount.setText(daysLeft.toString());
+            dropsLeftDaysCount.setText(String.format(Locale.getDefault(), "%d", daysLeft));
         }
     }
 }

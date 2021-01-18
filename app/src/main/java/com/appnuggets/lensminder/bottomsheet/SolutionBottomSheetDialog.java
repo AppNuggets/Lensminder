@@ -1,11 +1,11 @@
 package com.appnuggets.lensminder.bottomsheet;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +24,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -42,7 +43,7 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
 
         solutionStartDate = v.findViewById(R.id.solutionStartDate);
         solutionExpDate = v.findViewById(R.id.solutionExpDate);
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
         setCalendar();
 
         solutionStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
@@ -71,43 +72,46 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
             solutionExpDate.setText(simpleFormat.format(date));
         });
 
-        MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.solutionSaveButton);
+        MaterialButton saveButton = v.findViewById(R.id.solutionSaveButton);
         TextInputEditText solutionName = v.findViewById(R.id.solutionName);
-        saveButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
+        saveButton.setOnClickListener(v15 -> {
 
-                if(solutionExpDate.getText().toString().isEmpty() ||
-                        solutionStartDate.getText().toString().isEmpty() ||
-                        solutionName.getText().toString().isEmpty()) {
-                    dismiss();
-                    new AlertDialog.Builder(getContext())
-                            .setTitle("Fields must not be empty")
-                            .setMessage("").show();
-                }
-                else
-                {
-                    try {
-                        Solution solution = new Solution(Objects.requireNonNull(solutionName.getText()).toString(), true,
-                                new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(solutionExpDate.getText()).toString()),
-                                new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(solutionStartDate.getText()).toString()),
-                                93L);
+            if(Objects.requireNonNull(solutionExpDate.getText()).toString().isEmpty() ||
+                    Objects.requireNonNull(solutionStartDate.getText()).toString().isEmpty() ||
+                    Objects.requireNonNull(solutionName.getText()).toString().isEmpty()) {
+                dismiss();
+                Toast.makeText(getContext(), "Fields must not be empty", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                try {
+                    Solution solution = new Solution(Objects.requireNonNull(solutionName.getText()).toString(),
+                            true,
+                            simpleFormat.parse(Objects.requireNonNull(solutionExpDate.getText()).toString()),
+                            simpleFormat.parse(Objects.requireNonNull(solutionStartDate.getText()).toString()),
+                            null,
+                            93L);
 
-                        AppDatabase db = AppDatabase.getInstance(getContext());
+                    AppDatabase db = AppDatabase.getInstance(getContext());
 
-                        Solution inUseSolution = db.solutionDao().getInUse();
-                        if(inUseSolution != null)
-                        {
-                            inUseSolution.inUse = false;
-                            db.solutionDao().update(inUseSolution);
+                    Solution inUseSolution = db.solutionDao().getInUse();
+                    if(inUseSolution != null)
+                    {
+                        inUseSolution.inUse = false;
+                        try {
+                            Date today = new Date();
+                            inUseSolution.endDate = simpleFormat.parse(simpleFormat.format(today));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
-
-                        db.solutionDao().insert(solution);
-                        dismiss();
-
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                        db.solutionDao().update(inUseSolution);
                     }
+
+                    db.solutionDao().insert(solution);
+                    dismiss();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         });

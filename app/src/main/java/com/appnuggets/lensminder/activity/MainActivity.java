@@ -84,8 +84,8 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
                     return false;
                 });
 
-        /*AppDatabase db = AppDatabase.getInstance(this);
-        DEBUG_populateDataBase(db);*/
+        //AppDatabase db = AppDatabase.getInstance(this);
+        //DEBUG_populateDataBase(db);
     }
 
     @Override
@@ -139,77 +139,93 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
             Lenses lenses1 = new Lenses("lenses", State.IN_USE,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("15.12.2020"),
+                    null,
                     31L);
 
             Lenses lenses2 = new Lenses("lenses", State.IN_HISTORY,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("03.01.2020"),
+                    null,
                     31L);
 
             Lenses lenses3 = new Lenses("lenses", State.IN_HISTORY,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("08.02.2020"),
+                    null,
                     31L);
 
             Lenses lenses4 = new Lenses("lenses", State.IN_STOCK,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("10.03.2020"),
+                    null,
                     31L);
 
             Container container1 = new Container("container", true,
                     new SimpleDateFormat("dd.MM.yyyy").parse("01.01.2021"),
+                    null,
                     93L);
 
             Container container2 = new Container("lenses", false,
                     new SimpleDateFormat("dd.MM.yyyy").parse("11.01.2020"),
+                    null,
                     93L);
 
             Container container3 = new Container("lenses", false,
                     new SimpleDateFormat("dd.MM.yyyy").parse("17.02.2020"),
+                    null,
                     93L);
 
             Container container4 = new Container("lenses", false,
                     new SimpleDateFormat("dd.MM.yyyy").parse("02.03.2020"),
+                    null,
                     93L);
 
             Drops drops1 = new Drops("drops", true,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("24.12.2020"),
+                    null,
                     93L);
 
             Drops drops2 = new Drops("lenses", false,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("12.02.2020"),
+                    null,
                     93L);
 
             Drops drops3 = new Drops("lenses", false,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("17.03.2020"),
+                    null,
                     93L);
 
             Drops drops4 = new Drops("lenses", false,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("07.06.2020"),
+                    null,
                     93L);
 
             Solution solution1 = new Solution("solution", true,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("04.01.2021"),
+                    null,
                     93L);
 
             Solution solution2 = new Solution("lenses", false,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("12.02.2019"),
+                    null,
                     93L);
 
             Solution solution3 = new Solution("lenses", false,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("17.03.2019"),
+                    null,
                     93L);
 
             Solution solution4 = new Solution("lenses", false,
                     new SimpleDateFormat("dd.MM.yyyy").parse("06.08.2021"),
                     new SimpleDateFormat("dd.MM.yyyy").parse("07.06.2019"),
+                    null,
                     93L);
 
             db.lensesDao().insert(lenses1);

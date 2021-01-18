@@ -1,6 +1,5 @@
 package com.appnuggets.lensminder.bottomsheet;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -8,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -50,7 +51,7 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
         lensesStartDate = v.findViewById(R.id.lensesStartDate);
         lensesExpDate = v.findViewById(R.id.lensesExpDate);
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
         setCalendar();
 
         lensesStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
@@ -79,50 +80,55 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
             lensesExpDate.setText(simpleFormat.format(date));
         });
 
-        MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.lensesSaveButton);
+        MaterialButton saveButton = v.findViewById(R.id.lensesSaveButton);
         TextInputEditText lensesName = v.findViewById(R.id.lensesName);
-        saveButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
+        saveButton.setOnClickListener(v15 -> {
 
-                if(lensesWearCycle.getText().toString().isEmpty() ||
-                        lensesExpDate.getText().toString().isEmpty() ||
-                        lensesStartDate.getText().toString().isEmpty() ||
-                        lensesName.getText().toString().isEmpty()) {
-                    dismiss();
-                    new AlertDialog.Builder(getContext())
-                            .setTitle("Fields must not be empty")
-                            .setMessage("").show();
-                }
-                else
-                {
-                    long expPeriod = 0L;
+            if(lensesWearCycle.getText().toString().isEmpty() ||
+                    Objects.requireNonNull(lensesExpDate.getText()).toString().isEmpty() ||
+                    Objects.requireNonNull(lensesStartDate.getText()).toString().isEmpty() ||
+                    Objects.requireNonNull(lensesName.getText()).toString().isEmpty()) {
+                dismiss();
+                Toast.makeText(getContext(), "Fields must not be empty", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                long expPeriod = 0L;
 
-                    if(lensesWearCycle.getText().toString().equals(items[0])) expPeriod = 14L;
-                    else if(lensesWearCycle.getText().toString().equals(items[1])) expPeriod = 31L;
-                    else if(lensesWearCycle.getText().toString().equals(items[2])) expPeriod = 93L;
-                    else if(lensesWearCycle.getText().toString().equals(items[3])) expPeriod = 186L;
+                if(lensesWearCycle.getText().toString().equals(items[0])) expPeriod = 14L;
+                else if(lensesWearCycle.getText().toString().equals(items[1])) expPeriod = 31L;
+                else if(lensesWearCycle.getText().toString().equals(items[2])) expPeriod = 93L;
+                else if(lensesWearCycle.getText().toString().equals(items[3])) expPeriod = 186L;
 
-                    try {
-                        Lenses lenses = new Lenses(Objects.requireNonNull(lensesName.getText()).toString(), State.IN_USE,
-                                new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(lensesExpDate.getText()).toString()),
-                                new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(lensesStartDate.getText()).toString()),
-                                expPeriod);
+                try {
+                    Lenses lenses = new Lenses(Objects.requireNonNull(lensesName.getText()).
+                            toString(), State.IN_USE,
+                            simpleFormat.parse(Objects.requireNonNull(lensesExpDate.getText())
+                                    .toString()),
+                            simpleFormat.parse(Objects.requireNonNull(lensesStartDate.getText())
+                                    .toString()),
+                            null,
+                            expPeriod);
 
-                        AppDatabase db = AppDatabase.getInstance(getContext());
-                        Lenses inUseLenses = db.lensesDao().getInUse();
-                        if(inUseLenses != null)
-                        {
-                            inUseLenses.state = State.IN_HISTORY;
-                            db.lensesDao().update(inUseLenses);
+                    AppDatabase db = AppDatabase.getInstance(getContext());
+                    Lenses inUseLenses = db.lensesDao().getInUse();
+                    if(inUseLenses != null)
+                    {
+                        inUseLenses.state = State.IN_HISTORY;
+                        try {
+                            Date today = new Date();
+                            inUseLenses.endDate = simpleFormat.parse(simpleFormat.format(today));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
-
-                        db.lensesDao().insert(lenses);
-                        dismiss();
-
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                        db.lensesDao().update(inUseLenses);
                     }
+
+                    db.lensesDao().insert(lenses);
+                    dismiss();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         });

@@ -1,6 +1,5 @@
 package com.appnuggets.lensminder.bottomsheet;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -8,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -45,14 +46,14 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.drops_bottom_sheet_layout, container, false);
 
-        dropsExpPeriod = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_drops);
+        dropsExpPeriod = v.findViewById(R.id.autoComplete_drops);
         completeDropdownList();
 
 
-        dropsStartDate = (TextInputEditText) v.findViewById(R.id.dropsStartDate);
-        dropsExpDate = (TextInputEditText) v.findViewById(R.id.dropsExpDate);
+        dropsStartDate =  v.findViewById(R.id.dropsStartDate);
+        dropsExpDate =  v.findViewById(R.id.dropsExpDate);
         setCalendar();
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
 
         dropsStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
@@ -80,18 +81,16 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
             dropsExpDate.setText(simpleFormat.format(date));
         });
 
-        MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.dropsSaveButton);
+        MaterialButton saveButton = v.findViewById(R.id.dropsSaveButton);
         TextInputEditText dropsName = v.findViewById(R.id.dropsName);
         saveButton.setOnClickListener(v14 -> {
 
             if(dropsExpPeriod.getText().toString().isEmpty() ||
-                    dropsExpDate.getText().toString().isEmpty() ||
-                 dropsStartDate.getText().toString().isEmpty() ||
-                   dropsName.getText().toString().isEmpty()) {
+                    Objects.requireNonNull(dropsExpDate.getText()).toString().isEmpty() ||
+                    Objects.requireNonNull(dropsStartDate.getText()).toString().isEmpty() ||
+                    Objects.requireNonNull(dropsName.getText()).toString().isEmpty()) {
                 dismiss();
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Fields must not be empty")
-                        .setMessage("").show();
+                Toast.makeText(getContext(), "Fields must not be empty", Toast.LENGTH_SHORT).show();
             }
             else
             {
@@ -103,8 +102,9 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
 
                 try {
                     Drops drops = new Drops(Objects.requireNonNull(dropsName.getText()).toString(), true,
-                            new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(dropsExpDate.getText()).toString()),
-                            new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(dropsStartDate.getText()).toString()),
+                            simpleFormat.parse(Objects.requireNonNull(dropsExpDate.getText()).toString()),
+                            simpleFormat.parse(Objects.requireNonNull(dropsStartDate.getText()).toString()),
+                            null,
                             expPeriod);
 
                     AppDatabase db = AppDatabase.getInstance(getContext());
@@ -113,6 +113,12 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
                     if(inUseDrops != null)
                     {
                         inUseDrops.inUse = false;
+                        try {
+                            Date today = new Date();
+                            inUseDrops.endDate = simpleFormat.parse(simpleFormat.format(today));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                         db.dropsDao().update(inUseDrops);
                     }
 
