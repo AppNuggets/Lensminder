@@ -24,14 +24,19 @@ public class Solution {
     @ColumnInfo(name = "start_date")
     public Date startDate;
 
+    @ColumnInfo(name = "end_date")
+    public Date endDate;
+
     @ColumnInfo(name = "use_interval")
     public Long useInterval;
 
-    public Solution(String name, Boolean inUse, Date expirationDate, Date startDate, Long useInterval) {
+    public Solution(String name, Boolean inUse, Date expirationDate, Date startDate, Date endDate,
+                    Long useInterval) {
         this.name = name;
         this.inUse = inUse;
         this.expirationDate = expirationDate;
         this.startDate = startDate;
+        this.endDate = endDate;
         this.useInterval = useInterval;
     }
 }
