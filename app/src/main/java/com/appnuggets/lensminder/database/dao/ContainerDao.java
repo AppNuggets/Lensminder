@@ -15,7 +15,7 @@ public interface ContainerDao {
     @Query("SELECT * FROM container WHERE in_use = 1")
     Container getInUse();
 
-    @Query("SELECT * FROM container WHERE in_use = 0")
+    @Query("SELECT * FROM container WHERE in_use = 0 ORDER BY start_date DESC")
     List<Container> getAllNotInUse();
 
     @Query("SELECT * FROM container")

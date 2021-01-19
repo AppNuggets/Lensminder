@@ -20,13 +20,17 @@ public class Container {
     @ColumnInfo(name = "start_date")
     public Date startDate;
 
+    @ColumnInfo(name = "end_date")
+    public Date endDate;
+
     @ColumnInfo(name = "use_interval")
     public Long useInterval;
 
-    public Container(String name, Boolean inUse, Date startDate, Long useInterval) {
+    public Container(String name, Boolean inUse, Date startDate, Date endDate, Long useInterval) {
         this.name = name;
         this.inUse = inUse;
         this.startDate = startDate;
+        this.endDate = endDate;
         this.useInterval = useInterval;
     }
 }

@@ -35,11 +35,12 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         DateProcessor dateProcessor = new DateProcessor();
+
         if(solutionList != null && solutionList.size() > 0) {
             Solution solutionItem = solutionList.get(position);
             holder.solutionName.setText(solutionItem.name);
             holder.solutionStartDate.setText(dateProcessor.dateToString(solutionItem.startDate));
-            holder.solutionExpDate.setText(dateProcessor.dateToString(solutionItem.expirationDate));
+            holder.solutionExpDate.setText(dateProcessor.dateToString(solutionItem.endDate));
         }
     }
 

@@ -39,8 +39,7 @@ public class DropsAdapter extends RecyclerView.Adapter<DropsAdapter.ViewHolder> 
             Drops dropsItem = dropsList.get(position);
             holder.dropsName.setText(dropsItem.name);
             holder.dropsStartDate.setText(dateProcessor.dateToString(dropsItem.startDate));
-            holder.dropsExpDate.setText(dateProcessor.dateToString(dropsItem.expirationDate));
-        }
+            holder.dropsExpDate.setText(dateProcessor.dateToString(dropsItem.endDate)); }
     }
 
     @Override

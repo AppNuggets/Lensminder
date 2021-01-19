@@ -39,5 +39,4 @@ public class UsageProcessor {
 
         return calendar.getTime();
     }
-
 }

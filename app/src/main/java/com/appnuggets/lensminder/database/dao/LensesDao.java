@@ -18,7 +18,7 @@ public interface LensesDao {
     @Query("SELECT * FROM lenses WHERE state = 1")
     List<Lenses> getAllInStock();
 
-    @Query("SELECT * FROM lenses WHERE state = 2")
+    @Query("SELECT * FROM lenses WHERE state = 2 ORDER BY start_date DESC")
     List<Lenses> getAllNotInUse();
 
     @Query("SELECT * FROM lenses")

@@ -14,11 +14,12 @@ import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.model.DateProcessor;
 
 import java.util.List;
+import java.util.Locale;
 
 public class LensesStockAdapter extends RecyclerView.Adapter<LensesStockAdapter.ViewHolder>{
     Context context;
     List<Lenses> lensesStockList;
-    private OnLensListener myOnLensListener;
+    private final OnLensListener myOnLensListener;
 
     public LensesStockAdapter(Context context, List<Lenses> lensesStockList, OnLensListener myOnLensListener){
         this.context = context;
@@ -39,7 +40,7 @@ public class LensesStockAdapter extends RecyclerView.Adapter<LensesStockAdapter.
         if(lensesStockList != null && lensesStockList.size() > 0) {
             Lenses lensesStockItem = lensesStockList.get(position);
             holder.lensesName.setText(lensesStockItem.name);
-            holder.lensesWearCycle.setText(lensesStockItem.useInterval.toString());
+            holder.lensesWearCycle.setText(String.format(Locale.getDefault(), "%d",lensesStockItem.useInterval));
             holder.lensesExpDate.setText(dateProcessor.dateToString(lensesStockItem.expirationDate));
         }
     }
