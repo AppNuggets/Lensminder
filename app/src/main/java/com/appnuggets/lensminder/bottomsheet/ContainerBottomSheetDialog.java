@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Container;
+import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -72,6 +73,9 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
                                      getText()).toString()),
                             null,
                             93L);
+                    UsageProcessor usageProcessor = new UsageProcessor();
+                    newContainer.endDate = usageProcessor.calculateEndDate(newContainer.startDate,
+                            null, newContainer.useInterval);
 
                     AppDatabase db = AppDatabase.getInstance(getContext());
 

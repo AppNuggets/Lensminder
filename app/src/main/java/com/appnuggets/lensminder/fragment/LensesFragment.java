@@ -94,12 +94,17 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
             AppDatabase db = AppDatabase.getInstance(getContext(  ));
             Lenses inUseLenses = db.lensesDao().getInUse();
             inUseLenses.state = State.IN_HISTORY;
-            try {
-                Date today = new Date();
-                SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
-                inUseLenses.endDate = simpleFormat.parse(simpleFormat.format(today));
-            } catch (ParseException e) {
-                e.printStackTrace();
+            UsageProcessor usageProcessor = new UsageProcessor();
+            Long leftDays = usageProcessor.calculateUsageLeft(inUseLenses.startDate,
+                    inUseLenses.expirationDate, inUseLenses.useInterval);
+            if( leftDays > 0) {
+                try {
+                    Date today = new Date();
+                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+                    inUseLenses.endDate = simpleFormat.parse(simpleFormat.format(today));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             db.lensesDao().update(inUseLenses);
             Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
@@ -196,6 +201,9 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                UsageProcessor usageProcessor = new UsageProcessor();
+                lenses.endDate = usageProcessor.calculateEndDate(lenses.startDate,
+                        lenses.expirationDate, lenses.useInterval);
                 db.lensesDao().update(lenses);
             }
         });

@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Drops;
+import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -111,7 +112,9 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
                             simpleFormat.parse(Objects.requireNonNull(dropsStartDate.getText()).toString()),
                             null,
                             expPeriod);
-
+                    UsageProcessor usageProcessor = new UsageProcessor();
+                    drops.endDate = usageProcessor.calculateEndDate(drops.startDate,
+                            drops.expirationDate, drops.useInterval);
                     AppDatabase db = AppDatabase.getInstance(getContext());
 
                     Drops inUseDrops = db.dropsDao().getInUse();

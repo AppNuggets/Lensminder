@@ -82,11 +82,16 @@ public class SolutionFragment extends Fragment {
             AppDatabase db = AppDatabase.getInstance(getContext());
             Solution inUseSolution = db.solutionDao().getInUse();
             inUseSolution.inUse = false;
-            try {
-                Date today = new Date();
-                inUseSolution.endDate = simpleFormat.parse(simpleFormat.format(today));
-            } catch (ParseException e) {
-                e.printStackTrace();
+            UsageProcessor usageProcessor = new UsageProcessor();
+            Long leftDays = usageProcessor.calculateUsageLeft(inUseSolution.startDate,
+                    inUseSolution.expirationDate, inUseSolution.useInterval);
+            if( leftDays > 0) {
+                try {
+                    Date today = new Date();
+                    inUseSolution.endDate = simpleFormat.parse(simpleFormat.format(today));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             db.solutionDao().update(inUseSolution);
             Toast.makeText(getContext(), "Solution deleted", Toast.LENGTH_SHORT).show();
@@ -101,11 +106,16 @@ public class SolutionFragment extends Fragment {
             AppDatabase db = AppDatabase.getInstance(getContext());
             Container inUseContainer = db.containerDao().getInUse();
             inUseContainer.inUse = false;
-            try {
-                Date today = new Date();
-                inUseContainer.endDate = simpleFormat.parse(simpleFormat.format(today));
-            } catch (ParseException e) {
-                e.printStackTrace();
+            UsageProcessor usageProcessor = new UsageProcessor();
+            Long leftDays = usageProcessor.calculateUsageLeft(inUseContainer.startDate,
+                    null, inUseContainer.useInterval);
+            if( leftDays > 0) {
+                try {
+                    Date today = new Date();
+                    inUseContainer.endDate = simpleFormat.parse(simpleFormat.format(today));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             db.containerDao().update(inUseContainer);
             Toast.makeText(getContext(), "Container deleted", Toast.LENGTH_SHORT).show();

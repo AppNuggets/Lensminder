@@ -16,6 +16,7 @@ import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.State;
+import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -113,7 +114,9 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
                                     .toString()),
                             null,
                             expPeriod);
-
+                    UsageProcessor usageProcessor = new UsageProcessor();
+                    lenses.endDate = usageProcessor.calculateEndDate(lenses.startDate,
+                            lenses.expirationDate, lenses.useInterval);
                     AppDatabase db = AppDatabase.getInstance(getContext());
                     Lenses inUseLenses = db.lensesDao().getInUse();
                     if(inUseLenses != null)

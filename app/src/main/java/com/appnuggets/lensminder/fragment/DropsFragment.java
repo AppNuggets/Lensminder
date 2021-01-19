@@ -75,12 +75,18 @@ public class DropsFragment extends Fragment {
             AppDatabase db = AppDatabase.getInstance(getContext());
             Drops inUseDrops = db.dropsDao().getInUse();
             inUseDrops.inUse = false;
-            try {
-                Date today = new Date();
-                SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
-                inUseDrops.endDate = simpleFormat.parse(simpleFormat.format(today));
-            } catch (ParseException e) {
-                e.printStackTrace();
+
+            UsageProcessor usageProcessor = new UsageProcessor();
+            Long leftDays = usageProcessor.calculateUsageLeft(inUseDrops.startDate,
+                    inUseDrops.expirationDate, inUseDrops.useInterval);
+            if( leftDays > 0) {
+                try {
+                    Date today = new Date();
+                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+                    inUseDrops.endDate = simpleFormat.parse(simpleFormat.format(today));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
             db.dropsDao().update(inUseDrops);
             Toast.makeText(getContext(), "Drops deleted", Toast.LENGTH_SHORT).show();
