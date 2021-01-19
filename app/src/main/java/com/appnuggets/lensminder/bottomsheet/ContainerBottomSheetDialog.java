@@ -38,6 +38,9 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.container_bottom_sheet_layout, container, false);
 
         containerStartDate = v.findViewById(R.id.containerStartDate);
+        MaterialButton saveButton = v.findViewById(R.id.containerSaveButton);
+        TextInputEditText containerName = v.findViewById(R.id.containerName);
+
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
         setCalendar();
 
@@ -56,8 +59,6 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        MaterialButton saveButton = v.findViewById(R.id.containerSaveButton);
-        TextInputEditText containerName = v.findViewById(R.id.containerName);
         saveButton.setOnClickListener(v13 -> {
 
             if(Objects.requireNonNull(containerStartDate.getText()).toString().isEmpty() ||
@@ -83,11 +84,15 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
                     if(inUseContainer != null)
                     {
                         inUseContainer.inUse = false;
-                        try {
-                            Date today = new Date();
-                            inUseContainer.endDate = simpleFormat.parse(simpleFormat.format(today));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                        Long leftDays = usageProcessor.calculateUsageLeft(inUseContainer.startDate,
+                                null, inUseContainer.useInterval);
+                        if( leftDays > 0) {
+                            try {
+                                Date today = new Date();
+                                inUseContainer.endDate = simpleFormat.parse(simpleFormat.format(today));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                         db.containerDao().update(inUseContainer);
                     }

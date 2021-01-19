@@ -48,12 +48,14 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.drops_bottom_sheet_layout, container, false);
 
         dropsExpPeriod = v.findViewById(R.id.autoComplete_drops);
-        completeDropdownList();
-
-
         dropsStartDate =  v.findViewById(R.id.dropsStartDate);
         dropsExpDate =  v.findViewById(R.id.dropsExpDate);
+        MaterialButton saveButton = v.findViewById(R.id.dropsSaveButton);
+        TextInputEditText dropsName = v.findViewById(R.id.dropsName);
+
         setCalendar();
+        completeDropdownList();
+
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
 
         dropsStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
@@ -63,7 +65,6 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
                 startDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
-
 
         startDatePicker.addOnPositiveButtonClickListener(selection -> {
             if(startDatePicker.getSelection() != null) {
@@ -87,8 +88,6 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        MaterialButton saveButton = v.findViewById(R.id.dropsSaveButton);
-        TextInputEditText dropsName = v.findViewById(R.id.dropsName);
         saveButton.setOnClickListener(v14 -> {
 
             if(dropsExpPeriod.getText().toString().isEmpty() ||
@@ -121,11 +120,15 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
                     if(inUseDrops != null)
                     {
                         inUseDrops.inUse = false;
-                        try {
-                            Date today = new Date();
-                            inUseDrops.endDate = simpleFormat.parse(simpleFormat.format(today));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                        Long leftDays = usageProcessor.calculateUsageLeft(inUseDrops.startDate,
+                                inUseDrops.expirationDate, inUseDrops.useInterval);
+                        if( leftDays > 0) {
+                            try {
+                                Date today = new Date();
+                                inUseDrops.endDate = simpleFormat.parse(simpleFormat.format(today));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                         db.dropsDao().update(inUseDrops);
                     }

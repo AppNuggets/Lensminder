@@ -77,6 +77,8 @@ public class SolutionFragment extends Fragment {
         containerHistoryRecyclerView = view.findViewById(R.id.container_history_recycler_view);
 
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+        setSolutionHistoryRecyclerView();
+        setContainerHistoryRecyclerView();
 
         deleteCurrentSolution.setOnClickListener(v -> {
             AppDatabase db = AppDatabase.getInstance(getContext());
@@ -126,8 +128,6 @@ public class SolutionFragment extends Fragment {
             containerBottomSheetDialog.show(getChildFragmentManager(), "bottomSheetContainer");
         });
 
-        setSolutionHistoryRecyclerView();
-        setContainerHistoryRecyclerView();
     }
 
     @Override

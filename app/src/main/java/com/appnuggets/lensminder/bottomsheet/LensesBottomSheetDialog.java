@@ -48,12 +48,14 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.lenses_bottom_sheet_layout, container, false);
 
         lensesWearCycle = v.findViewById(R.id.autoComplete_lenses);
-        completeDropdownList();
-
         lensesStartDate = v.findViewById(R.id.lensesStartDate);
         lensesExpDate = v.findViewById(R.id.lensesExpDate);
+        MaterialButton saveButton = v.findViewById(R.id.lensesSaveButton);
+        TextInputEditText lensesName = v.findViewById(R.id.lensesName);
+
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
         setCalendar();
+        completeDropdownList();
 
         lensesStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
@@ -85,8 +87,6 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        MaterialButton saveButton = v.findViewById(R.id.lensesSaveButton);
-        TextInputEditText lensesName = v.findViewById(R.id.lensesName);
         saveButton.setOnClickListener(v15 -> {
 
             if(lensesWearCycle.getText().toString().isEmpty() ||
@@ -122,11 +122,15 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
                     if(inUseLenses != null)
                     {
                         inUseLenses.state = State.IN_HISTORY;
-                        try {
-                            Date today = new Date();
-                            inUseLenses.endDate = simpleFormat.parse(simpleFormat.format(today));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                        Long leftDays = usageProcessor.calculateUsageLeft(inUseLenses.startDate,
+                                inUseLenses.expirationDate, inUseLenses.useInterval);
+                        if( leftDays > 0) {
+                            try {
+                                Date today = new Date();
+                                inUseLenses.endDate = simpleFormat.parse(simpleFormat.format(today));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                         db.lensesDao().update(inUseLenses);
                     }

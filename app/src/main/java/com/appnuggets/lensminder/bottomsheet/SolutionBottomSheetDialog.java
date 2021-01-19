@@ -44,6 +44,9 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
 
         solutionStartDate = v.findViewById(R.id.solutionStartDate);
         solutionExpDate = v.findViewById(R.id.solutionExpDate);
+        MaterialButton saveButton = v.findViewById(R.id.solutionSaveButton);
+        TextInputEditText solutionName = v.findViewById(R.id.solutionName);
+
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
         setCalendar();
 
@@ -77,8 +80,6 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        MaterialButton saveButton = v.findViewById(R.id.solutionSaveButton);
-        TextInputEditText solutionName = v.findViewById(R.id.solutionName);
         saveButton.setOnClickListener(v15 -> {
 
             if(Objects.requireNonNull(solutionExpDate.getText()).toString().isEmpty() ||
@@ -105,11 +106,15 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
                     if(inUseSolution != null)
                     {
                         inUseSolution.inUse = false;
-                        try {
-                            Date today = new Date();
-                            inUseSolution.endDate = simpleFormat.parse(simpleFormat.format(today));
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                        Long leftDays = usageProcessor.calculateUsageLeft(inUseSolution.startDate,
+                                inUseSolution.expirationDate, inUseSolution.useInterval);
+                        if( leftDays > 0) {
+                            try {
+                                Date today = new Date();
+                                inUseSolution.endDate = simpleFormat.parse(simpleFormat.format(today));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
                         db.solutionDao().update(inUseSolution);
                     }

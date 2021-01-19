@@ -44,9 +44,11 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.lenses_stock_bottom_sheret_layout, container, false);
 
         stockLensesWearCycle = v.findViewById(R.id.autoComplete_stockLenses);
+        stockLensesExpDate = v.findViewById(R.id.stockLensesExpDate);
+        MaterialButton saveButton = v.findViewById(R.id.stockLensesSaveButton);
+        TextInputEditText lensesName = v.findViewById(R.id.stockLensesName);
         completeDropdownList();
 
-        stockLensesExpDate = v.findViewById(R.id.stockLensesExpDate);
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
         setCalendar();
 
@@ -65,8 +67,6 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        MaterialButton saveButton = v.findViewById(R.id.stockLensesSaveButton);
-        TextInputEditText lensesName = v.findViewById(R.id.stockLensesName);
         saveButton.setOnClickListener(v13 -> {
             if(stockLensesWearCycle.getText().toString().isEmpty() ||
                     Objects.requireNonNull(stockLensesExpDate.getText()).toString().isEmpty() ||
