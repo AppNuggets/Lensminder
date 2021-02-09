@@ -14,6 +14,9 @@ import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.service.NotificationService;
 
+import java.util.Calendar;
+
+
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
@@ -66,7 +69,7 @@ public class SettingsActivity extends AppCompatActivity {
                 notificationSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     if(newValue.equals(true)) {
                         // Start notification for everything
-                        NotificationService.createNotification(getContext(), null, NotificationCode.CONTAINER_EXPIRED);
+                        NotificationService.createNotification(getContext(), Calendar.getInstance().getTime(), NotificationCode.CONTAINER_EXPIRED);
                     }
                     else {
                         // Cancel everything

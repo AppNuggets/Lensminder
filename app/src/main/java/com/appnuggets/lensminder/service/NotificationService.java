@@ -8,6 +8,7 @@ import android.content.Intent;
 import com.appnuggets.lensminder.activity.ReminderBroadcast;
 import com.appnuggets.lensminder.model.NotificationCode;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import static android.content.Context.ALARM_SERVICE;
@@ -19,10 +20,15 @@ public class NotificationService {
                 notificationId.getCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        long timeAtButtonClick = System.currentTimeMillis();
-        long tenSeconds = 1000 * 3;
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP,timeAtButtonClick + tenSeconds, pendingIntent );
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fireDate);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTime().getTime(), pendingIntent );
     }
 
     public static void cancelNotification(Context context, NotificationCode notificationId) {
