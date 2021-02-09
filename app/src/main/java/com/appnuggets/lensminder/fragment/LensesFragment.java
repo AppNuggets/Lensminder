@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.activity.RefreshInterface;
 import com.appnuggets.lensminder.adapter.LensesAdapter;
 import com.appnuggets.lensminder.adapter.LensesStockAdapter;
 import com.appnuggets.lensminder.bottomsheet.LensesBottomSheetDialog;
@@ -28,7 +29,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
-public class LensesFragment extends Fragment {
+public class LensesFragment extends Fragment implements RefreshInterface {
 
     private CircularProgressBar lensesProgressbar;
     private TextView lensesLeftDaysCount;
@@ -67,7 +68,7 @@ public class LensesFragment extends Fragment {
 
         // Add new current lenses listener
         lensesShowAddCurrent.setOnClickListener(v -> {
-            LensesBottomSheetDialog lensesBottomSheetDialog = new LensesBottomSheetDialog();
+            LensesBottomSheetDialog lensesBottomSheetDialog = new LensesBottomSheetDialog(this);
             //lensesBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
             lensesBottomSheetDialog.show(getChildFragmentManager(), "bottomSheetLenses");
         });
@@ -138,5 +139,14 @@ public class LensesFragment extends Fragment {
 
             lensesLeftDaysCount.setText(daysLeft.toString());
         }
+    }
+
+    @Override
+    public void refreshData() {
+        AppDatabase db = AppDatabase.getInstance(getContext());
+        Lenses lensesInUse = db.lensesDao().getInUse();
+        updateLensesSummary(lensesInUse);
+
+        // TODO table refresh
     }
 }

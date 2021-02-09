@@ -14,7 +14,8 @@ import java.util.Date;
 import static android.content.Context.ALARM_SERVICE;
 
 public class NotificationService {
-    public static void createNotification(Context context, Date fireDate, NotificationCode notificationId){
+
+    public static void createNotification(Context context, long leftDays, NotificationCode notificationId){
         Intent intent = new Intent(context, ReminderBroadcast.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 notificationId.getCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -22,7 +23,8 @@ public class NotificationService {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(fireDate);
+        calendar.setTime(Calendar.getInstance().getTime());
+        calendar.add(Calendar.DATE, (int)leftDays);
         calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MINUTE, 0);

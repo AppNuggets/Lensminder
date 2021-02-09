@@ -37,11 +37,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                super.onBackPressed();
-                return true;
+        // Respond to the action bar's Up/Home button
+        if (item.getItemId() == android.R.id.home) {
+            super.onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -69,11 +68,13 @@ public class SettingsActivity extends AppCompatActivity {
                 notificationSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     if(newValue.equals(true)) {
                         // Start notification for everything
-                        NotificationService.createNotification(getContext(), Calendar.getInstance().getTime(), NotificationCode.CONTAINER_EXPIRED);
+                        NotificationService.createNotification(getContext(), 10,
+                                NotificationCode.CONTAINER_EXPIRED);
                     }
                     else {
                         // Cancel everything
-                        NotificationService.cancelNotification(getContext(), NotificationCode.CONTAINER_EXPIRED);
+                        NotificationService.cancelNotification(getContext(),
+                                NotificationCode.CONTAINER_EXPIRED);
                     }
                     return true;
                 });
