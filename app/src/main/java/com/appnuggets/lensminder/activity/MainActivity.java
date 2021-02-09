@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
                     return false;
                 });
 
-        /*AppDatabase db = AppDatabase.getInstance(this);
-        DEBUG_populateDataBase(db);*/
+//        AppDatabase db = AppDatabase.getInstance(this);
+//        DEBUG_populateDataBase(db);
     }
 
     @Override

@@ -147,9 +147,9 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
                     dismiss();
                         refreshInterface.refreshData();
 
-                    } catch (ParseException e) {
-                        e.printStackTrace();
                     }
+                catch (ParseException e) {
+                        e.printStackTrace();
                 }
             }
         });

@@ -170,6 +170,8 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
         updateLensesSummary(lensesInUse);
 
         // TODO table refresh
+    }
+
     public void onLensClick(int position) {
         MaterialDatePicker<Long> startDatePicker;
 
