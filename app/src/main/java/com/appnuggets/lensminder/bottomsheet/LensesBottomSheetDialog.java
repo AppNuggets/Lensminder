@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.activity.NavigationInterface;
+import com.appnuggets.lensminder.activity.RefreshInterface;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.State;
@@ -34,6 +36,8 @@ import java.util.TimeZone;
 
 public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
+    private RefreshInterface refreshInterface;
+
     private AutoCompleteTextView lensesWearCycle;
     private TextInputEditText lensesStartDate;
     private TextInputEditText lensesExpDate;
@@ -41,6 +45,10 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
     MaterialDatePicker<Long> startDatePicker;
     MaterialDatePicker<Long> expDatePicker;
+
+    public LensesBottomSheetDialog(RefreshInterface refreshInterface){
+        this.refreshInterface = refreshInterface;
+    }
 
     @Nullable
     @Override
@@ -137,9 +145,11 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
                     db.lensesDao().insert(lenses);
                     dismiss();
+                        refreshInterface.refreshData();
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

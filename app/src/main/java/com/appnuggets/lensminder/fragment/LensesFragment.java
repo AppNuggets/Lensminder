@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.activity.RefreshInterface;
 import com.appnuggets.lensminder.adapter.LensesAdapter;
 import com.appnuggets.lensminder.adapter.LensesStockAdapter;
 import com.appnuggets.lensminder.bottomsheet.LensesBottomSheetDialog;
@@ -36,7 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class LensesFragment extends Fragment implements LensesStockAdapter.OnLensListener {
+public class LensesFragment extends Fragment implements LensesStockAdapter.OnLensListener, RefreshInterface {
 
     private CircularProgressBar lensesProgressbar;
     private TextView lensesLeftDaysCount;
@@ -77,7 +78,7 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
 
         // Add new current lenses listener
         lensesShowAddCurrent.setOnClickListener(v -> {
-            LensesBottomSheetDialog lensesBottomSheetDialog = new LensesBottomSheetDialog();
+            LensesBottomSheetDialog lensesBottomSheetDialog = new LensesBottomSheetDialog(this);
             //lensesBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
             lensesBottomSheetDialog.show(getChildFragmentManager(), "bottomSheetLenses");
         });
@@ -163,6 +164,12 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
     }
 
     @Override
+    public void refreshData() {
+        AppDatabase db = AppDatabase.getInstance(getContext());
+        Lenses lensesInUse = db.lensesDao().getInUse();
+        updateLensesSummary(lensesInUse);
+
+        // TODO table refresh
     public void onLensClick(int position) {
         MaterialDatePicker<Long> startDatePicker;
 

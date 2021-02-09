@@ -11,6 +11,11 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.model.NotificationCode;
+import com.appnuggets.lensminder.service.NotificationService;
+
+import java.util.Calendar;
+
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -32,11 +37,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                super.onBackPressed();
-                return true;
+        // Respond to the action bar's Up/Home button
+        if (item.getItemId() == android.R.id.home) {
+            super.onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -58,8 +62,25 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 });
             }
-        }
 
+            SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notify");
+            if(null != notificationSwitch){
+                notificationSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    if(newValue.equals(true)) {
+                        // Start notification for everything
+                        NotificationService.createNotification(getContext(), 10,
+                                NotificationCode.CONTAINER_EXPIRED);
+                    }
+                    else {
+                        // Cancel everything
+                        NotificationService.cancelNotification(getContext(),
+                                NotificationCode.CONTAINER_EXPIRED);
+                    }
+                    return true;
+                });
+            }
+
+        }
 
     }
 }
