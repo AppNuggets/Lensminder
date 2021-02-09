@@ -2,18 +2,17 @@ package com.appnuggets.lensminder.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.activity.RefreshInterface;
@@ -26,16 +25,27 @@ import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.State;
 import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
-public class LensesFragment extends Fragment implements RefreshInterface {
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
+
+public class LensesFragment extends Fragment implements LensesStockAdapter.OnLensListener, RefreshInterface {
 
     private CircularProgressBar lensesProgressbar;
     private TextView lensesLeftDaysCount;
 
     private RecyclerView lensesHistoryRecyclerView;
     private RecyclerView lensesStockRecyclerView;
+
+    private List<Lenses> stockLensesList;
 
     public LensesFragment() {
         // Required empty public constructor
@@ -85,12 +95,28 @@ public class LensesFragment extends Fragment implements RefreshInterface {
             AppDatabase db = AppDatabase.getInstance(getContext(  ));
             Lenses inUseLenses = db.lensesDao().getInUse();
             inUseLenses.state = State.IN_HISTORY;
+            UsageProcessor usageProcessor = new UsageProcessor();
+            Long leftDays = usageProcessor.calculateUsageLeft(inUseLenses.startDate,
+                    inUseLenses.expirationDate, inUseLenses.useInterval);
+            if( leftDays > 0) {
+                try {
+                    Date today = new Date();
+                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+                    inUseLenses.endDate = simpleFormat.parse(simpleFormat.format(today));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
             db.lensesDao().update(inUseLenses);
             Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
         });
 
-        setLensesHistoryRecyclerView();
-        setLensesStockRecyclerView();
+        Context context = getContext();
+        AppDatabase db = AppDatabase.getInstance(context);
+        List<Lenses> lensesList = db.lensesDao().getAllNotInUse();
+        setLensesHistoryRecyclerView(lensesList);
+        stockLensesList = db.lensesDao().getAllInStock();
+        setLensesStockRecyclerView(stockLensesList);
     }
 
     @Override
@@ -102,21 +128,17 @@ public class LensesFragment extends Fragment implements RefreshInterface {
         updateLensesSummary(lensesInUse);
     }
 
-    private void setLensesHistoryRecyclerView() {
+    private void setLensesHistoryRecyclerView(List<Lenses> lenses) {
         Context context = getContext();
-        AppDatabase db = AppDatabase.getInstance(context);
-        LensesAdapter lensesAdapter = new LensesAdapter(context, db.lensesDao().getAllNotInUse());
-
+        LensesAdapter lensesAdapter = new LensesAdapter(context, lenses);
         lensesHistoryRecyclerView.setHasFixedSize(true);
         lensesHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         lensesHistoryRecyclerView.setAdapter(lensesAdapter);
     }
 
-    private void setLensesStockRecyclerView() {
+    private void setLensesStockRecyclerView(List<Lenses> lenses) {
         Context context = getContext();
-        AppDatabase db = AppDatabase.getInstance(context);
-        LensesStockAdapter lensesStockAdapter = new LensesStockAdapter(context, db.lensesDao().getAllInStock());
-
+        LensesStockAdapter lensesStockAdapter = new LensesStockAdapter(context, lenses, this);
         lensesStockRecyclerView.setHasFixedSize(true);
         lensesStockRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         lensesStockRecyclerView.setAdapter(lensesStockAdapter);
@@ -137,7 +159,7 @@ public class LensesFragment extends Fragment implements RefreshInterface {
             lensesProgressbar.setProgressWithAnimation(Math.max(daysLeft, 0),
                     1000L);
 
-            lensesLeftDaysCount.setText(daysLeft.toString());
+            lensesLeftDaysCount.setText(String.format(Locale.getDefault(), "%d", daysLeft));
         }
     }
 
@@ -148,5 +170,49 @@ public class LensesFragment extends Fragment implements RefreshInterface {
         updateLensesSummary(lensesInUse);
 
         // TODO table refresh
+    public void onLensClick(int position) {
+        MaterialDatePicker<Long> startDatePicker;
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.clear();
+        long today = MaterialDatePicker.todayInUtcMilliseconds();
+        MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
+        builder.setTitleText("Select start date");
+        builder.setSelection(today);
+        startDatePicker = builder.build();
+        startDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
+
+        startDatePicker.addOnPositiveButtonClickListener(selection -> {
+            AppDatabase db = AppDatabase.getInstance(getContext());
+            Lenses inUseLenses = db.lensesDao().getInUse();
+            SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+            if(inUseLenses != null)
+            {
+                inUseLenses.state = State.IN_HISTORY;
+                try {
+                    Date today1 = new Date();
+
+                    inUseLenses.endDate = simpleFormat.parse(simpleFormat.format(today1));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                db.lensesDao().update(inUseLenses);
+            }
+            Lenses lenses = stockLensesList.get(position);
+            lenses.state = State.IN_USE;
+            if(startDatePicker.getSelection()!=null){
+                Date date = new Date(startDatePicker.getSelection());
+                String dateValue = simpleFormat.format(date);
+                try {
+                    lenses.startDate = simpleFormat.parse(dateValue);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                UsageProcessor usageProcessor = new UsageProcessor();
+                lenses.endDate = usageProcessor.calculateEndDate(lenses.startDate,
+                        lenses.expirationDate, lenses.useInterval);
+                db.lensesDao().update(lenses);
+            }
+        });
     }
 }

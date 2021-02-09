@@ -40,7 +40,7 @@ LensesAdapter extends RecyclerView.Adapter<LensesAdapter.ViewHolder>{
             Lenses lensesItem = lensesList.get(position);
             holder.lensesName.setText(lensesItem.name);
             holder.lensesStartDate.setText(dateProcessor.dateToString(lensesItem.startDate));
-            holder.lensesExpDate.setText(dateProcessor.dateToString(lensesItem.expirationDate));
+            holder.lensesExpDate.setText(dateProcessor.dateToString(lensesItem.endDate));
         }
     }
 

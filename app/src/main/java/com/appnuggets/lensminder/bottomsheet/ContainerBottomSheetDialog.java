@@ -1,11 +1,11 @@
 package com.appnuggets.lensminder.bottomsheet;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,24 +13,24 @@ import androidx.annotation.Nullable;
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Container;
-import com.appnuggets.lensminder.database.entity.State;
+import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
 public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
 
     private TextInputEditText containerStartDate;
-    private MaterialDatePicker startDatePicker;
+    private MaterialDatePicker<Long> startDatePicker;
 
     @Nullable
     @Override
@@ -38,43 +38,45 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         View v = inflater.inflate(R.layout.container_bottom_sheet_layout, container, false);
 
         containerStartDate = v.findViewById(R.id.containerStartDate);
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
+        MaterialButton saveButton = v.findViewById(R.id.containerSaveButton);
+        TextInputEditText containerName = v.findViewById(R.id.containerName);
+
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
         setCalendar();
 
-        containerStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+        containerStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
         containerStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
             if (hasFocus) {
-                startDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                startDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
 
-        startDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
-            @Override
-            public void onPositiveButtonClick(Object selection) {
-                Date date = new Date((Long) startDatePicker.getSelection()) ;
+        startDatePicker.addOnPositiveButtonClickListener(selection -> {
+            if(startDatePicker.getSelection() != null) {
+                Date date = new Date(startDatePicker.getSelection());
                 containerStartDate.setText(simpleFormat.format(date));
             }
         });
 
-        MaterialButton saveButton = v.findViewById(R.id.containerSaveButton);
-        TextInputEditText containerName = v.findViewById(R.id.containerName);
         saveButton.setOnClickListener(v13 -> {
 
-            if(containerStartDate.getText().toString().isEmpty() ||
-                    containerName.getText().toString().isEmpty()) {
+            if(Objects.requireNonNull(containerStartDate.getText()).toString().isEmpty() ||
+                    Objects.requireNonNull(containerName.getText()).toString().isEmpty()) {
                 dismiss();
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Fields must not be empty")
-                        .setMessage("").show();
+                Toast.makeText(getContext(), "Fields must not be empty", Toast.LENGTH_SHORT).show();
             }
             else {
                 try {
                     Container newContainer = new Container(Objects.requireNonNull
                             (containerName.getText()).toString(), true,
-                             new SimpleDateFormat("dd.MM.yyyy").parse(Objects.
-                                     requireNonNull(containerStartDate.getText()).toString()),
+                             simpleFormat.parse(Objects.requireNonNull(containerStartDate.
+                                     getText()).toString()),
+                            null,
                             93L);
+                    UsageProcessor usageProcessor = new UsageProcessor();
+                    newContainer.endDate = usageProcessor.calculateEndDate(newContainer.startDate,
+                            null, newContainer.useInterval);
 
                     AppDatabase db = AppDatabase.getInstance(getContext());
 
@@ -82,6 +84,16 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
                     if(inUseContainer != null)
                     {
                         inUseContainer.inUse = false;
+                        Long leftDays = usageProcessor.calculateUsageLeft(inUseContainer.startDate,
+                                null, inUseContainer.useInterval);
+                        if( leftDays > 0) {
+                            try {
+                                Date today = new Date();
+                                inUseContainer.endDate = simpleFormat.parse(simpleFormat.format(today));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         db.containerDao().update(inUseContainer);
                     }
 
@@ -105,7 +117,7 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         calendar.clear();
         long today = MaterialDatePicker.todayInUtcMilliseconds();
 
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
         builder.setTitleText("Select start date");
         builder.setSelection(today);
         startDatePicker = builder.build();

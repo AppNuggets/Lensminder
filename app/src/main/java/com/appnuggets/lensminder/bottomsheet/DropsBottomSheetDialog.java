@@ -1,6 +1,5 @@
 package com.appnuggets.lensminder.bottomsheet;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -8,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Drops;
+import com.appnuggets.lensminder.model.UsageProcessor;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -26,6 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -37,61 +39,63 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
     private TextInputEditText dropsExpDate;
     private String[] items;
 
-    MaterialDatePicker startDatePicker;
-    MaterialDatePicker expDatePicker;
+    MaterialDatePicker<Long> startDatePicker;
+    MaterialDatePicker<Long> expDatePicker;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.drops_bottom_sheet_layout, container, false);
 
-        dropsExpPeriod = (AutoCompleteTextView) v.findViewById(R.id.autoComplete_drops);
+        dropsExpPeriod = v.findViewById(R.id.autoComplete_drops);
+        dropsStartDate =  v.findViewById(R.id.dropsStartDate);
+        dropsExpDate =  v.findViewById(R.id.dropsExpDate);
+        MaterialButton saveButton = v.findViewById(R.id.dropsSaveButton);
+        TextInputEditText dropsName = v.findViewById(R.id.dropsName);
+
+        setCalendar();
         completeDropdownList();
 
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
 
-        dropsStartDate = (TextInputEditText) v.findViewById(R.id.dropsStartDate);
-        dropsExpDate = (TextInputEditText) v.findViewById(R.id.dropsExpDate);
-        setCalendar();
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy");
-
-        dropsStartDate.setOnClickListener(v1 -> startDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+        dropsStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
         dropsStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
             if (hasFocus) {
-                startDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                startDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
 
         startDatePicker.addOnPositiveButtonClickListener(selection -> {
-            Date date = new Date((Long) startDatePicker.getSelection()) ;
-            dropsStartDate.setText(simpleFormat.format(date));
+            if(startDatePicker.getSelection() != null) {
+                Date date = new Date(startDatePicker.getSelection());
+                dropsStartDate.setText(simpleFormat.format(date));
+            }
         });
 
-        dropsExpDate.setOnClickListener(v15 -> expDatePicker.show(getFragmentManager(), "DATE_PICKER"));
+        dropsExpDate.setOnClickListener(v15 -> expDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
 
         dropsExpDate.setOnFocusChangeListener((v13, hasFocus) -> {
             if (hasFocus) {
-                expDatePicker.show(getFragmentManager(), "DATE_PICKER");
+                expDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
             }
         });
 
         expDatePicker.addOnPositiveButtonClickListener(selection -> {
-            Date date = new Date((Long) expDatePicker.getSelection()) ;
-            dropsExpDate.setText(simpleFormat.format(date));
+            if(expDatePicker.getSelection() != null) {
+                Date date = new Date(expDatePicker.getSelection());
+                dropsExpDate.setText(simpleFormat.format(date));
+            }
         });
 
-        MaterialButton saveButton = (MaterialButton) v.findViewById(R.id.dropsSaveButton);
-        TextInputEditText dropsName = v.findViewById(R.id.dropsName);
         saveButton.setOnClickListener(v14 -> {
 
             if(dropsExpPeriod.getText().toString().isEmpty() ||
-                    dropsExpDate.getText().toString().isEmpty() ||
-                 dropsStartDate.getText().toString().isEmpty() ||
-                   dropsName.getText().toString().isEmpty()) {
+                    Objects.requireNonNull(dropsExpDate.getText()).toString().isEmpty() ||
+                    Objects.requireNonNull(dropsStartDate.getText()).toString().isEmpty() ||
+                    Objects.requireNonNull(dropsName.getText()).toString().isEmpty()) {
                 dismiss();
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Fields must not be empty")
-                        .setMessage("").show();
+                Toast.makeText(getContext(), "Fields must not be empty", Toast.LENGTH_SHORT).show();
             }
             else
             {
@@ -103,16 +107,29 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
 
                 try {
                     Drops drops = new Drops(Objects.requireNonNull(dropsName.getText()).toString(), true,
-                            new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(dropsExpDate.getText()).toString()),
-                            new SimpleDateFormat("dd.MM.yyyy").parse(Objects.requireNonNull(dropsStartDate.getText()).toString()),
+                            simpleFormat.parse(Objects.requireNonNull(dropsExpDate.getText()).toString()),
+                            simpleFormat.parse(Objects.requireNonNull(dropsStartDate.getText()).toString()),
+                            null,
                             expPeriod);
-
+                    UsageProcessor usageProcessor = new UsageProcessor();
+                    drops.endDate = usageProcessor.calculateEndDate(drops.startDate,
+                            drops.expirationDate, drops.useInterval);
                     AppDatabase db = AppDatabase.getInstance(getContext());
 
                     Drops inUseDrops = db.dropsDao().getInUse();
                     if(inUseDrops != null)
                     {
                         inUseDrops.inUse = false;
+                        Long leftDays = usageProcessor.calculateUsageLeft(inUseDrops.startDate,
+                                inUseDrops.expirationDate, inUseDrops.useInterval);
+                        if( leftDays > 0) {
+                            try {
+                                Date today = new Date();
+                                inUseDrops.endDate = simpleFormat.parse(simpleFormat.format(today));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         db.dropsDao().update(inUseDrops);
                     }
 
@@ -146,7 +163,7 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
                 /*constraintBuilder.setStart(january);
                 constraintBuilder.setEnd(december);*/
 
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+        MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
         // builder.setTheme(R.style.MyDatePickerDialogTheme);
         builder.setTitleText("Select start date");
         builder.setSelection(today);
@@ -156,7 +173,7 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         dropsExpDate.setInputType(InputType.TYPE_NULL);
         dropsExpDate.setKeyListener(null);
         constraintBuilder.setValidator(DateValidatorPointForward.now());
-        MaterialDatePicker.Builder builderExp = MaterialDatePicker.Builder.datePicker();
+        MaterialDatePicker.Builder<Long> builderExp = MaterialDatePicker.Builder.datePicker();
         builderExp.setTitleText("Select exp. date");
         builderExp.setCalendarConstraints(constraintBuilder.build());
         expDatePicker = builderExp.build();

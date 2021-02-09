@@ -15,7 +15,7 @@ public interface DropsDao {
     @Query("SELECT * FROM drops WHERE in_use = 1")
     Drops getInUse();
 
-    @Query("SELECT * FROM drops WHERE in_use = 0")
+    @Query("SELECT * FROM drops WHERE in_use = 0 ORDER BY start_date DESC")
     List<Drops> getAllNotInUse();
 
     @Query("SELECT * FROM drops")
