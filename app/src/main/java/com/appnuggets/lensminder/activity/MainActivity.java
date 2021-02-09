@@ -8,8 +8,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.appnuggets.lensminder.R;
@@ -41,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        createNotificationChannel();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         boolean darkModeEnabled = prefs.getBoolean("dark_mode", false);
@@ -131,6 +138,19 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_view, dropsFragment);
         fragmentTransaction.commit();
+    }
+
+    private void createNotificationChannel() {
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.BASE) {
+            CharSequence name = "LensminderNotificationChannel";
+            String description = "Channel for lensminder notifications";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel notificationChannel = new NotificationChannel("lensminderNotification", name, importance);
+            notificationChannel.setDescription(description);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
     }
 
     @SuppressLint("SimpleDateFormat")

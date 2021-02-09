@@ -11,6 +11,8 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.model.NotificationCode;
+import com.appnuggets.lensminder.service.NotificationService;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -58,8 +60,23 @@ public class SettingsActivity extends AppCompatActivity {
                     return true;
                 });
             }
-        }
 
+            SwitchPreference notificationSwitch = (SwitchPreference) findPreference("notify");
+            if(null != notificationSwitch){
+                notificationSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    if(newValue.equals(true)) {
+                        // Start notification for everything
+                        NotificationService.createNotification(getContext(), null, NotificationCode.CONTAINER_EXPIRED);
+                    }
+                    else {
+                        // Cancel everything
+                        NotificationService.cancelNotification(getContext(), NotificationCode.CONTAINER_EXPIRED);
+                    }
+                    return true;
+                });
+            }
+
+        }
 
     }
 }

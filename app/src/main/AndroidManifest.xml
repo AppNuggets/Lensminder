@@ -23,5 +23,6 @@
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
+        <receiver android:name=".activity.ReminderBroadcast"/>
     </application>
 </manifest>
