@@ -50,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
         createNotificationChannel();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        // Check notification preferences
+        boolean enabledNotification = prefs.getBoolean("notify", false);
+
         boolean darkModeEnabled = prefs.getBoolean("dark_mode", false);
         if( true ==  darkModeEnabled) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
