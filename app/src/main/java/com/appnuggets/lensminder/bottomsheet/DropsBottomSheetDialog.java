@@ -1,5 +1,6 @@
 package com.appnuggets.lensminder.bottomsheet;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -11,11 +12,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.activity.RefreshInterface;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Drops;
+import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.model.UsageProcessor;
+import com.appnuggets.lensminder.service.NotificationService;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -41,6 +46,12 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
 
     MaterialDatePicker<Long> startDatePicker;
     MaterialDatePicker<Long> expDatePicker;
+
+    private final RefreshInterface refreshInterface;
+
+    public DropsBottomSheetDialog(RefreshInterface refreshInterface){
+        this.refreshInterface = refreshInterface;
+    }
 
     @Nullable
     @Override
@@ -132,10 +143,19 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
                         }
                         db.dropsDao().update(inUseDrops);
                     }
-
                     db.dropsDao().insert(drops);
-                    dismiss();
 
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+                    boolean enabledNotification = prefs.getBoolean("notify", false);
+                    if(enabledNotification) {
+                        NotificationService.createNotification(getContext(),
+                                usageProcessor.calculateUsageLeft(drops.startDate,
+                                        drops.expirationDate, drops.useInterval),
+                                NotificationCode.DROPS_EXPIRED);
+                    }
+
+                    dismiss();
+                    refreshInterface.refreshData();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

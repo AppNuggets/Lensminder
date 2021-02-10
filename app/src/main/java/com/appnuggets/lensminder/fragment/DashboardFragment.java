@@ -226,5 +226,4 @@ public class DashboardFragment extends Fragment {
             // TODO Set progress bar default color
         }
     }
-
 }

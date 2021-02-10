@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.activity.RefreshInterface;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.State;
@@ -37,6 +38,12 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
     private TextInputEditText stockLensesExpDate;
     MaterialDatePicker<Long> expDatePicker;
     String[] items;
+
+    private final RefreshInterface refreshInterface;
+
+    public LensesStockBottomSheetDialog(RefreshInterface refreshInterface){
+        this.refreshInterface = refreshInterface;
+    }
 
     @Nullable
     @Override
@@ -92,7 +99,7 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
                     AppDatabase db = AppDatabase.getInstance(getContext());
                     db.lensesDao().insert(lenses);
                     dismiss();
-
+                    refreshInterface.refreshData();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

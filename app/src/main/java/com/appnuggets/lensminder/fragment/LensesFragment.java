@@ -1,6 +1,7 @@
 package com.appnuggets.lensminder.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +12,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.activity.RefreshInterface;
+import com.appnuggets.lensminder.activity.SettingsActivity;
+import com.appnuggets.lensminder.adapter.DropsAdapter;
 import com.appnuggets.lensminder.adapter.LensesAdapter;
 import com.appnuggets.lensminder.adapter.LensesStockAdapter;
 import com.appnuggets.lensminder.bottomsheet.LensesBottomSheetDialog;
@@ -23,7 +28,9 @@ import com.appnuggets.lensminder.bottomsheet.LensesStockBottomSheetDialog;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.State;
+import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.model.UsageProcessor;
+import com.appnuggets.lensminder.service.NotificationService;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -85,7 +92,7 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
 
         // Add lenses to stock listener
         lensesShowAddStock.setOnClickListener(v -> {
-            LensesStockBottomSheetDialog lensesStockBottomSheetDialog = new LensesStockBottomSheetDialog();
+            LensesStockBottomSheetDialog lensesStockBottomSheetDialog = new LensesStockBottomSheetDialog(this);
             //lensesStockBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
             lensesStockBottomSheetDialog.show(getChildFragmentManager(), "bottomSheetLensesStock");
         });
@@ -108,7 +115,16 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
                 }
             }
             db.lensesDao().update(inUseLenses);
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+            boolean enabledNotification = prefs.getBoolean("notify", false);
+            if(enabledNotification) {
+                NotificationService.cancelNotification(getContext(),
+                        NotificationCode.LENSES_EXPIRED);
+            }
+
             Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
+            refreshData();
         });
 
         Context context = getContext();
@@ -169,7 +185,13 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
         Lenses lensesInUse = db.lensesDao().getInUse();
         updateLensesSummary(lensesInUse);
 
-        // TODO table refresh
+        Context context = getContext();
+        LensesAdapter lensesAdapter = new LensesAdapter(context, db.lensesDao().getAllNotInUse());
+        lensesHistoryRecyclerView.setAdapter(lensesAdapter);
+
+        LensesStockAdapter lensesStockAdapterAdapter = new LensesStockAdapter(context,
+                db.lensesDao().getAllInStock(), this);
+        lensesStockRecyclerView.setAdapter(lensesStockAdapterAdapter);
     }
 
     public void onLensClick(int position) {
@@ -215,6 +237,17 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
                         lenses.expirationDate, lenses.useInterval);
                 db.lensesDao().update(lenses);
             }
+
+            UsageProcessor usageProcessor = new UsageProcessor();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+            boolean enabledNotification = prefs.getBoolean("notify", false);
+            if(enabledNotification) {
+                NotificationService.createNotification(getContext(),
+                        usageProcessor.calculateUsageLeft(lenses.startDate,
+                                lenses.expirationDate, lenses.useInterval),
+                        NotificationCode.LENSES_EXPIRED);
+            }
+            refreshData();
         });
     }
 }
