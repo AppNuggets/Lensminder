@@ -2,6 +2,7 @@ package com.appnuggets.lensminder.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.activity.MainActivity;
@@ -23,10 +25,14 @@ import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.Solution;
 import com.appnuggets.lensminder.database.entity.State;
 import com.appnuggets.lensminder.model.DateProcessor;
+import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.model.UsageProcessor;
+import com.appnuggets.lensminder.service.NotificationService;
 import com.google.android.material.card.MaterialCardView;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -41,7 +47,6 @@ public class DashboardFragment extends Fragment {
 
     private CircularProgressBar containerProgressbar;
     private TextView containerLeftDaysCount;
-    private TextView containerExpirationDate;
     private TextView containerDaysUsedCount;
 
     private CircularProgressBar dropsProgressbar;
@@ -100,30 +105,179 @@ public class DashboardFragment extends Fragment {
         solutionExpirationDate = view.findViewById(R.id.solution_card_expiration_date);
         solutionDaysUsedCount = view.findViewById(R.id.solution_card_day_usage);
 
-        lensesCardView.setOnLongClickListener(v -> {
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Delete current lenses")
-                    .setMessage("Are you sure you want to delete current lenses??")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            AppDatabase db = AppDatabase.getInstance(getContext());
-                            Lenses inUseLenses = db.lensesDao().getInUse();
-                            inUseLenses.state = State.IN_HISTORY;
-                            db.lensesDao().update(inUseLenses);
-                            Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
-                        }})
-                    .setNegativeButton(android.R.string.no, null).show();
-            return true;
-        });
 
         lensesCardView.setOnClickListener(v -> navigationInterface.navigateToFragmentLenses());
 
+        lensesCardView.setOnLongClickListener(v -> {
+            AppDatabase db = AppDatabase.getInstance(getContext());
+            Lenses inUseLenses = db.lensesDao().getInUse();
+            if(  null != inUseLenses) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Delete current lenses")
+                        .setMessage("Are you sure you want to delete current lenses?")
+                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+
+                            UsageProcessor usageProcessor = new UsageProcessor();
+                            Long leftDays = usageProcessor.calculateUsageLeft(inUseLenses.startDate,
+                                    inUseLenses.expirationDate, inUseLenses.useInterval);
+                            if( leftDays > 0) {
+                                try {
+                                    Date today = new Date();
+                                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+                                    inUseLenses.endDate = simpleFormat.parse(simpleFormat.format(today));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            inUseLenses.state = State.IN_HISTORY;
+                            db.lensesDao().update(inUseLenses);
+
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                            boolean enabledNotification = prefs.getBoolean("notify", false);
+                            if(enabledNotification) {
+                                NotificationService.cancelNotification(getContext(),
+                                        NotificationCode.LENSES_EXPIRED);
+                            }
+
+                            updateLensesSummary(null);
+                            Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
+            else {
+                Toast.makeText(getContext(), "No current lenses to delete", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        });
+
+
         containerCardView.setOnClickListener(v -> navigationInterface.navigateToFragmentSolution());
+
+        containerCardView.setOnLongClickListener(v -> {
+            AppDatabase db = AppDatabase.getInstance(getContext());
+            Container inUseContainer = db.containerDao().getInUse();
+            if(null != inUseContainer) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Delete current lenses")
+                        .setMessage("Are you sure you want to delete current container?")
+                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                            UsageProcessor usageProcessor = new UsageProcessor();
+                            Long leftDays = usageProcessor.calculateUsageLeft(inUseContainer.startDate,
+                                    null, inUseContainer.useInterval);
+                            if( leftDays > 0) {
+                                try {
+                                    Date today = new Date();
+                                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+                                    inUseContainer.endDate = simpleFormat.parse(simpleFormat.format(today));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            inUseContainer.inUse = false;
+                            db.containerDao().update(inUseContainer);
+
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                            boolean enabledNotification = prefs.getBoolean("notify", false);
+                            if(enabledNotification) {
+                                NotificationService.cancelNotification(getContext(),
+                                        NotificationCode.CONTAINER_EXPIRED);
+                            }
+                            updateContainerSummary(null);
+                            Toast.makeText(getContext(), "Container deleted", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
+            else {
+                Toast.makeText(getContext(), "No current container to delete", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        });
+
 
         dropsCardView.setOnClickListener(v -> navigationInterface.navigateToFragmentDrops());
 
+        dropsCardView.setOnLongClickListener(v -> {
+            AppDatabase db = AppDatabase.getInstance(getContext());
+            Drops inUseDrops = db.dropsDao().getInUse();
+            if( null !=  inUseDrops) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Delete current lenses")
+                        .setMessage("Are you sure you want to delete current drops?")
+                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+                            UsageProcessor usageProcessor = new UsageProcessor();
+                            Long leftDays = usageProcessor.calculateUsageLeft(inUseDrops.startDate,
+                                    inUseDrops.expirationDate, inUseDrops.useInterval);
+                            if( leftDays > 0) {
+                                try {
+                                    Date today = new Date();
+                                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+                                    inUseDrops.endDate = simpleFormat.parse(simpleFormat.format(today));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            inUseDrops.inUse = false;
+                            db.dropsDao().update(inUseDrops);
+
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                            boolean enabledNotification = prefs.getBoolean("notify", false);
+                            if(enabledNotification) {
+                                NotificationService.cancelNotification(getContext(),
+                                        NotificationCode.DROPS_EXPIRED);
+                            }
+                            updateDropsSummary(null);
+                            Toast.makeText(getContext(), "Drops deleted", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
+            else {
+                Toast.makeText(getContext(), "No current drops to delete", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        });
+
         solutionCardView.setOnClickListener(v -> navigationInterface.navigateToFragmentSolution());
+
+        solutionCardView.setOnLongClickListener(v -> {
+            AppDatabase db = AppDatabase.getInstance(getContext());
+            Solution inUseSolution = db.solutionDao().getInUse();
+            if(null != inUseSolution) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Delete current lenses")
+                        .setMessage("Are you sure you want to delete current solution?")
+                        .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+
+                            UsageProcessor usageProcessor = new UsageProcessor();
+                            Long leftDays = usageProcessor.calculateUsageLeft(inUseSolution.startDate,
+                                    inUseSolution.expirationDate, inUseSolution.useInterval);
+                            if( leftDays > 0) {
+                                try {
+                                    Date today = new Date();
+                                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
+                                    inUseSolution.endDate = simpleFormat.parse(simpleFormat.format(today));
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            inUseSolution.inUse = false;
+                            db.solutionDao().update(inUseSolution);
+
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                            boolean enabledNotification = prefs.getBoolean("notify", false);
+                            if(enabledNotification) {
+                                NotificationService.cancelNotification(getContext(),
+                                        NotificationCode.SOLUTION_EXPIRED);
+                            }
+                            updateSolutionSummary(null);
+                            Toast.makeText(getContext(), "Solution deleted", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton(android.R.string.no, null).show();
+            }
+            else {
+                Toast.makeText(getContext(), "No current solution to delete", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        });
     }
 
     @Override
@@ -160,11 +314,11 @@ public class DashboardFragment extends Fragment {
     private void updateContainerSummary(Container container) {
         if(null == container) {
             updateCardInfoUnavailable(containerProgressbar, containerLeftDaysCount,
-                    containerDaysUsedCount, containerExpirationDate);
+                    containerDaysUsedCount, null);
         }
         else {
             updateCardInfoAvailable(containerProgressbar, containerLeftDaysCount,
-                    containerDaysUsedCount, containerExpirationDate,
+                    containerDaysUsedCount, null,
                     null, container.startDate, container.useInterval);
         }
     }
@@ -198,7 +352,7 @@ public class DashboardFragment extends Fragment {
         progressBar.setProgressMax(100f);
         progressBar.setProgressWithAnimation(0f,1000L);
         daysUsedView.setText("-");
-        expDateView.setText("-");
+        if(null != expDateView)  expDateView.setText("-");
         leftDaysView.setText("-");
     }
 
