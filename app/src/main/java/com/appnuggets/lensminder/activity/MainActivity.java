@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
     @Override
     protected void onStart() {
         super.onStart();
+        bottomNavigationView.setSelectedItemId(R.id.Dashboard);
     }
 
     public void navigateToFragmentLenses() {

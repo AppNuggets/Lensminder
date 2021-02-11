@@ -7,7 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.fragment.app.Fragment;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreference;
 
 import com.appnuggets.lensminder.R;
@@ -18,7 +21,6 @@ import java.util.Calendar;
 
 
 public class SettingsActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +82,25 @@ public class SettingsActivity extends AppCompatActivity {
                 });
             }
 
+            PreferenceScreen eyeDefect = (PreferenceScreen) findPreference("eye_defect");
+            eyeDefect.setOnPreferenceClickListener(preference -> {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.settings, new EyeDefectFragment())
+                        .commit();
+                return true;
+            });
+
+
         }
 
+    }
+
+    public static class EyeDefectFragment extends PreferenceFragmentCompat {
+
+        @Override
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+            setPreferencesFromResource(R.xml.eye_defect_preferences, rootKey);
+        }
     }
 }

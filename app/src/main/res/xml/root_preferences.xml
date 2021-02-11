@@ -25,7 +25,8 @@
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Personal">
-        <PreferenceScreen  app:title="Eye defect"/>
+        <PreferenceScreen  app:title="Eye defect"
+            app:key="eye_defect"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="About">

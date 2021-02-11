@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="Left eye">
+        <EditTextPreference
+            app:title="Sphere (SPH)"
+            app:key="left_sphere"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:title="Cylinder (CYL)"
+            app:key="left_cylinder"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:title="Axis (AX)"
+            app:key="left_axis"
+            app:useSimpleSummaryProvider="true"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Right eye">
+        <EditTextPreference
+            app:title="Sphere (SPH)"
+            app:key="right_sphere"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:title="Cylinder (CYL)"
+            app:key="right_cylinder"
+            app:useSimpleSummaryProvider="true"/>
+
+        <EditTextPreference
+            app:title="Axis (AX)"
+            app:key="right_axis"
+            app:useSimpleSummaryProvider="true"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
