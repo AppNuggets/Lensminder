@@ -1,12 +1,15 @@
 package com.appnuggets.lensminder.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,11 +20,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.activity.RefreshInterface;
+import com.appnuggets.lensminder.activity.SettingsActivity;
 import com.appnuggets.lensminder.adapter.DropsAdapter;
 import com.appnuggets.lensminder.bottomsheet.DropsBottomSheetDialog;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Drops;
+import com.appnuggets.lensminder.database.entity.Lenses;
+import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.model.UsageProcessor;
+import com.appnuggets.lensminder.service.NotificationService;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
@@ -31,7 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class DropsFragment extends Fragment {
+public class DropsFragment extends Fragment implements RefreshInterface {
 
     private CircularProgressBar dropsProgressbar;
     private TextView dropsLeftDaysCount;
@@ -66,7 +74,7 @@ public class DropsFragment extends Fragment {
 
         setRecyclerView();
         dropsShowAddSheet.setOnClickListener(v -> {
-            DropsBottomSheetDialog dropsBottomSheetDialog = new DropsBottomSheetDialog();
+            DropsBottomSheetDialog dropsBottomSheetDialog = new DropsBottomSheetDialog(this);
             dropsBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
             dropsBottomSheetDialog.show(getChildFragmentManager(), "bottomSheetDrops");
         });
@@ -89,6 +97,14 @@ public class DropsFragment extends Fragment {
                 }
             }
             db.dropsDao().update(inUseDrops);
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+            boolean enabledNotification = prefs.getBoolean("notify", false);
+            if(enabledNotification) {
+                NotificationService.cancelNotification(getContext(),
+                        NotificationCode.DROPS_EXPIRED);
+            }
+            refreshData();
             Toast.makeText(getContext(), "Drops deleted", Toast.LENGTH_SHORT).show();
         });
     }
@@ -129,5 +145,16 @@ public class DropsFragment extends Fragment {
 
             dropsLeftDaysCount.setText(String.format(Locale.getDefault(), "%d", daysLeft));
         }
+    }
+
+    @Override
+    public void refreshData() {
+        AppDatabase db = AppDatabase.getInstance(getContext());
+        Drops dropsInUse = db.dropsDao().getInUse();
+        updateDropsSummary(dropsInUse);
+
+        Context context = getContext();
+        DropsAdapter dropsAdapter = new DropsAdapter(context, db.dropsDao().getAllNotInUse());
+        dropsHistoryRecyclerView.setAdapter(dropsAdapter);
     }
 }

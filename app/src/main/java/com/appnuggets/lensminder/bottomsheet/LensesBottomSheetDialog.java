@@ -1,5 +1,6 @@
 package com.appnuggets.lensminder.bottomsheet;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -11,14 +12,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import com.appnuggets.lensminder.R;
-import com.appnuggets.lensminder.activity.NavigationInterface;
 import com.appnuggets.lensminder.activity.RefreshInterface;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.State;
+import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.model.UsageProcessor;
+import com.appnuggets.lensminder.service.NotificationService;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -36,7 +39,7 @@ import java.util.TimeZone;
 
 public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
-    private RefreshInterface refreshInterface;
+    private final RefreshInterface refreshInterface;
 
     private AutoCompleteTextView lensesWearCycle;
     private TextInputEditText lensesStartDate;
@@ -144,10 +147,19 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
                     }
 
                     db.lensesDao().insert(lenses);
-                    dismiss();
-                        refreshInterface.refreshData();
 
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+                    boolean enabledNotification = prefs.getBoolean("notify", false);
+                    if(enabledNotification) {
+                        NotificationService.createNotification(getContext(),
+                                usageProcessor.calculateUsageLeft(lenses.startDate,
+                                        lenses.expirationDate, lenses.useInterval),
+                                NotificationCode.LENSES_EXPIRED);
                     }
+
+                    dismiss();
+                    refreshInterface.refreshData();
+                }
                 catch (ParseException e) {
                         e.printStackTrace();
                 }

@@ -1,11 +1,14 @@
 package com.appnuggets.lensminder.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,14 +19,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.activity.RefreshInterface;
+import com.appnuggets.lensminder.activity.SettingsActivity;
 import com.appnuggets.lensminder.adapter.ContainerAdapter;
+import com.appnuggets.lensminder.adapter.LensesAdapter;
 import com.appnuggets.lensminder.adapter.SolutionAdapter;
 import com.appnuggets.lensminder.bottomsheet.ContainerBottomSheetDialog;
 import com.appnuggets.lensminder.bottomsheet.SolutionBottomSheetDialog;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Container;
+import com.appnuggets.lensminder.database.entity.Drops;
 import com.appnuggets.lensminder.database.entity.Solution;
+import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.model.UsageProcessor;
+import com.appnuggets.lensminder.service.NotificationService;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
@@ -33,7 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class SolutionFragment extends Fragment {
+public class SolutionFragment extends Fragment implements RefreshInterface {
 
     private CircularProgressBar solutionProgressBar;
     private TextView solutionLeftDaysCount;
@@ -96,11 +105,20 @@ public class SolutionFragment extends Fragment {
                 }
             }
             db.solutionDao().update(inUseSolution);
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+            boolean enabledNotification = prefs.getBoolean("notify", false);
+            if(enabledNotification) {
+                NotificationService.cancelNotification(getContext(),
+                        NotificationCode.SOLUTION_EXPIRED);
+            }
+
             Toast.makeText(getContext(), "Solution deleted", Toast.LENGTH_SHORT).show();
+            refreshData();
         });
 
         solutionShowAddCurrent.setOnClickListener(v -> {
-            SolutionBottomSheetDialog solutionBottomSheetDialog = new SolutionBottomSheetDialog();
+            SolutionBottomSheetDialog solutionBottomSheetDialog = new SolutionBottomSheetDialog(this);
             solutionBottomSheetDialog.show(getChildFragmentManager(), "bottomSheetSolution");
         });
 
@@ -120,11 +138,20 @@ public class SolutionFragment extends Fragment {
                 }
             }
             db.containerDao().update(inUseContainer);
+
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+            boolean enabledNotification = prefs.getBoolean("notify", false);
+            if(enabledNotification) {
+                NotificationService.cancelNotification(getContext(),
+                        NotificationCode.CONTAINER_EXPIRED);
+            }
+
             Toast.makeText(getContext(), "Container deleted", Toast.LENGTH_SHORT).show();
+            refreshData();
         });
 
         containerShowAddCurrent.setOnClickListener(v -> {
-            ContainerBottomSheetDialog containerBottomSheetDialog = new ContainerBottomSheetDialog();
+            ContainerBottomSheetDialog containerBottomSheetDialog = new ContainerBottomSheetDialog(this);
             containerBottomSheetDialog.show(getChildFragmentManager(), "bottomSheetContainer");
         });
 
@@ -200,5 +227,21 @@ public class SolutionFragment extends Fragment {
 
             containerLeftDaysCount.setText(String.format(Locale.getDefault(), "%d", daysLeft));
         }
+    }
+
+    @Override
+    public void refreshData() {
+        AppDatabase db = AppDatabase.getInstance(getContext());
+        Solution solutionInUse = db.solutionDao().getInUse();
+        updateSolutionSummary(solutionInUse);
+        Container containerInUse = db.containerDao().getInUse();
+        updateContainerSummary(containerInUse);
+
+        Context context = getContext();
+        SolutionAdapter solutionAdapter = new SolutionAdapter(context, db.solutionDao().getAllNotInUse());
+        solutionHistoryRecyclerView.setAdapter(solutionAdapter);
+
+        ContainerAdapter containerAdapter = new ContainerAdapter(context, db.containerDao().getAllNotInUse());
+        containerHistoryRecyclerView.setAdapter(containerAdapter);
     }
 }
