@@ -222,6 +222,7 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
                 }
                 db.lensesDao().update(inUseLenses);
             }
+            stockLensesList = db.lensesDao().getAllInStock();
             Lenses lenses = stockLensesList.get(position);
             lenses.state = State.IN_USE;
             if(startDatePicker.getSelection()!=null){
