@@ -14,7 +14,13 @@ import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreference;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.database.AppDatabase;
+import com.appnuggets.lensminder.database.entity.Container;
+import com.appnuggets.lensminder.database.entity.Drops;
+import com.appnuggets.lensminder.database.entity.Lenses;
+import com.appnuggets.lensminder.database.entity.Solution;
 import com.appnuggets.lensminder.model.NotificationCode;
+import com.appnuggets.lensminder.model.UsageProcessor;
 import com.appnuggets.lensminder.service.NotificationService;
 
 import java.util.Calendar;
@@ -69,14 +75,54 @@ public class SettingsActivity extends AppCompatActivity {
             if(null != notificationSwitch){
                 notificationSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     if(newValue.equals(true)) {
-                        // Start notification for everything
-                        NotificationService.createNotification(getContext(), 10,
-                                NotificationCode.CONTAINER_EXPIRED);
+                        AppDatabase db = AppDatabase.getInstance(getContext());
+                        UsageProcessor usageProcessor = new UsageProcessor();
+
+                        Solution solution = db.solutionDao().getInUse();
+                        Container container = db.containerDao().getInUse();
+                        Drops drops = db.dropsDao().getInUse();
+                        Lenses lenses = db.lensesDao().getInUse();
+
+                        if(container != null){
+                            NotificationService.createNotification(getContext(),
+                                    usageProcessor.calculateUsageLeft(container.startDate,
+                                            null, container.useInterval),
+                                    NotificationCode.CONTAINER_EXPIRED);
+                        }
+
+                        if(solution != null){
+                            NotificationService.createNotification(getContext(),
+                                    usageProcessor.calculateUsageLeft(solution.startDate,
+                                            solution.expirationDate, solution.useInterval),
+                                    NotificationCode.SOLUTION_EXPIRED);
+                        }
+
+                        if(drops != null){
+                            NotificationService.createNotification(getContext(),
+                                    usageProcessor.calculateUsageLeft(drops.startDate,
+                                            drops.expirationDate, drops.useInterval),
+                                    NotificationCode.DROPS_EXPIRED);
+                        }
+
+                        if(lenses != null){
+                            NotificationService.createNotification(getContext(),
+                                    usageProcessor.calculateUsageLeft(lenses.startDate,
+                                            lenses.expirationDate, lenses.useInterval),
+                                    NotificationCode.LENSES_EXPIRED);
+                        }
                     }
                     else {
-                        // Cancel everything
                         NotificationService.cancelNotification(getContext(),
                                 NotificationCode.CONTAINER_EXPIRED);
+
+                        NotificationService.cancelNotification(getContext(),
+                                NotificationCode.SOLUTION_EXPIRED);
+
+                        NotificationService.cancelNotification(getContext(),
+                                NotificationCode.DROPS_EXPIRED);
+
+                        NotificationService.cancelNotification(getContext(),
+                                NotificationCode.LENSES_EXPIRED);
                     }
                     return true;
                 });

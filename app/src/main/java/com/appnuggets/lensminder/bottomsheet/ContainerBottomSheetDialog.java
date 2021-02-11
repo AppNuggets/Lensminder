@@ -1,5 +1,6 @@
 package com.appnuggets.lensminder.bottomsheet;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -9,11 +10,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import com.appnuggets.lensminder.R;
+import com.appnuggets.lensminder.activity.RefreshInterface;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Container;
+import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.model.UsageProcessor;
+import com.appnuggets.lensminder.service.NotificationService;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -31,6 +36,12 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
 
     private TextInputEditText containerStartDate;
     private MaterialDatePicker<Long> startDatePicker;
+
+    private final RefreshInterface refreshInterface;
+
+    public ContainerBottomSheetDialog(RefreshInterface refreshInterface){
+        this.refreshInterface = refreshInterface;
+    }
 
     @Nullable
     @Override
@@ -81,12 +92,11 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
                     AppDatabase db = AppDatabase.getInstance(getContext());
 
                     Container inUseContainer = db.containerDao().getInUse();
-                    if(inUseContainer != null)
-                    {
+                    if(inUseContainer != null) {
                         inUseContainer.inUse = false;
                         Long leftDays = usageProcessor.calculateUsageLeft(inUseContainer.startDate,
                                 null, inUseContainer.useInterval);
-                        if( leftDays > 0) {
+                        if (leftDays > 0) {
                             try {
                                 Date today = new Date();
                                 inUseContainer.endDate = simpleFormat.parse(simpleFormat.format(today));
@@ -96,10 +106,19 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
                         }
                         db.containerDao().update(inUseContainer);
                     }
-
                     db.containerDao().insert(newContainer);
-                    dismiss();
 
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+                    boolean enabledNotification = prefs.getBoolean("notify", false);
+                    if(enabledNotification) {
+                        NotificationService.createNotification(getContext(),
+                                usageProcessor.calculateUsageLeft(newContainer.startDate,
+                                        null, newContainer.useInterval),
+                                NotificationCode.CONTAINER_EXPIRED);
+                    }
+
+                    dismiss();
+                    refreshInterface.refreshData();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
