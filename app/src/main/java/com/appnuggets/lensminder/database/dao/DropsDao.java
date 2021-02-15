@@ -1,7 +1,6 @@
 package com.appnuggets.lensminder.database.dao;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -18,15 +17,9 @@ public interface DropsDao {
     @Query("SELECT * FROM drops WHERE in_use = 0 ORDER BY start_date DESC")
     List<Drops> getAllNotInUse();
 
-    @Query("SELECT * FROM drops")
-    List<Drops> getAll();
-
     @Insert
     void insert(Drops drops);
 
     @Update
     void update(Drops drops);
-
-    @Delete
-    void delete(Drops drops);
 }

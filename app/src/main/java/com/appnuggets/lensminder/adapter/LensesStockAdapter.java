@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class LensesStockAdapter extends RecyclerView.Adapter<LensesStockAdapter.ViewHolder>{
-    Context context;
-    List<Lenses> lensesStockList;
+    final Context context;
+    final List<Lenses> lensesStockList;
     private final OnLensListener myOnLensListener;
 
     public LensesStockAdapter(Context context, List<Lenses> lensesStockList,
@@ -56,8 +56,10 @@ public class LensesStockAdapter extends RecyclerView.Adapter<LensesStockAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView lensesName, lensesWearCycle, lensesExpDate;
-        OnLensListener onLensListener;
+        final TextView lensesName;
+        final TextView lensesWearCycle;
+        final TextView lensesExpDate;
+        final OnLensListener onLensListener;
 
         public ViewHolder(@NonNull View itemView, OnLensListener onLensListener) {
             super(itemView);

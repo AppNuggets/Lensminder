@@ -3,7 +3,6 @@ package com.appnuggets.lensminder.service;
 import android.graphics.Color;
 import android.widget.TextView;
 
-import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.model.DateProcessor;
 import com.appnuggets.lensminder.model.UsageProcessor;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;

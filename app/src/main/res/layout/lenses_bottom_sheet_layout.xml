@@ -23,7 +23,6 @@
         <!-- Start date select  -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/bottom_sheet_date_selector_style"
-            android:id="@+id/lensesStartDateField"
             android:hint="@string/start_date"
             android:layout_marginEnd="10dp"
             android:layout_width="150dp" >
@@ -41,7 +40,6 @@
         <!-- Expiration date select  -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/bottom_sheet_date_selector_style"
-            android:id="@+id/lensesExpDateField"
             android:hint="@string/exp_date"
             android:layout_marginStart="10dp"
             android:layout_width="150dp"  >
@@ -59,12 +57,11 @@
 
     <!-- Wear cycle select -->
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/bottom_sheet_wear_cycle_selector_style"
-        android:id="@+id/lensesWearCycle"
-        android:hint="@string/wear_cycle">
+        style="@style/bottom_sheet_wear_cycle_selector_style">
 
         <AutoCompleteTextView
             android:id="@+id/autoComplete_lenses"
+            android:hint="@string/wear_cycle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"/>
@@ -73,12 +70,11 @@
 
     <!-- Name input  -->
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/bottom_sheet_name_selector_style"
-        android:id="@+id/lensesNameField"
-        android:hint="@string/name">
+        style="@style/bottom_sheet_name_selector_style">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/lensesName"
+            android:hint="@string/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"/>

@@ -46,7 +46,7 @@
     <style name="page_table_header_style" parent="Widget.AppCompat.TextView">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -56,7 +56,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:padding">10dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">15dp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="delete_button_style" parent="Widget.MaterialComponents.Button" >
@@ -121,7 +121,6 @@
         <item name="android:layout_marginTop">15dp</item>
         <item name="android:layout_marginEnd">50dp</item>
         <item name="android:layout_marginStart">50dp</item>
-        <item name="android:hint">@string/name</item>
 
         <item name="boxBackgroundMode">outline</item>
         <item name="counterMaxLength">20</item>
@@ -146,14 +145,6 @@
         <item name="endIconMode">dropdown_menu</item>
     </style>
 
-
-    <style name="BottomSheetTheme" parent="Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
-    </style>
-
-    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="background">@android:color/transparent</item>
-    </style>
 
     <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
         <item name="colorAccent">@color/teal_200</item>

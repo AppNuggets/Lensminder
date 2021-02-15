@@ -23,7 +23,6 @@
         <!-- Start date select  -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/bottom_sheet_date_selector_style"
-            android:id="@+id/solutionStartDateField"
             android:hint="@string/start_date"
             android:layout_marginEnd="10dp"
             android:layout_width="150dp" >
@@ -41,7 +40,6 @@
         <!-- Expiration date select  -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/bottom_sheet_date_selector_style"
-            android:id="@+id/solutionExpDateField"
             android:hint="@string/exp_date"
             android:layout_marginStart="10dp"
             android:layout_width="150dp" >
@@ -61,7 +59,6 @@
     <!-- Name input  -->
     <com.google.android.material.textfield.TextInputLayout
         style="@style/bottom_sheet_name_selector_style"
-        android:id="@+id/solutionNameField"
         android:hint="@string/name" >
 
         <com.google.android.material.textfield.TextInputEditText

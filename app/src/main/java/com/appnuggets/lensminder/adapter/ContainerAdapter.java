@@ -17,8 +17,8 @@ import java.util.List;
 
 public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.ViewHolder>{
 
-    Context context;
-    List<Container> containerList;
+    final Context context;
+    final List<Container> containerList;
 
     public ContainerAdapter(Context context, List<Container> containerList){
         this.context = context;
@@ -50,7 +50,9 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView containerName, containerStartDate, containerExpDate;
+        final TextView containerName;
+        final TextView containerStartDate;
+        final TextView containerExpDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

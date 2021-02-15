@@ -1,7 +1,6 @@
 package com.appnuggets.lensminder.database.dao;
 
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -21,15 +20,9 @@ public interface LensesDao {
     @Query("SELECT * FROM lenses WHERE state = 2 ORDER BY start_date DESC")
     List<Lenses> getAllNotInUse();
 
-    @Query("SELECT * FROM lenses")
-    List<Lenses> getAll();
-
     @Insert
     void insert(Lenses lenses);
 
     @Update
     void update(Lenses lenses);
-
-    @Delete
-    void delete(Lenses lenses);
 }

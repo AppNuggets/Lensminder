@@ -9,7 +9,6 @@ import com.appnuggets.lensminder.activity.ReminderBroadcast;
 import com.appnuggets.lensminder.model.NotificationCode;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import static android.content.Context.ALARM_SERVICE;
 

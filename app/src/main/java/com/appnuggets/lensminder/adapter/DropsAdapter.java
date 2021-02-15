@@ -17,8 +17,8 @@ import java.util.List;
 
 public class DropsAdapter extends RecyclerView.Adapter<DropsAdapter.ViewHolder> {
 
-    Context context;
-    List<Drops> dropsList;
+    final Context context;
+    final List<Drops> dropsList;
 
     public DropsAdapter(Context context, List<Drops> dropsList){
         this.context = context;
@@ -49,7 +49,9 @@ public class DropsAdapter extends RecyclerView.Adapter<DropsAdapter.ViewHolder> 
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView dropsName, dropsStartDate, dropsExpDate;
+        final TextView dropsName;
+        final TextView dropsStartDate;
+        final TextView dropsExpDate;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 

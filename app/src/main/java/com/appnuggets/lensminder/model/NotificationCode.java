@@ -6,7 +6,7 @@ public enum NotificationCode {
     SOLUTION_EXPIRED(30),
     CONTAINER_EXPIRED(40);
 
-    int code;
+    final int code;
     NotificationCode(int code){
         this.code = code;
     }

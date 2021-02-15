@@ -2,7 +2,6 @@ package com.appnuggets.lensminder.fragment;
 
 import android.app.AlertDialog;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,6 @@ import com.appnuggets.lensminder.database.entity.Drops;
 import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.database.entity.Solution;
 import com.appnuggets.lensminder.database.entity.State;
-import com.appnuggets.lensminder.model.DateProcessor;
 import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.model.UsageProcessor;
 import com.appnuggets.lensminder.service.NotificationService;
