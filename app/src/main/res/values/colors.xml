@@ -16,4 +16,6 @@
     <color name="secondary">#01579b</color>
     <color name="secondary_light">#4f83cc</color>
     <color name="secondary_dark">#002f6c</color>
+
+    <color name="progress_bar_background">#ffcfd8dc</color>
 </resources>

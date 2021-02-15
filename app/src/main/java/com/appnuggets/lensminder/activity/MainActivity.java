@@ -8,13 +8,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 
 import com.appnuggets.lensminder.R;
@@ -50,9 +47,6 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
         createNotificationChannel();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        // Check notification preferences
-        boolean enabledNotification = prefs.getBoolean("notify", false);
-
         boolean darkModeEnabled = prefs.getBoolean("dark_mode", false);
         if(darkModeEnabled) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -87,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
                             navigateDrops();
                             return true;
                         case R.id.Settings:
-                            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                            startActivity(new Intent(getApplicationContext(),
+                                    SettingsActivity.class));
                             overridePendingTransition(0,0);
                             return false;   // Do not make settings icon highlighted
                     }
@@ -145,16 +140,15 @@ public class MainActivity extends AppCompatActivity implements NavigationInterfa
     }
 
     private void createNotificationChannel() {
-        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.BASE) {
-            CharSequence name = "LensminderNotificationChannel";
-            String description = "Channel for lensminder notifications";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel notificationChannel = new NotificationChannel("lensminderNotification", name, importance);
-            notificationChannel.setDescription(description);
+        CharSequence name = "LensminderNotificationChannel";
+        String description = "Channel for lensminder notifications";
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel notificationChannel = new NotificationChannel(
+                getString(R.string.notification_channel_id), name, importance);
+        notificationChannel.setDescription(description);
 
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(notificationChannel);
     }
 
     @SuppressLint("SimpleDateFormat")

@@ -1,77 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:id="@+id/solution_bottom_sheet"
     android:background="@drawable/bottom_sheet_background"
-    android:padding="20dp">
+    android:padding="@dimen/bottom_sheet_margin">
 
+    <!-- Bottom sheet title  -->
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start new container"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        android:gravity="start"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="8dp">
+        style="@style/bottom_sheet_title_style"
+        android:text="@string/start_new_container">
     </TextView>
 
-    <LinearLayout
-        android:id="@+id/page_buttons"
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/containerStartDateField"
+    <!-- Start date select  -->
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/bottom_sheet_date_selector_style"
+        android:id="@+id/containerStartDateField"
+        android:hint="@string/start_date">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/containerStartDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="50dp"
-            android:hint="Start date"
-            app:boxBackgroundMode="outline"
-            app:endIconDrawable="@drawable/ic_calendar"
-            app:endIconMode="custom"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusTopStart="8dp"
-            app:hintTextColor="#001a4d"
-            app:boxStrokeColor="#001a4d"
-            app:placeholderTextColor="#001a4d"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="50dp">
+            android:inputType="date"
+            android:focusable="false"
+            android:clickable="true" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/containerStartDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="date"
-                android:focusable="false"
-                android:clickable="true" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
-
+    <!-- Name input  -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/containerNameField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Name"
-        app:boxBackgroundMode="outline"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:counterMaxLength="20"
-        app:counterEnabled="true"
-        app:endIconMode="clear_text"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp">
+        style="@style/bottom_sheet_name_selector_style"
+        android:id="@+id/containerNameField">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/containerName"
@@ -81,16 +40,10 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Add button -->
     <com.google.android.material.button.MaterialButton
+        style="@style/bottom_sheet_add_button_style"
         android:id="@+id/containerSaveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:backgroundTint="@color/purple_200"
-        android:padding="5dp"
-        android:text="Add"
-        android:layout_gravity="end"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="30dp"
-        android:textColor="#fff" />
+        android:text="@string/add" />
 
 </LinearLayout>

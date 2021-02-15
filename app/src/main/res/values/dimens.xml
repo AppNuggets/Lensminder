@@ -26,4 +26,9 @@
     <dimen name="card_title_icon_padding">10dp</dimen>
     <dimen name="card_additional_text_margin_top">15dp</dimen>
     <dimen name="card_additional_text_margin_left">10dp</dimen>
+    <!-- Bottom sheet layout -->
+    <dimen name="bottom_sheet_margin">20dp</dimen>
+    <dimen name="bottom_sheet_title_size">20sp</dimen>
+    <dimen name="bottom_sheet_title_margin_start">15dp</dimen>
+    <dimen name="bottom_sheet_title_margin_top">8dp</dimen>
 </resources>

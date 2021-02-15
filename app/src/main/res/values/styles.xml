@@ -78,6 +78,97 @@
         <item name="android:layout_marginBottom">@dimen/fab_margin_bottom</item>
     </style>
 
+    <!-- Bottom sheets element's styles -->
+    <style name="bottom_sheet_title_style" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/bottom_sheet_title_margin_start</item>
+        <item name="android:layout_marginTop">@dimen/bottom_sheet_title_margin_top</item>
+        <item name="android:gravity">start</item>
+        <item name="android:textSize">@dimen/bottom_sheet_title_size</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
 
+    <style name="bottom_sheet_add_button_style" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:backgroundTint">@color/purple_200</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_gravity">end</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginEnd">30dp</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="bottom_sheet_date_selector_style"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">50dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginStart">50dp</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="endIconMode">custom</item>
+        <item name="endIconDrawable">@drawable/ic_calendar</item>
+    </style>
+
+    <style name="bottom_sheet_name_selector_style"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginEnd">50dp</item>
+        <item name="android:layout_marginStart">50dp</item>
+        <item name="android:hint">@string/name</item>
+
+        <item name="boxBackgroundMode">outline</item>
+        <item name="counterMaxLength">20</item>
+        <item name="counterEnabled">true</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+    </style>
+
+    <style name="bottom_sheet_wear_cycle_selector_style"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginEnd">50dp</item>
+        <item name="android:layout_marginStart">50dp</item>
+
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxCornerRadiusTopEnd">8dp</item>
+        <item name="boxCornerRadiusTopStart">8dp</item>
+        <item name="endIconMode">dropdown_menu</item>
+    </style>
+
+
+    <style name="BottomSheetTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="background">@android:color/transparent</item>
+    </style>
+
+    <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <item name="colorAccent">@color/teal_200</item>
+        <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
+        <item name="android:colorAccent">@color/teal_200</item>
+    </style>
+
+    <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
+        <item name="android:headerBackground">@color/teal_200</item>
+        <item name="android:calendarTextColor">@color/teal_200</item>
+        <item name="android:dayOfWeekBackground">@color/teal_200</item>
+        <item name="android:yearListSelectorColor">@color/teal_200</item>
+        <item name="android:datePickerMode">calendar</item>
+        <item name="colorOnPrimary">@color/teal_200</item>
+        <item name="colorPrimary">@color/teal_200</item>
+    </style>
 
 </resources>

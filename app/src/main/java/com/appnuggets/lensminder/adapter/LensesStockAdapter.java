@@ -21,7 +21,8 @@ public class LensesStockAdapter extends RecyclerView.Adapter<LensesStockAdapter.
     List<Lenses> lensesStockList;
     private final OnLensListener myOnLensListener;
 
-    public LensesStockAdapter(Context context, List<Lenses> lensesStockList, OnLensListener myOnLensListener){
+    public LensesStockAdapter(Context context, List<Lenses> lensesStockList,
+                              OnLensListener myOnLensListener){
         this.context = context;
         this.lensesStockList = lensesStockList;
         this.myOnLensListener = myOnLensListener;
@@ -29,8 +30,10 @@ public class LensesStockAdapter extends RecyclerView.Adapter<LensesStockAdapter.
 
     @NonNull
     @Override
-    public LensesStockAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.table_item_layout, parent, false);
+    public LensesStockAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+                                                            int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.table_item_layout, parent,
+                false);
         return new LensesStockAdapter.ViewHolder(view, myOnLensListener);
     }
 
@@ -40,8 +43,10 @@ public class LensesStockAdapter extends RecyclerView.Adapter<LensesStockAdapter.
         if(lensesStockList != null && lensesStockList.size() > 0) {
             Lenses lensesStockItem = lensesStockList.get(position);
             holder.lensesName.setText(lensesStockItem.name);
-            holder.lensesWearCycle.setText(String.format(Locale.getDefault(), "%d",lensesStockItem.useInterval));
-            holder.lensesExpDate.setText(dateProcessor.dateToString(lensesStockItem.expirationDate));
+            holder.lensesWearCycle.setText(String.format(Locale.getDefault(),
+                    "%d",lensesStockItem.useInterval));
+            holder.lensesExpDate.setText(
+                    dateProcessor.dateToString(lensesStockItem.expirationDate));
         }
     }
 

@@ -28,7 +28,8 @@ public class ContainerAdapter extends RecyclerView.Adapter<ContainerAdapter.View
     @NonNull
     @Override
     public ContainerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.table_item_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.table_item_layout, parent,
+                false);
         return new ContainerAdapter.ViewHolder(view);
     }
 

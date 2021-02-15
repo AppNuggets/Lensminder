@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">Lensminder</string>
+    <!-- Bottom navigation menu  -->
+    <string name="dashboard">Dashboard</string>
+    <string name="lenses">Lenses</string>
+    <string name="solution">Solution</string>
+    <string name="drops">Drops</string>
+    <string name="settings">Settings</string>
     <!-- Dashboard layout -->
     <string name="text_expiration_date">Exp. date</string>
     <string name="text_usage_count">Days of use</string>
@@ -31,4 +37,49 @@
     <string name="to_column_header">TO</string>
     <string name="wear_cycle_column_header">WEAR CYCLE</string>
     <string name="exp_date_column_header">EXP. DATE</string>
+    <!-- Bottom sheets -->
+    <string name="start_new_container">Start new container</string>
+    <string name="add_lenses_to_stock">Add lenses to stock</string>
+    <string name="start_new_lenses">Start new lenses</string>
+    <string name="start_new_solution">Start new solution</string>
+    <string name="start_new_drops">Start New drops</string>
+    <string name="wear_cycle">Wear cycle</string>
+    <string name="start_date">Start date</string>
+    <string name="exp_date">Exp. date</string>
+    <string name="exp_period">Exp. period</string>
+    <string name="name">Name</string>
+    <string name="add">Add</string>
+    <!-- Notifications -->
+    <string name="expiration_notification_title">Expiration warning</string>
+    <string name="expiration_notification_message">Looks like one of your eye care products has expired… Navigate to Lensminder app and check it!</string>
+    <string name="notification_channel_id">lensminderNotification</string>
+
+    <string name="non_empty_required_message">Fields must not be empty</string>
+    <string name="start_date_picker_title">Select start date</string>
+    <string name="exp_date_picker_title">Select exp. date</string>
+
+    <string name="one_month_label">One month</string>
+    <string name="three_months_label">Three months</string>
+    <string name="six_months_label">Six months</string>
+    <string name="two_weeks_label">Two Weeks</string>
+
+    <string name="delete_current_lenses_title">Delete current lenses</string>
+    <string name="delete_current_lenses_message">Are you sure you want to delete current lenses?</string>
+    <string name="delete_current_lenses_confirmation">Lenses deleted</string>
+    <string name="delete_current_lenses_error">No current lenses to delete</string>
+
+    <string name="delete_current_container_title">Delete current container</string>
+    <string name="delete_current_container_message">Are you sure you want to delete current container?</string>
+    <string name="delete_current_container_confirmation">Container deleted</string>
+    <string name="delete_current_container_error">No current container to delete</string>
+
+    <string name="delete_current_drops_title">Delete current drops</string>
+    <string name="delete_current_drops_message">Are you sure you want to delete current drops?</string>
+    <string name="delete_current_drops_confirmation">Drops deleted</string>
+    <string name="delete_current_drops_error">No current drops to delete</string>
+
+    <string name="delete_current_solution_title">Delete current solution</string>
+    <string name="delete_current_solution_message">Are you sure you want to delete current solution?</string>
+    <string name="delete_current_solution_confirmation">Solution deleted</string>
+    <string name="delete_current_solution_error">No current solution to delete</string>
 </resources>

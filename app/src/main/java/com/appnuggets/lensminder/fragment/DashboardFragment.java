@@ -1,8 +1,8 @@
 package com.appnuggets.lensminder.fragment;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +28,7 @@ import com.appnuggets.lensminder.model.DateProcessor;
 import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.model.UsageProcessor;
 import com.appnuggets.lensminder.service.NotificationService;
+import com.appnuggets.lensminder.service.UpdateDisplayService;
 import com.google.android.material.card.MaterialCardView;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
@@ -59,11 +60,6 @@ public class DashboardFragment extends Fragment {
     private TextView solutionExpirationDate;
     private TextView solutionDaysUsedCount;
 
-    public DashboardFragment() {
-        // Required empty public constructor
-        System.out.println("DashboardFragment constructor called!");
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +69,6 @@ public class DashboardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dashboard, container, false);
     }
 
@@ -113,8 +108,8 @@ public class DashboardFragment extends Fragment {
             Lenses inUseLenses = db.lensesDao().getInUse();
             if(  null != inUseLenses) {
                 new AlertDialog.Builder(getContext())
-                        .setTitle("Delete current lenses")
-                        .setMessage("Are you sure you want to delete current lenses?")
+                        .setTitle(R.string.delete_current_lenses_title)
+                        .setMessage(R.string.delete_current_lenses_message)
                         .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
 
                             UsageProcessor usageProcessor = new UsageProcessor();
@@ -123,8 +118,10 @@ public class DashboardFragment extends Fragment {
                             if( leftDays > 0) {
                                 try {
                                     Date today = new Date();
-                                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
-                                    inUseLenses.endDate = simpleFormat.parse(simpleFormat.format(today));
+                                    SimpleDateFormat simpleFormat = new SimpleDateFormat(
+                                            "dd.MM.yyyy", Locale.UK);
+                                    inUseLenses.endDate = simpleFormat.parse(
+                                            simpleFormat.format(today));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -132,20 +129,24 @@ public class DashboardFragment extends Fragment {
                             inUseLenses.state = State.IN_HISTORY;
                             db.lensesDao().update(inUseLenses);
 
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                            boolean enabledNotification = prefs.getBoolean("notify", false);
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
+                                    getContext());
+                            boolean enabledNotification = prefs.getBoolean("notify",
+                                    false);
                             if(enabledNotification) {
                                 NotificationService.cancelNotification(getContext(),
                                         NotificationCode.LENSES_EXPIRED);
                             }
 
                             updateLensesSummary(null);
-                            Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.delete_current_lenses_confirmation,
+                                    Toast.LENGTH_SHORT).show();
                         })
                         .setNegativeButton(android.R.string.no, null).show();
             }
             else {
-                Toast.makeText(getContext(), "No current lenses to delete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.delete_current_lenses_error,
+                        Toast.LENGTH_SHORT).show();
             }
             return true;
         });
@@ -158,17 +159,20 @@ public class DashboardFragment extends Fragment {
             Container inUseContainer = db.containerDao().getInUse();
             if(null != inUseContainer) {
                 new AlertDialog.Builder(getContext())
-                        .setTitle("Delete current lenses")
-                        .setMessage("Are you sure you want to delete current container?")
+                        .setTitle(R.string.delete_current_container_title)
+                        .setMessage(R.string.delete_current_container_message)
                         .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
                             UsageProcessor usageProcessor = new UsageProcessor();
-                            Long leftDays = usageProcessor.calculateUsageLeft(inUseContainer.startDate,
+                            Long leftDays = usageProcessor.calculateUsageLeft(
+                                    inUseContainer.startDate,
                                     null, inUseContainer.useInterval);
                             if( leftDays > 0) {
                                 try {
                                     Date today = new Date();
-                                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
-                                    inUseContainer.endDate = simpleFormat.parse(simpleFormat.format(today));
+                                    SimpleDateFormat simpleFormat = new SimpleDateFormat(
+                                            "dd.MM.yyyy", Locale.UK);
+                                    inUseContainer.endDate = simpleFormat.parse(
+                                            simpleFormat.format(today));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -176,19 +180,23 @@ public class DashboardFragment extends Fragment {
                             inUseContainer.inUse = false;
                             db.containerDao().update(inUseContainer);
 
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                            boolean enabledNotification = prefs.getBoolean("notify", false);
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
+                                    getContext());
+                            boolean enabledNotification = prefs.getBoolean("notify",
+                                    false);
                             if(enabledNotification) {
                                 NotificationService.cancelNotification(getContext(),
                                         NotificationCode.CONTAINER_EXPIRED);
                             }
                             updateContainerSummary(null);
-                            Toast.makeText(getContext(), "Container deleted", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.delete_current_container_confirmation,
+                                    Toast.LENGTH_SHORT).show();
                         })
                         .setNegativeButton(android.R.string.no, null).show();
             }
             else {
-                Toast.makeText(getContext(), "No current container to delete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.delete_current_container_error,
+                        Toast.LENGTH_SHORT).show();
             }
             return true;
         });
@@ -201,8 +209,8 @@ public class DashboardFragment extends Fragment {
             Drops inUseDrops = db.dropsDao().getInUse();
             if( null !=  inUseDrops) {
                 new AlertDialog.Builder(getContext())
-                        .setTitle("Delete current lenses")
-                        .setMessage("Are you sure you want to delete current drops?")
+                        .setTitle(R.string.delete_current_drops_title)
+                        .setMessage(R.string.delete_current_drops_message)
                         .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
                             UsageProcessor usageProcessor = new UsageProcessor();
                             Long leftDays = usageProcessor.calculateUsageLeft(inUseDrops.startDate,
@@ -210,8 +218,10 @@ public class DashboardFragment extends Fragment {
                             if( leftDays > 0) {
                                 try {
                                     Date today = new Date();
-                                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
-                                    inUseDrops.endDate = simpleFormat.parse(simpleFormat.format(today));
+                                    SimpleDateFormat simpleFormat = new SimpleDateFormat(
+                                            "dd.MM.yyyy", Locale.UK);
+                                    inUseDrops.endDate = simpleFormat.parse(
+                                            simpleFormat.format(today));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -219,22 +229,27 @@ public class DashboardFragment extends Fragment {
                             inUseDrops.inUse = false;
                             db.dropsDao().update(inUseDrops);
 
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                            boolean enabledNotification = prefs.getBoolean("notify", false);
+                            SharedPreferences prefs =
+                                    PreferenceManager.getDefaultSharedPreferences(getContext());
+                            boolean enabledNotification = prefs.getBoolean("notify",
+                                    false);
                             if(enabledNotification) {
                                 NotificationService.cancelNotification(getContext(),
                                         NotificationCode.DROPS_EXPIRED);
                             }
                             updateDropsSummary(null);
-                            Toast.makeText(getContext(), "Drops deleted", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.delete_current_drops_confirmation,
+                                    Toast.LENGTH_SHORT).show();
                         })
                         .setNegativeButton(android.R.string.no, null).show();
             }
             else {
-                Toast.makeText(getContext(), "No current drops to delete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.delete_current_drops_error,
+                        Toast.LENGTH_SHORT).show();
             }
             return true;
         });
+
 
         solutionCardView.setOnClickListener(v -> navigationInterface.navigateToFragmentSolution());
 
@@ -243,18 +258,21 @@ public class DashboardFragment extends Fragment {
             Solution inUseSolution = db.solutionDao().getInUse();
             if(null != inUseSolution) {
                 new AlertDialog.Builder(getContext())
-                        .setTitle("Delete current lenses")
-                        .setMessage("Are you sure you want to delete current solution?")
+                        .setTitle(R.string.delete_current_solution_title)
+                        .setMessage(R.string.delete_current_solution_message)
                         .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
 
                             UsageProcessor usageProcessor = new UsageProcessor();
-                            Long leftDays = usageProcessor.calculateUsageLeft(inUseSolution.startDate,
-                                    inUseSolution.expirationDate, inUseSolution.useInterval);
+                            Long leftDays = usageProcessor.calculateUsageLeft(
+                                    inUseSolution.startDate, inUseSolution.expirationDate,
+                                    inUseSolution.useInterval);
                             if( leftDays > 0) {
                                 try {
                                     Date today = new Date();
-                                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
-                                    inUseSolution.endDate = simpleFormat.parse(simpleFormat.format(today));
+                                    SimpleDateFormat simpleFormat = new SimpleDateFormat(
+                                            "dd.MM.yyyy", Locale.UK);
+                                    inUseSolution.endDate = simpleFormat.parse(
+                                            simpleFormat.format(today));
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
@@ -262,19 +280,24 @@ public class DashboardFragment extends Fragment {
                             inUseSolution.inUse = false;
                             db.solutionDao().update(inUseSolution);
 
-                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-                            boolean enabledNotification = prefs.getBoolean("notify", false);
+                            SharedPreferences prefs =
+                                    PreferenceManager.getDefaultSharedPreferences(getContext());
+                            boolean enabledNotification = prefs.getBoolean("notify",
+                                    false);
                             if(enabledNotification) {
                                 NotificationService.cancelNotification(getContext(),
                                         NotificationCode.SOLUTION_EXPIRED);
                             }
                             updateSolutionSummary(null);
-                            Toast.makeText(getContext(), "Solution deleted", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(),
+                                    R.string.delete_current_solution_confirmation,
+                                    Toast.LENGTH_SHORT).show();
                         })
                         .setNegativeButton(android.R.string.no, null).show();
             }
             else {
-                Toast.makeText(getContext(), "No current solution to delete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.delete_current_solution_error,
+                        Toast.LENGTH_SHORT).show();
             }
             return true;
         });
@@ -301,83 +324,56 @@ public class DashboardFragment extends Fragment {
 
     private void updateLensesSummary(Lenses lenses) {
         if(null == lenses) {
-            updateCardInfoUnavailable(lensesProgressbar, lensesLeftDaysCount,
-                    lensesDaysUsedCount, lensesExpirationDate);
+            UpdateDisplayService.updateProgressBar(lensesProgressbar, lensesLeftDaysCount);
+            UpdateDisplayService.updateDaysUsed(lensesDaysUsedCount);
+            UpdateDisplayService.updateExpirationDate(lensesExpirationDate);
         }
         else {
-            updateCardInfoAvailable(lensesProgressbar, lensesLeftDaysCount,
-                    lensesDaysUsedCount, lensesExpirationDate,
-                    lenses.expirationDate, lenses.startDate, lenses.useInterval);
+            UpdateDisplayService.updateProgressBar(lensesProgressbar, lensesLeftDaysCount,
+                    lenses.expirationDate, lenses.startDate, lenses.useInterval );
+            UpdateDisplayService.updateDaysUsed(lensesDaysUsedCount, lenses.startDate);
+            UpdateDisplayService.updateExpirationDate(lensesExpirationDate, lenses.expirationDate);
         }
     }
 
     private void updateContainerSummary(Container container) {
         if(null == container) {
-            updateCardInfoUnavailable(containerProgressbar, containerLeftDaysCount,
-                    containerDaysUsedCount, null);
+            UpdateDisplayService.updateProgressBar(containerProgressbar, containerLeftDaysCount);
+            UpdateDisplayService.updateDaysUsed(containerDaysUsedCount);
         }
         else {
-            updateCardInfoAvailable(containerProgressbar, containerLeftDaysCount,
-                    containerDaysUsedCount, null,
-                    null, container.startDate, container.useInterval);
+            UpdateDisplayService.updateProgressBar(containerProgressbar, containerLeftDaysCount,
+                    null, container.startDate, container.useInterval );
+            UpdateDisplayService.updateDaysUsed(containerDaysUsedCount, container.startDate);
         }
     }
 
     private void updateDropsSummary(Drops drops) {
         if(null == drops) {
-            updateCardInfoUnavailable(dropsProgressbar, dropsLeftDaysCount,
-                    dropsDaysUsedCount, dropsExpirationDate);
+            UpdateDisplayService.updateProgressBar(dropsProgressbar, dropsLeftDaysCount);
+            UpdateDisplayService.updateDaysUsed(dropsDaysUsedCount);
+            UpdateDisplayService.updateExpirationDate(dropsExpirationDate);
         }
         else {
-            updateCardInfoAvailable(dropsProgressbar, dropsLeftDaysCount,
-                    dropsDaysUsedCount, dropsExpirationDate,
-                    drops.expirationDate, drops.startDate, drops.useInterval);
+            UpdateDisplayService.updateProgressBar(dropsProgressbar, dropsLeftDaysCount,
+                    drops.expirationDate, drops.startDate, drops.useInterval );
+            UpdateDisplayService.updateDaysUsed(dropsDaysUsedCount, drops.startDate);
+            UpdateDisplayService.updateExpirationDate(dropsExpirationDate, drops.expirationDate);
         }
     }
 
     private void updateSolutionSummary(Solution solution) {
         if(null == solution) {
-            updateCardInfoUnavailable(solutionProgressbar, solutionLeftDaysCount,
-                    solutionDaysUsedCount, solutionExpirationDate);
+            UpdateDisplayService.updateProgressBar(solutionProgressbar, solutionLeftDaysCount);
+            UpdateDisplayService.updateDaysUsed(solutionDaysUsedCount);
+            UpdateDisplayService.updateExpirationDate(solutionExpirationDate);
         }
         else {
-            updateCardInfoAvailable(solutionProgressbar, solutionLeftDaysCount,
-                    solutionDaysUsedCount, solutionExpirationDate,
-                    solution.expirationDate, solution.startDate, solution.useInterval);
-        }
-    }
-
-    private void updateCardInfoUnavailable(CircularProgressBar progressBar, TextView leftDaysView,
-                                           TextView daysUsedView, TextView expDateView) {
-        progressBar.setProgressMax(100f);
-        progressBar.setProgressWithAnimation(0f,1000L);
-        daysUsedView.setText("-");
-        if(null != expDateView)  expDateView.setText("-");
-        leftDaysView.setText("-");
-    }
-
-    private void updateCardInfoAvailable(CircularProgressBar progressBar, TextView leftDaysView,
-                                         TextView daysUsedView, TextView expDateView,
-                                         Date expDate, Date startDate, Long useInterval) {
-        DateProcessor dateProcessor = new DateProcessor();
-        UsageProcessor usageProcessor = new UsageProcessor();
-
-        Long leftDays = usageProcessor.calculateUsageLeft(startDate, expDate, useInterval);
-        Long daysUsed = usageProcessor.calculateCurrentUsage(startDate);
-
-        leftDaysView.setText(String.format(Locale.getDefault(), "%d", leftDays));
-        daysUsedView.setText(String.format(Locale.getDefault(), "%d", daysUsed));
-        if(  null != expDate)
-            expDateView.setText(dateProcessor.dateToString(expDate));
-
-        progressBar.setProgressMax(useInterval);
-        progressBar.setProgressWithAnimation( Math.max(leftDays, 0) , 1000L);
-
-        if( leftDays <= 0) {
-            // TODO Set progressbar red
-        }
-        else {
-            // TODO Set progress bar default color
+            UpdateDisplayService.updateProgressBar(solutionProgressbar, solutionLeftDaysCount,
+                    solution.expirationDate, solution.startDate, solution.useInterval );
+            UpdateDisplayService.updateDaysUsed(solutionDaysUsedCount, solution.startDate);
+            UpdateDisplayService.updateExpirationDate(solutionExpirationDate,
+                    solution.expirationDate);
         }
     }
 }

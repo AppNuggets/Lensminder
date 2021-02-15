@@ -55,8 +55,10 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.lenses_bottom_sheet_layout, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.lenses_bottom_sheet_layout, container,
+                false);
 
         lensesWearCycle = v.findViewById(R.id.autoComplete_lenses);
         lensesStartDate = v.findViewById(R.id.lensesStartDate);
@@ -68,7 +70,8 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
         setCalendar();
         completeDropdownList();
 
-        lensesStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
+        lensesStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(),
+                "DATE_PICKER"));
 
         lensesStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
             if (hasFocus) {
@@ -83,7 +86,8 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        lensesExpDate.setOnClickListener(v13 -> expDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
+        lensesExpDate.setOnClickListener(v13 -> expDatePicker.show(getParentFragmentManager(),
+                "DATE_PICKER"));
 
         lensesExpDate.setOnFocusChangeListener((v14, hasFocus) -> {
             if (hasFocus) {
@@ -105,7 +109,8 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
                     Objects.requireNonNull(lensesStartDate.getText()).toString().isEmpty() ||
                     Objects.requireNonNull(lensesName.getText()).toString().isEmpty()) {
                 dismiss();
-                Toast.makeText(getContext(), "Fields must not be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.non_empty_required_message,
+                        Toast.LENGTH_SHORT).show();
             }
             else
             {
@@ -148,7 +153,8 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
                     db.lensesDao().insert(lenses);
 
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
+                            this.getContext());
                     boolean enabledNotification = prefs.getBoolean("notify", false);
                     if(enabledNotification) {
                         NotificationService.createNotification(getContext(),
@@ -182,7 +188,7 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
         CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
 
         MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select start date");
+        builder.setTitleText(R.string.start_date_picker_title);
         builder.setSelection(today);
         builder.setCalendarConstraints(constraintBuilder.build());
 
@@ -191,7 +197,7 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
         constraintBuilder.setValidator(DateValidatorPointForward.now());
 
         MaterialDatePicker.Builder<Long> builderExp = MaterialDatePicker.Builder.datePicker();
-        builderExp.setTitleText("Select exp. date");
+        builderExp.setTitleText(R.string.exp_date_picker_title);
         builderExp.setCalendarConstraints(constraintBuilder.build());
 
         expDatePicker = builderExp.build();
@@ -199,10 +205,10 @@ public class LensesBottomSheetDialog extends BottomSheetDialogFragment {
 
     public void completeDropdownList() {
         items = new String[] {
-                "Two Weeks",
-                "One month",
-                "Three months",
-                "Six months"
+                getString(R.string.two_weeks_label),
+                getString(R.string.one_month_label),
+                getString(R.string.three_months_label),
+                getString(R.string.six_months_label)
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
