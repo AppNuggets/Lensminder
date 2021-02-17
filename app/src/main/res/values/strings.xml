@@ -47,7 +47,7 @@
     <string name="add">Add</string>
     <!-- Notifications -->
     <string name="expiration_notification_title">Expiration warning</string>
-    <string name="expiration_notification_message">Looks like one of your eye care products has expired… Navigate to Lensminder app and check it!</string>
+    <string name="expiration_notification_message">Looks like one of your eye care products is about to expire… Navigate to Lensminder app and check it!</string>
     <string name="notification_channel_id">lensminderNotification</string>
 
     <string name="non_empty_required_message">Fields must not be empty</string>

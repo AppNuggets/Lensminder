@@ -30,6 +30,7 @@ public class UpdateDisplayService {
     }
 
     public static void updateProgressBar(CircularProgressBar progressBar,  TextView leftDaysView) {
+        progressBar.setBackgroundProgressBarColor(0xffcfd8dc);
         progressBar.setProgressMax(100f);
         progressBar.setProgress(0f);
         leftDaysView.setText("-");
