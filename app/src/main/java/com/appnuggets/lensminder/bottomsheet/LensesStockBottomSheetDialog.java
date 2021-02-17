@@ -47,8 +47,10 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.lenses_stock_bottom_sheret_layout, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.lenses_stock_bottom_sheret_layout, container,
+                false);
 
         stockLensesWearCycle = v.findViewById(R.id.autoComplete_stockLenses);
         stockLensesExpDate = v.findViewById(R.id.stockLensesExpDate);
@@ -59,7 +61,8 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
         setCalendar();
 
-        stockLensesExpDate.setOnClickListener(v1 -> expDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
+        stockLensesExpDate.setOnClickListener(v1 -> expDatePicker.show(getParentFragmentManager(),
+                "DATE_PICKER"));
 
         stockLensesExpDate.setOnFocusChangeListener((v12, hasFocus) -> {
             if (hasFocus) {
@@ -79,7 +82,8 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
                     Objects.requireNonNull(stockLensesExpDate.getText()).toString().isEmpty() ||
                     Objects.requireNonNull(lensesName.getText()).toString().isEmpty()) {
                 dismiss();
-                Toast.makeText(getContext(), "Fields must not be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.non_empty_required_message,
+                        Toast.LENGTH_SHORT).show();
             }
             else
             {
@@ -91,7 +95,8 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
                 else if(stockLensesWearCycle.getText().toString().equals(items[3])) expPeriod = 186L;
 
                 try {
-                    Lenses lenses = new Lenses(Objects.requireNonNull(lensesName.getText()).toString(),
+                    Lenses lenses = new Lenses(Objects.requireNonNull(
+                            lensesName.getText()).toString(),
                             State.IN_STOCK, simpleFormat.parse(Objects.requireNonNull
                             (stockLensesExpDate.getText()).toString()), null,
                             null, expPeriod);
@@ -120,7 +125,7 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
         constraintBuilder.setValidator(DateValidatorPointForward.now());
 
         MaterialDatePicker.Builder<Long> builderExp = MaterialDatePicker.Builder.datePicker();
-        builderExp.setTitleText("Select exp. date");
+        builderExp.setTitleText(R.string.exp_date_picker_title);
         builderExp.setCalendarConstraints(constraintBuilder.build());
 
         expDatePicker = builderExp.build();
@@ -128,10 +133,10 @@ public class LensesStockBottomSheetDialog extends BottomSheetDialogFragment {
 
     public void completeDropdownList() {
         items = new String[] {
-                "Two Weeks",
-                "One month",
-                "Three months",
-                "Six months"
+                getString(R.string.two_weeks_label),
+                getString(R.string.one_month_label),
+                getString(R.string.three_months_label),
+                getString(R.string.six_months_label)
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(

@@ -5,13 +5,9 @@ public enum State {
     IN_STOCK(1),
     IN_HISTORY(2);
 
-    private Integer code;
+    private final Integer code;
 
     State(Integer code) {
         this.code = code;
-    }
-
-    public Integer getCode() {
-        return code;
     }
 }

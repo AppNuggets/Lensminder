@@ -2,22 +2,22 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/Dashboard"
-        android:title="Dashboard"
+        android:title="@string/dashboard"
         android:icon="@drawable/ic_home" />
 
     <item android:id="@+id/Lenses"
-        android:title="Lenses"
+        android:title="@string/lenses"
         android:icon="@drawable/ic_lens" />
 
     <item android:id="@+id/Solution"
-        android:title="Solution"
+        android:title="@string/solution"
         android:icon="@drawable/ic_solution" />
 
     <item android:id="@+id/Drops"
-        android:title="Drops"
+        android:title="@string/drops"
         android:icon="@drawable/ic_drops"/>
 
     <item android:id="@+id/Settings"
-        android:title="Settings"
+        android:title="@string/settings"
         android:icon="@drawable/ic_settings" />
 </menu>

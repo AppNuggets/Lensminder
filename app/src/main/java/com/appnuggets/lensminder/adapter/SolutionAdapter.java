@@ -17,8 +17,8 @@ import java.util.List;
 
 public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHolder>{
 
-    Context context;
-    List<Solution> solutionList;
+    final Context context;
+    final List<Solution> solutionList;
 
     public SolutionAdapter(Context context, List<Solution> solutionList){
         this.context = context;
@@ -28,7 +28,8 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.table_item_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.table_item_layout, parent,
+                false);
         return new ViewHolder(view);
     }
 
@@ -50,7 +51,9 @@ public class SolutionAdapter extends RecyclerView.Adapter<SolutionAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView solutionName, solutionStartDate, solutionExpDate;
+        final TextView solutionName;
+        final TextView solutionStartDate;
+        final TextView solutionExpDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

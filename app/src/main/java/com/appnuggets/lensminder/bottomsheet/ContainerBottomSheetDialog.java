@@ -45,8 +45,10 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.container_bottom_sheet_layout, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.container_bottom_sheet_layout, container,
+                false);
 
         containerStartDate = v.findViewById(R.id.containerStartDate);
         MaterialButton saveButton = v.findViewById(R.id.containerSaveButton);
@@ -55,7 +57,8 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
         setCalendar();
 
-        containerStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
+        containerStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(),
+                "DATE_PICKER"));
 
         containerStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
             if (hasFocus) {
@@ -75,7 +78,8 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
             if(Objects.requireNonNull(containerStartDate.getText()).toString().isEmpty() ||
                     Objects.requireNonNull(containerName.getText()).toString().isEmpty()) {
                 dismiss();
-                Toast.makeText(getContext(), "Fields must not be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.non_empty_required_message,
+                        Toast.LENGTH_SHORT).show();
             }
             else {
                 try {
@@ -99,7 +103,8 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
                         if (leftDays > 0) {
                             try {
                                 Date today = new Date();
-                                inUseContainer.endDate = simpleFormat.parse(simpleFormat.format(today));
+                                inUseContainer.endDate = simpleFormat.parse(
+                                        simpleFormat.format(today));
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
@@ -108,7 +113,8 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
                     }
                     db.containerDao().insert(newContainer);
 
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
+                            this.getContext());
                     boolean enabledNotification = prefs.getBoolean("notify", false);
                     if(enabledNotification) {
                         NotificationService.createNotification(getContext(),
@@ -137,7 +143,7 @@ public class ContainerBottomSheetDialog extends BottomSheetDialogFragment {
         long today = MaterialDatePicker.todayInUtcMilliseconds();
 
         MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select start date");
+        builder.setTitleText(R.string.start_date_picker_title);
         builder.setSelection(today);
         startDatePicker = builder.build();
     }

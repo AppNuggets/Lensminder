@@ -18,8 +18,8 @@ import java.util.List;
 public class
 LensesAdapter extends RecyclerView.Adapter<LensesAdapter.ViewHolder>{
 
-    Context context;
-    List<Lenses> lensesList;
+    final Context context;
+    final List<Lenses> lensesList;
 
     public LensesAdapter(Context context, List<Lenses> lensesList){
         this.context = context;
@@ -29,7 +29,8 @@ LensesAdapter extends RecyclerView.Adapter<LensesAdapter.ViewHolder>{
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.table_item_layout, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.table_item_layout, parent,
+                false);
         return new ViewHolder(view);
     }
 
@@ -50,7 +51,9 @@ LensesAdapter extends RecyclerView.Adapter<LensesAdapter.ViewHolder>{
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView lensesName, lensesStartDate, lensesExpDate;
+        final TextView lensesName;
+        final TextView lensesStartDate;
+        final TextView lensesExpDate;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

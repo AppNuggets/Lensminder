@@ -106,7 +106,8 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
                     Objects.requireNonNull(dropsStartDate.getText()).toString().isEmpty() ||
                     Objects.requireNonNull(dropsName.getText()).toString().isEmpty()) {
                 dismiss();
-                Toast.makeText(getContext(), "Fields must not be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.non_empty_required_message,
+                        Toast.LENGTH_SHORT).show();
             }
             else
             {
@@ -185,7 +186,7 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
 
         MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
         // builder.setTheme(R.style.MyDatePickerDialogTheme);
-        builder.setTitleText("Select start date");
+        builder.setTitleText(R.string.start_date_picker_title);
         builder.setSelection(today);
         builder.setCalendarConstraints(constraintBuilder.build());
         startDatePicker = builder.build();
@@ -194,16 +195,16 @@ public class DropsBottomSheetDialog extends BottomSheetDialogFragment {
         dropsExpDate.setKeyListener(null);
         constraintBuilder.setValidator(DateValidatorPointForward.now());
         MaterialDatePicker.Builder<Long> builderExp = MaterialDatePicker.Builder.datePicker();
-        builderExp.setTitleText("Select exp. date");
+        builderExp.setTitleText(R.string.exp_date_picker_title);
         builderExp.setCalendarConstraints(constraintBuilder.build());
         expDatePicker = builderExp.build();
     }
 
     public void completeDropdownList() {
         items = new String[] {
-                "One month",
-                "Three months",
-                "Six months"
+                getString(R.string.one_month_label),
+                getString(R.string.three_months_label),
+                getString(R.string.six_months_label)
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(

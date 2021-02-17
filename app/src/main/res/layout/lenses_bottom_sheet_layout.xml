@@ -1,49 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:id="@+id/drops_bottom_sheet"
-    android:background="@drawable/bottom_sheet_background"
-    android:padding="20dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bottom_sheet_background"
+    android:padding="@dimen/bottom_sheet_margin">
 
+    <!-- Bottom sheet title  -->
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start new lenses"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        android:gravity="start"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="8dp">
+        style="@style/bottom_sheet_title_style"
+        android:text="@string/start_new_lenses">
     </TextView>
 
+    <!-- Date selects  -->
     <LinearLayout
-        android:id="@+id/page_buttons"
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:gravity="center_horizontal">
 
+        <!-- Start date select  -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/lensesStartDateField"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:hint="Start date"
-            app:boxBackgroundMode="outline"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:endIconDrawable="@drawable/ic_calendar"
-            app:endIconMode="custom"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusTopStart="8dp"
-            app:hintTextColor="#001a4d"
-            app:boxStrokeColor="#001a4d"
-            app:placeholderTextColor="#001a4d"
-            android:layout_marginTop="15dp"
+            style="@style/bottom_sheet_date_selector_style"
+            android:hint="@string/start_date"
             android:layout_marginEnd="10dp"
-            android:layout_marginStart="50dp">
+            android:layout_width="150dp" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/lensesStartDate"
@@ -55,20 +37,12 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Expiration date select  -->
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/lensesExpDateField"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:hint="Exp. date"
-            app:boxBackgroundMode="outline"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:endIconDrawable="@drawable/ic_calendar"
-            app:endIconMode="custom"
-            app:boxCornerRadiusTopEnd="8dp"
-            app:boxCornerRadiusTopStart="8dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="50dp"
-            android:layout_marginStart="10dp">
+            style="@style/bottom_sheet_date_selector_style"
+            android:hint="@string/exp_date"
+            android:layout_marginStart="10dp"
+            android:layout_width="150dp"  >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/lensesExpDate"
@@ -81,62 +55,36 @@
 
     </LinearLayout>
 
+    <!-- Wear cycle select -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/lensesWearCycle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Wear cycle"
-        app:boxBackgroundMode="outline"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        app:endIconMode="dropdown_menu"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp">
+        style="@style/bottom_sheet_wear_cycle_selector_style">
 
         <AutoCompleteTextView
             android:id="@+id/autoComplete_lenses"
+            android:hint="@string/wear_cycle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Name input  -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/lensesNameField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Name"
-        app:boxBackgroundMode="outline"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:counterMaxLength="20"
-        app:counterEnabled="true"
-        app:endIconMode="clear_text"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp">
+        style="@style/bottom_sheet_name_selector_style">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/lensesName"
+            android:hint="@string/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Add button -->
     <com.google.android.material.button.MaterialButton
+        style="@style/bottom_sheet_add_button_style"
         android:id="@+id/lensesSaveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:backgroundTint="@color/purple_200"
-        android:padding="5dp"
-        android:text="SAVE"
-        android:layout_gravity="end"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="30dp"
-        android:textColor="#fff" />
+        android:text="@string/add" />
 
 </LinearLayout>

@@ -12,19 +12,19 @@ public class Container {
     public int id;
 
     @ColumnInfo(name = "name")
-    public String name;
+    public final String name;
 
     @ColumnInfo(name = "in_use")
     public Boolean inUse;
 
     @ColumnInfo(name = "start_date")
-    public Date startDate;
+    public final Date startDate;
 
     @ColumnInfo(name = "end_date")
     public Date endDate;
 
     @ColumnInfo(name = "use_interval")
-    public Long useInterval;
+    public final Long useInterval;
 
     public Container(String name, Boolean inUse, Date startDate, Date endDate, Long useInterval) {
         this.name = name;

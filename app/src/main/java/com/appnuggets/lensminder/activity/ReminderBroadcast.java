@@ -12,11 +12,12 @@ import com.appnuggets.lensminder.R;
 public class ReminderBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "lensminderNotification")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context,
+                context.getString(R.string.notification_channel_id))
                 .setSmallIcon(R.drawable.ic_lens)
-                .setContentTitle("Expiration warning")
+                .setContentTitle(context.getString(R.string.expiration_notification_title))
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Looks like one of your eye care products has expired... Navigate to Lensminder app and check it!"))
+                        .bigText(context.getString(R.string.expiration_notification_message)))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

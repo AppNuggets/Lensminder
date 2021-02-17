@@ -27,7 +27,8 @@
                 <TextView
                     style="@style/dashboard_card_title_style"
                     android:text="@string/title_lenses"
-                    app:drawableLeftCompat="@drawable/ic_lens" />
+                    app:drawableLeftCompat="@drawable/ic_lens"
+                    app:drawableTint="?attr/colorOnPrimary" />
                 <!-- Progress bar and countdown -->
                 <FrameLayout
                     android:layout_width="@dimen/circular_progressbar_size"
@@ -102,7 +103,8 @@
                     style="@style/dashboard_card_title_style"
                     android:text="@string/title_container"
                     android:padding="10dp"
-                    app:drawableLeftCompat="@drawable/ic_container" />
+                    app:drawableLeftCompat="@drawable/ic_container"
+                    app:drawableTint="?attr/colorOnPrimary" />
                 <!-- Progress bar and countdown -->
                 <FrameLayout
                     android:layout_width="@dimen/circular_progressbar_size"
@@ -130,22 +132,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/card_additional_text_margin_left"
                     android:layout_marginVertical="@dimen/card_additional_text_margin_top"
-                    android:orientation="vertical">
-
+                    android:orientation="horizontal">
                     <!-- Days of use -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                    <TextView
+                        style="@style/dashboard_card_additional_text_style"
+                        android:text="@string/text_usage_count" />
 
-                        <TextView
-                            style="@style/dashboard_card_additional_text_style"
-                            android:text="@string/text_usage_count" />
-
-                        <TextView
-                            android:id="@+id/container_card_day_usage"
-                            style="@style/dashboard_card_additional_text_style" />
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/container_card_day_usage"
+                        style="@style/dashboard_card_additional_text_style" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -170,7 +165,8 @@
                 <TextView
                     style="@style/dashboard_card_title_style"
                     android:text="@string/title_drops"
-                    app:drawableLeftCompat="@drawable/ic_drops" />
+                    app:drawableLeftCompat="@drawable/ic_drops"
+                    app:drawableTint="?attr/colorOnPrimary"/>
                 <!-- Progress bar and countdown -->
                 <FrameLayout
                     android:layout_width="@dimen/circular_progressbar_size"
@@ -244,7 +240,8 @@
                 <TextView
                     style="@style/dashboard_card_title_style"
                     android:text="@string/title_solution"
-                    app:drawableLeftCompat="@drawable/ic_solution" />
+                    app:drawableLeftCompat="@drawable/ic_solution"
+                    app:drawableTint="?attr/colorOnPrimary"/>
                 <!-- Progress bar and countdown -->
                 <FrameLayout
                     android:layout_width="@dimen/circular_progressbar_size"

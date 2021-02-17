@@ -6,10 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,15 +19,14 @@ import android.widget.Toast;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.activity.RefreshInterface;
-import com.appnuggets.lensminder.activity.SettingsActivity;
 import com.appnuggets.lensminder.adapter.DropsAdapter;
 import com.appnuggets.lensminder.bottomsheet.DropsBottomSheetDialog;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Drops;
-import com.appnuggets.lensminder.database.entity.Lenses;
 import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.model.UsageProcessor;
 import com.appnuggets.lensminder.service.NotificationService;
+import com.appnuggets.lensminder.service.UpdateDisplayService;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
@@ -41,14 +38,9 @@ import java.util.Locale;
 
 public class DropsFragment extends Fragment implements RefreshInterface {
 
-    private CircularProgressBar dropsProgressbar;
     private TextView dropsLeftDaysCount;
+    private CircularProgressBar dropsProgressbar;
     private RecyclerView dropsHistoryRecyclerView;
-
-    public DropsFragment() {
-        // Required empty public constructor
-        System.out.println("DropsFragment constructor called!");
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +50,6 @@ public class DropsFragment extends Fragment implements RefreshInterface {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_drops, container, false);
     }
 
@@ -74,38 +65,47 @@ public class DropsFragment extends Fragment implements RefreshInterface {
 
         setRecyclerView();
         dropsShowAddSheet.setOnClickListener(v -> {
-            DropsBottomSheetDialog dropsBottomSheetDialog = new DropsBottomSheetDialog(this);
-            dropsBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
+            DropsBottomSheetDialog dropsBottomSheetDialog =
+                    new DropsBottomSheetDialog(this);
+            //dropsBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
             dropsBottomSheetDialog.show(getChildFragmentManager(), "bottomSheetDrops");
         });
 
         deleteCurrentDrops.setOnClickListener(v -> {
             AppDatabase db = AppDatabase.getInstance(getContext());
             Drops inUseDrops = db.dropsDao().getInUse();
-            inUseDrops.inUse = false;
-
-            UsageProcessor usageProcessor = new UsageProcessor();
-            Long leftDays = usageProcessor.calculateUsageLeft(inUseDrops.startDate,
-                    inUseDrops.expirationDate, inUseDrops.useInterval);
-            if( leftDays > 0) {
-                try {
-                    Date today = new Date();
-                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
-                    inUseDrops.endDate = simpleFormat.parse(simpleFormat.format(today));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+            if( null != inUseDrops) {
+                inUseDrops.inUse = false;
+                UsageProcessor usageProcessor = new UsageProcessor();
+                Long leftDays = usageProcessor.calculateUsageLeft(inUseDrops.startDate,
+                        inUseDrops.expirationDate, inUseDrops.useInterval);
+                if( leftDays > 0) {
+                    try {
+                        Date today = new Date();
+                        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy",
+                                Locale.UK);
+                        inUseDrops.endDate = simpleFormat.parse(simpleFormat.format(today));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            db.dropsDao().update(inUseDrops);
+                db.dropsDao().update(inUseDrops);
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-            boolean enabledNotification = prefs.getBoolean("notify", false);
-            if(enabledNotification) {
-                NotificationService.cancelNotification(getContext(),
-                        NotificationCode.DROPS_EXPIRED);
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
+                        this.getContext());
+                boolean enabledNotification = prefs.getBoolean("notify", false);
+                if(enabledNotification) {
+                    NotificationService.cancelNotification(getContext(),
+                            NotificationCode.DROPS_EXPIRED);
+                }
+                refreshData();
+                Toast.makeText(getContext(), R.string.delete_current_drops_confirmation,
+                        Toast.LENGTH_SHORT).show();
             }
-            refreshData();
-            Toast.makeText(getContext(), "Drops deleted", Toast.LENGTH_SHORT).show();
+            else {
+                Toast.makeText(getContext(), R.string.delete_current_drops_error,
+                        Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -116,6 +116,17 @@ public class DropsFragment extends Fragment implements RefreshInterface {
         AppDatabase db = AppDatabase.getInstance(getContext());
         Drops dropsInUse = db.dropsDao().getInUse();
         updateDropsSummary(dropsInUse);
+    }
+
+    @Override
+    public void refreshData() {
+        AppDatabase db = AppDatabase.getInstance(getContext());
+        Drops dropsInUse = db.dropsDao().getInUse();
+        updateDropsSummary(dropsInUse);
+
+        Context context = getContext();
+        DropsAdapter dropsAdapter = new DropsAdapter(context, db.dropsDao().getAllNotInUse());
+        dropsHistoryRecyclerView.setAdapter(dropsAdapter);
     }
 
     private void setRecyclerView() {
@@ -130,31 +141,12 @@ public class DropsFragment extends Fragment implements RefreshInterface {
 
     private void updateDropsSummary(Drops drops) {
         if (null == drops) {
-            dropsProgressbar.setProgressMax(100f);
-            dropsProgressbar.setProgressWithAnimation(0f, (long) 1000); // =1s
-            dropsLeftDaysCount.setText("-");
+            UpdateDisplayService.updateProgressBar(dropsProgressbar, dropsLeftDaysCount);
         }
         else {
-            UsageProcessor usageProcessor = new UsageProcessor();
-            Long daysLeft = usageProcessor.calculateUsageLeft(drops.startDate,
-                    drops.expirationDate, drops.useInterval);
-
-            dropsProgressbar.setProgressMax(drops.useInterval);
-            dropsProgressbar.setProgressWithAnimation(Math.max(daysLeft, 0),
-                    1000L);
-
-            dropsLeftDaysCount.setText(String.format(Locale.getDefault(), "%d", daysLeft));
+            UpdateDisplayService.updateProgressBar(dropsProgressbar, dropsLeftDaysCount,
+                    drops.expirationDate, drops.startDate, drops.useInterval );
         }
     }
 
-    @Override
-    public void refreshData() {
-        AppDatabase db = AppDatabase.getInstance(getContext());
-        Drops dropsInUse = db.dropsDao().getInUse();
-        updateDropsSummary(dropsInUse);
-
-        Context context = getContext();
-        DropsAdapter dropsAdapter = new DropsAdapter(context, db.dropsDao().getAllNotInUse());
-        dropsHistoryRecyclerView.setAdapter(dropsAdapter);
-    }
 }

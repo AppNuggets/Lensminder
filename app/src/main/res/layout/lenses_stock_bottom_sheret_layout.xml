@@ -1,39 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:id="@+id/lenses_stock_bottom_sheet"
-    android:background="@drawable/bottom_sheet_background"
-    android:padding="20dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bottom_sheet_background"
+    android:padding="@dimen/bottom_sheet_margin">
 
+    <!-- Bottom sheet title  -->
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add lenses to stock"
-        android:textSize="20dp"
-        android:textColor="@color/black"
-        android:gravity="start"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="8dp">
+        style="@style/bottom_sheet_title_style"
+        android:text="@string/add_lenses_to_stock">
     </TextView>
 
+    <!-- Expiration date select  -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/stockLensesExpDateField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Exp. date"
-        app:boxBackgroundMode="outline"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:endIconDrawable="@drawable/ic_calendar"
-        app:endIconMode="custom"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp">
+        style="@style/bottom_sheet_date_selector_style"
+        android:hint="@string/exp_date">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/stockLensesExpDate"
@@ -44,63 +27,36 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
+    <!-- Wear cycle select -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/stockLensesWearCycle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Wear cycle"
-        app:boxBackgroundMode="outline"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        app:endIconMode="dropdown_menu"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp">
+        style="@style/bottom_sheet_wear_cycle_selector_style">
 
         <AutoCompleteTextView
             android:id="@+id/autoComplete_stockLenses"
+            android:hint="@string/wear_cycle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Name input  -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/stockLensesNameField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Name"
-        app:boxBackgroundMode="outline"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:counterMaxLength="20"
-        app:counterEnabled="true"
-        app:endIconMode="clear_text"
-        app:boxCornerRadiusTopEnd="8dp"
-        app:boxCornerRadiusTopStart="8dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp">
+        style="@style/bottom_sheet_name_selector_style">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/stockLensesName"
+            android:hint="@string/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Add button -->
     <com.google.android.material.button.MaterialButton
+        style="@style/bottom_sheet_add_button_style"
         android:id="@+id/stockLensesSaveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:backgroundTint="@color/purple_200"
-        android:padding="5dp"
-        android:text="ADD"
-        android:layout_gravity="end"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="30dp"
-        android:textColor="#fff" />
+        android:text="@string/add" />
 
 </LinearLayout>

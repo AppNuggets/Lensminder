@@ -13,7 +13,8 @@
             app:title="Reminder interval"
             app:useSimpleSummaryProvider="true"
             android:entries="@array/reminder_entries"
-            android:entryValues="@array/reminder_values"/>
+            android:entryValues="@array/reminder_values"
+            android:defaultValue="2"/>
     </PreferenceCategory>
 
     <PreferenceCategory app:title="Appearance">

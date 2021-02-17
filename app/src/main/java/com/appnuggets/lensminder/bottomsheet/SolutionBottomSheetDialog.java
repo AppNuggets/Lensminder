@@ -11,11 +11,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreference;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.activity.RefreshInterface;
-import com.appnuggets.lensminder.activity.SettingsActivity;
 import com.appnuggets.lensminder.database.AppDatabase;
 import com.appnuggets.lensminder.database.entity.Solution;
 import com.appnuggets.lensminder.model.NotificationCode;
@@ -44,7 +42,7 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
     MaterialDatePicker<Long> startDatePicker;
     MaterialDatePicker<Long> expDatePicker;
 
-    private RefreshInterface refreshInterface;
+    private final RefreshInterface refreshInterface;
 
     public SolutionBottomSheetDialog(RefreshInterface refreshInterface){
         this.refreshInterface = refreshInterface;
@@ -52,8 +50,10 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.solution_bottom_sheet_layout, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.solution_bottom_sheet_layout, container,
+                false);
 
         solutionStartDate = v.findViewById(R.id.solutionStartDate);
         solutionExpDate = v.findViewById(R.id.solutionExpDate);
@@ -63,7 +63,8 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
         SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
         setCalendar();
 
-        solutionStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
+        solutionStartDate.setOnClickListener(v1 -> startDatePicker.show(getParentFragmentManager(),
+                "DATE_PICKER"));
 
         solutionStartDate.setOnFocusChangeListener((v12, hasFocus) -> {
             if (hasFocus) {
@@ -78,7 +79,8 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
             }
         });
 
-        solutionExpDate.setOnClickListener(v13 -> expDatePicker.show(getParentFragmentManager(), "DATE_PICKER"));
+        solutionExpDate.setOnClickListener(v13 -> expDatePicker.show(getParentFragmentManager(),
+                "DATE_PICKER"));
 
         solutionExpDate.setOnFocusChangeListener((v14, hasFocus) -> {
             if (hasFocus) {
@@ -99,15 +101,19 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
                     Objects.requireNonNull(solutionStartDate.getText()).toString().isEmpty() ||
                     Objects.requireNonNull(solutionName.getText()).toString().isEmpty()) {
                 dismiss();
-                Toast.makeText(getContext(), "Fields must not be empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.non_empty_required_message,
+                        Toast.LENGTH_SHORT).show();
             }
             else
             {
                 try {
-                    Solution solution = new Solution(Objects.requireNonNull(solutionName.getText()).toString(),
+                    Solution solution = new Solution(Objects.requireNonNull(
+                            solutionName.getText()).toString(),
                             true,
-                            simpleFormat.parse(Objects.requireNonNull(solutionExpDate.getText()).toString()),
-                            simpleFormat.parse(Objects.requireNonNull(solutionStartDate.getText()).toString()),
+                            simpleFormat.parse(Objects.requireNonNull(
+                                    solutionExpDate.getText()).toString()),
+                            simpleFormat.parse(Objects.requireNonNull(
+                                    solutionStartDate.getText()).toString()),
                             null,
                             93L);
                     UsageProcessor usageProcessor = new UsageProcessor();
@@ -124,7 +130,8 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
                         if( leftDays > 0) {
                             try {
                                 Date today = new Date();
-                                inUseSolution.endDate = simpleFormat.parse(simpleFormat.format(today));
+                                inUseSolution.endDate = simpleFormat.parse(
+                                        simpleFormat.format(today));
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
@@ -133,7 +140,8 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
                     }
                     db.solutionDao().insert(solution);
 
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
+                            this.getContext());
                     boolean enabledNotification = prefs.getBoolean("notify", false);
                     if(enabledNotification) {
                         NotificationService.createNotification(getContext(),
@@ -164,7 +172,7 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
         CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
 
         MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select start date");
+        builder.setTitleText(R.string.start_date_picker_title);
         builder.setSelection(today);
         builder.setCalendarConstraints(constraintBuilder.build());
         startDatePicker = builder.build();
@@ -173,7 +181,7 @@ public class SolutionBottomSheetDialog extends BottomSheetDialogFragment {
         solutionExpDate.setKeyListener(null);
         constraintBuilder.setValidator(DateValidatorPointForward.now());
         MaterialDatePicker.Builder<Long> builderExp = MaterialDatePicker.Builder.datePicker();
-        builderExp.setTitleText("Select exp. date");
+        builderExp.setTitleText(R.string.exp_date_picker_title);
         builderExp.setCalendarConstraints(constraintBuilder.build());
         expDatePicker = builderExp.build();
     }

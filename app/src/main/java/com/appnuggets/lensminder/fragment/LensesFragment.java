@@ -13,14 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreference;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.appnuggets.lensminder.R;
 import com.appnuggets.lensminder.activity.RefreshInterface;
-import com.appnuggets.lensminder.activity.SettingsActivity;
-import com.appnuggets.lensminder.adapter.DropsAdapter;
 import com.appnuggets.lensminder.adapter.LensesAdapter;
 import com.appnuggets.lensminder.adapter.LensesStockAdapter;
 import com.appnuggets.lensminder.bottomsheet.LensesBottomSheetDialog;
@@ -31,6 +28,7 @@ import com.appnuggets.lensminder.database.entity.State;
 import com.appnuggets.lensminder.model.NotificationCode;
 import com.appnuggets.lensminder.model.UsageProcessor;
 import com.appnuggets.lensminder.service.NotificationService;
+import com.appnuggets.lensminder.service.UpdateDisplayService;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -44,20 +42,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class LensesFragment extends Fragment implements LensesStockAdapter.OnLensListener, RefreshInterface {
+public class LensesFragment extends Fragment implements LensesStockAdapter.OnLensListener,
+        RefreshInterface {
 
-    private CircularProgressBar lensesProgressbar;
     private TextView lensesLeftDaysCount;
-
-    private RecyclerView lensesHistoryRecyclerView;
-    private RecyclerView lensesStockRecyclerView;
+    private CircularProgressBar lensesProgressbar;
 
     private List<Lenses> stockLensesList;
-
-    public LensesFragment() {
-        // Required empty public constructor
-        System.out.println("LensesFragment constructor called!");
-    }
+    private RecyclerView lensesStockRecyclerView;
+    private RecyclerView lensesHistoryRecyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +60,6 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_lenses, container, false);
     }
 
@@ -85,46 +77,56 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
 
         // Add new current lenses listener
         lensesShowAddCurrent.setOnClickListener(v -> {
-            LensesBottomSheetDialog lensesBottomSheetDialog = new LensesBottomSheetDialog(this);
-            //lensesBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
+            LensesBottomSheetDialog lensesBottomSheetDialog =
+                    new LensesBottomSheetDialog(this);
             lensesBottomSheetDialog.show(getChildFragmentManager(), "bottomSheetLenses");
         });
 
         // Add lenses to stock listener
         lensesShowAddStock.setOnClickListener(v -> {
-            LensesStockBottomSheetDialog lensesStockBottomSheetDialog = new LensesStockBottomSheetDialog(this);
-            //lensesStockBottomSheetDialog.setStyle(DialogFragment.STYLE_NORMAL, R.style.BottomSheetTheme);
-            lensesStockBottomSheetDialog.show(getChildFragmentManager(), "bottomSheetLensesStock");
+            LensesStockBottomSheetDialog lensesStockBottomSheetDialog =
+                    new LensesStockBottomSheetDialog(this);
+            lensesStockBottomSheetDialog.show(getChildFragmentManager(),
+                    "bottomSheetLensesStock");
         });
 
         // Delete current lenses listener
         deleteCurrentLenses.setOnClickListener(v -> {
             AppDatabase db = AppDatabase.getInstance(getContext(  ));
             Lenses inUseLenses = db.lensesDao().getInUse();
-            inUseLenses.state = State.IN_HISTORY;
-            UsageProcessor usageProcessor = new UsageProcessor();
-            Long leftDays = usageProcessor.calculateUsageLeft(inUseLenses.startDate,
-                    inUseLenses.expirationDate, inUseLenses.useInterval);
-            if( leftDays > 0) {
-                try {
-                    Date today = new Date();
-                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.UK);
-                    inUseLenses.endDate = simpleFormat.parse(simpleFormat.format(today));
-                } catch (ParseException e) {
-                    e.printStackTrace();
+            if(null != inUseLenses) {
+                inUseLenses.state = State.IN_HISTORY;
+                UsageProcessor usageProcessor = new UsageProcessor();
+                Long leftDays = usageProcessor.calculateUsageLeft(inUseLenses.startDate,
+                        inUseLenses.expirationDate, inUseLenses.useInterval);
+                if( leftDays > 0) {
+                    try {
+                        Date today = new Date();
+                        SimpleDateFormat simpleFormat = new SimpleDateFormat("dd.MM.yyyy",
+                                Locale.UK);
+                        inUseLenses.endDate = simpleFormat.parse(simpleFormat.format(today));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            db.lensesDao().update(inUseLenses);
+                db.lensesDao().update(inUseLenses);
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-            boolean enabledNotification = prefs.getBoolean("notify", false);
-            if(enabledNotification) {
-                NotificationService.cancelNotification(getContext(),
-                        NotificationCode.LENSES_EXPIRED);
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
+                        this.getContext());
+                boolean enabledNotification = prefs.getBoolean("notify", false);
+                if(enabledNotification) {
+                    NotificationService.cancelNotification(getContext(),
+                            NotificationCode.LENSES_EXPIRED);
+                }
+                Toast.makeText(getContext(), R.string.delete_current_lenses_confirmation,
+                        Toast.LENGTH_SHORT).show();
+                refreshData();
+            }
+            else {
+                Toast.makeText(getContext(), R.string.delete_current_lenses_error,
+                        Toast.LENGTH_SHORT).show();
             }
 
-            Toast.makeText(getContext(), "Lenses deleted", Toast.LENGTH_SHORT).show();
-            refreshData();
         });
 
         Context context = getContext();
@@ -144,41 +146,6 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
         updateLensesSummary(lensesInUse);
     }
 
-    private void setLensesHistoryRecyclerView(List<Lenses> lenses) {
-        Context context = getContext();
-        LensesAdapter lensesAdapter = new LensesAdapter(context, lenses);
-        lensesHistoryRecyclerView.setHasFixedSize(true);
-        lensesHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        lensesHistoryRecyclerView.setAdapter(lensesAdapter);
-    }
-
-    private void setLensesStockRecyclerView(List<Lenses> lenses) {
-        Context context = getContext();
-        LensesStockAdapter lensesStockAdapter = new LensesStockAdapter(context, lenses, this);
-        lensesStockRecyclerView.setHasFixedSize(true);
-        lensesStockRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        lensesStockRecyclerView.setAdapter(lensesStockAdapter);
-    }
-
-    private void updateLensesSummary(Lenses lenses) {
-        if (null == lenses) {
-            lensesProgressbar.setProgressMax(100f);
-            lensesProgressbar.setProgressWithAnimation(0f, (long) 1000); // =1s
-            lensesLeftDaysCount.setText("-");
-        }
-        else {
-            UsageProcessor usageProcessor = new UsageProcessor();
-            Long daysLeft = usageProcessor.calculateUsageLeft(lenses.startDate,
-                    lenses.expirationDate, lenses.useInterval);
-
-            lensesProgressbar.setProgressMax(lenses.useInterval);
-            lensesProgressbar.setProgressWithAnimation(Math.max(daysLeft, 0),
-                    1000L);
-
-            lensesLeftDaysCount.setText(String.format(Locale.getDefault(), "%d", daysLeft));
-        }
-    }
-
     @Override
     public void refreshData() {
         AppDatabase db = AppDatabase.getInstance(getContext());
@@ -194,6 +161,33 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
         lensesStockRecyclerView.setAdapter(lensesStockAdapterAdapter);
     }
 
+    private void setLensesHistoryRecyclerView(List<Lenses> lenses) {
+        Context context = getContext();
+        LensesAdapter lensesAdapter = new LensesAdapter(context, lenses);
+        lensesHistoryRecyclerView.setHasFixedSize(true);
+        lensesHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        lensesHistoryRecyclerView.setAdapter(lensesAdapter);
+    }
+
+    private void setLensesStockRecyclerView(List<Lenses> lenses) {
+        Context context = getContext();
+        LensesStockAdapter lensesStockAdapter = new LensesStockAdapter(context, lenses,
+                this);
+        lensesStockRecyclerView.setHasFixedSize(true);
+        lensesStockRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+        lensesStockRecyclerView.setAdapter(lensesStockAdapter);
+    }
+
+    private void updateLensesSummary(Lenses lenses) {
+        if(null == lenses) {
+            UpdateDisplayService.updateProgressBar(lensesProgressbar, lensesLeftDaysCount);
+        }
+        else {
+            UpdateDisplayService.updateProgressBar(lensesProgressbar, lensesLeftDaysCount,
+                    lenses.expirationDate, lenses.startDate, lenses.useInterval );
+        }
+    }
+
     public void onLensClick(int position) {
         MaterialDatePicker<Long> startDatePicker;
 
@@ -201,7 +195,7 @@ public class LensesFragment extends Fragment implements LensesStockAdapter.OnLen
         calendar.clear();
         long today = MaterialDatePicker.todayInUtcMilliseconds();
         MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select start date");
+        builder.setTitleText(R.string.start_date_picker_title);
         builder.setSelection(today);
         startDatePicker = builder.build();
         startDatePicker.show(getParentFragmentManager(), "DATE_PICKER");
